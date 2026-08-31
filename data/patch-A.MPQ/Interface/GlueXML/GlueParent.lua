@@ -217,6 +217,7 @@ end
 function GlueParent_OnEvent(event, arg1, arg2, arg3)
 	if ( event == "FRAMES_LOADED" ) then
 		LocalizeFrames();
+		Baercraft_InstallCharacterLocationFix();
 	elseif ( event == "SET_GLUE_SCREEN" ) then
 		GlueScreenExit(GetCurrentGlueScreenName(), arg1);
 	elseif ( event == "START_GLUE_MUSIC" ) then
@@ -509,3 +510,68 @@ function UpgradeAccount()
 	LaunchURL(AUTH_NO_TIME_URL);
 end
 
+
+
+-- Baercraft 5.9 character-select location restoration
+-- Some client packs ship a CharacterSelect layout that omits the location line.
+-- Keep the stock localized zone returned by GetCharacterInfo() and add/reuse
+-- a third line on each character button without replacing GlueStrings.lua.
+local BAERCRAFT_OriginalUpdateCharacterList = nil;
+
+local function Baercraft_GetLocationFontString(index)
+    local button = _G["CharSelectCharacterButton"..index];
+    if ( not button ) then
+        return nil;
+    end
+
+    local location = _G["CharSelectCharacterButton"..index.."ButtonTextLocation"];
+    if ( not location ) then
+        location = button:CreateFontString("CharSelectCharacterButton"..index.."ButtonTextLocation", "OVERLAY", "GlueFontNormalSmall");
+        local info = _G["CharSelectCharacterButton"..index.."ButtonTextInfo"];
+        if ( info ) then
+            location:SetPoint("TOPLEFT", info, "BOTTOMLEFT", 0, -1);
+        else
+            location:SetPoint("TOPLEFT", button, "TOPLEFT", 12, -38);
+        end
+        location:SetPoint("RIGHT", button, "RIGHT", -10, 0);
+        location:SetJustifyH("LEFT");
+        location:SetTextColor(0.82, 0.82, 0.82);
+    end
+    return location;
+end
+
+function Baercraft_UpdateCharacterLocations()
+    local numChars = GetNumCharacters();
+    for i = 1, MAX_CHARACTERS_DISPLAYED or 10 do
+        local location = Baercraft_GetLocationFontString(i);
+        if ( location ) then
+            if ( i <= numChars ) then
+                local name, race, class, level, zone = GetCharacterInfo(i);
+                if ( zone and zone ~= "" ) then
+                    location:SetText(zone);
+                    location:Show();
+                else
+                    location:SetText("");
+                    location:Hide();
+                end
+            else
+                location:SetText("");
+                location:Hide();
+            end
+        end
+    end
+end
+
+function Baercraft_InstallCharacterLocationFix()
+    if ( BAERCRAFT_OriginalUpdateCharacterList or type(UpdateCharacterList) ~= "function" ) then
+        return;
+    end
+
+    BAERCRAFT_OriginalUpdateCharacterList = UpdateCharacterList;
+    UpdateCharacterList = function(...)
+        BAERCRAFT_OriginalUpdateCharacterList(...);
+        Baercraft_UpdateCharacterLocations();
+    end
+
+    Baercraft_UpdateCharacterLocations();
+end

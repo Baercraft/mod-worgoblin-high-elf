@@ -1,0 +1,17 @@
+# Worgoblin / High Elf / Mag'har configuration
+
+Announce.Enable = 1
+
+# Server-side ARAC gate. Default: disabled.
+# IMPORTANT: use the matching client profile as documented in CLIENT-PROFILES.md.
+ARAC.Enable = 0
+
+# Server-side switch for the module's fly-anywhere behavior. Default: disabled.
+# Client AreaTable.dbc must match the selected profile.
+FlyAnywhere.Enable = 0
+
+# Worgen Two Forms integration. Default: enabled.
+Worgen.TwoForms.Enable = 1
+
+# Force Worgen form when entering combat. Default: enabled.
+Worgen.TwoForms.CombatForceWorgen = 1

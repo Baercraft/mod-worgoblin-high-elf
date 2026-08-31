@@ -1,0 +1,10 @@
+-- LEGACY ONLY - DO NOT IMPORT ON CURRENT AZEROTHCORE
+-- Current AzerothCore no longer provides spell_learn_spell in the standard world schema.
+-- Running Wild synchronization is handled by src/Worgoblin.cpp.
+
+-- Running Wild is synchronized by src/Worgoblin.cpp because the correct
+-- spell is gender- and riding-rank-dependent. Remove legacy data-driven
+-- links that could teach the wrong gender variant or recurse while learning.
+DELETE FROM `spell_learn_spell`
+WHERE `entry` IN (87840, 87841, 110010, 110011)
+   OR `SpellID` IN (87840, 87841, 110010, 110011);
