@@ -50,6 +50,8 @@ GlueAmbienceTracks["GOBLIN"] = "GlueScreenOrcTroll";
 GlueAmbienceTracks["WORGEN"] = "GlueScreenHuman";
 GlueAmbienceTracks["HIGHELF"] = "GlueScreenHuman";
 GlueAmbienceTracks["MAGHAR"] = "GlueScreenOrcTroll";
+GlueAmbienceTracks["OGRE"] = "GlueScreenOrcTroll";
+GlueAmbienceTracks["DARKIRONDWARF"] = "GlueScreenDwarfGnome";
 
 
 -- RaceLights[] duplicates the 3.2.2 color values in the models. Henceforth, the models no longer contain directional lights
@@ -111,6 +113,11 @@ RaceLights = {
 		{1,     0,  -0.74919,       0.35208,        -0.56103,   1.0,    0.00000,    0.00000,    0.00000,    1.0,    0.44706,    0.54510,    0.73725},
 		{1,     0,  0.53162,        -0.84340,       0.07780,    1.0,    0.00000,    0.00000,    0.00000,    2.0,    0.55,       0.338625,   0.148825},
 	},
+    OGRE = {
+        {1,     0,  0.00000,        0.00000,        -1.00000,   1.0,    0.15000,    0.15000,    0.15000,    1.0,    0.00000,    0.00000,    0.00000},
+        {1,     0,  -0.74919,       0.35208,        -0.56103,   1.0,    0.00000,    0.00000,    0.00000,    1.0,    0.44706,    0.54510,    0.73725},
+        {1,     0,  0.53162,        -0.84340,       0.07780,    1.0,    0.00000,    0.00000,    0.00000,    2.0,    0.55,       0.338625,   0.148825},
+    },
 }
 
 -- indicies for adding lights ModelFFX:Add*Light
@@ -217,7 +224,6 @@ end
 function GlueParent_OnEvent(event, arg1, arg2, arg3)
 	if ( event == "FRAMES_LOADED" ) then
 		LocalizeFrames();
-		Baercraft_InstallCharacterLocationFix();
 	elseif ( event == "SET_GLUE_SCREEN" ) then
 		GlueScreenExit(GetCurrentGlueScreenName(), arg1);
 	elseif ( event == "START_GLUE_MUSIC" ) then
@@ -395,24 +401,20 @@ end
 
 -- Function to set the background model for character select and create screens
 function SetBackgroundModel(model, name)
-    local nameupper = strupper(name);
-    
+	-- Custom races reuse a stock Glue background/ambience; calculate the key AFTER mapping.
 	if (name == "HighElf" or name == "HIGHELF" or name == "High Elf" or name == "HIGH ELF" or name == "HIGH_ELF") then
 		name = "Human";
-	end
-
-	if (name == "Maghar" or name == "MAGHAR" or name == "Mag'har" or name == "MAG'HAR") then
+	elseif (name == "DarkIronDwarf" or name == "DARKIRONDWARF" or name == "Dark Iron Dwarf" or name == "DARK IRON DWARF") then
+		name = "Dwarf";
+	elseif (name == "Maghar" or name == "MAGHAR" or name == "Mag'har" or name == "MAG'HAR" or name == "Ogre" or name == "OGRE") then
 		name = "Orc";
 	end
-    
-    local path = "Interface\\Glues\\Models\\UI_"..name.."\\UI_"..name..".m2";
-	if ( model == CharacterCreate ) then
-		SetCharCustomizeBackground(path);
-	else
-		SetCharSelectBackground(path);
-	end
-	PlayGlueAmbience(GlueAmbienceTracks[nameupper], 4.0);
-	SetLighting(model, nameupper)
+	local nameupper = strupper(name);
+	local path = "Interface\\Glues\\Models\\UI_"..name.."\\UI_"..name..".m2";
+	if ( model == CharacterCreate ) then SetCharCustomizeBackground(path); else SetCharSelectBackground(path); end
+	local ambience = GlueAmbienceTracks[nameupper];
+	if ambience and ambience ~= "" then PlayGlueAmbience(ambience, 4.0); end
+	SetLighting(model, nameupper);
 end
 
 function SecondsToTime(seconds, noSeconds)
@@ -510,68 +512,3 @@ function UpgradeAccount()
 	LaunchURL(AUTH_NO_TIME_URL);
 end
 
-
-
--- Baercraft 5.9 character-select location restoration
--- Some client packs ship a CharacterSelect layout that omits the location line.
--- Keep the stock localized zone returned by GetCharacterInfo() and add/reuse
--- a third line on each character button without replacing GlueStrings.lua.
-local BAERCRAFT_OriginalUpdateCharacterList = nil;
-
-local function Baercraft_GetLocationFontString(index)
-    local button = _G["CharSelectCharacterButton"..index];
-    if ( not button ) then
-        return nil;
-    end
-
-    local location = _G["CharSelectCharacterButton"..index.."ButtonTextLocation"];
-    if ( not location ) then
-        location = button:CreateFontString("CharSelectCharacterButton"..index.."ButtonTextLocation", "OVERLAY", "GlueFontNormalSmall");
-        local info = _G["CharSelectCharacterButton"..index.."ButtonTextInfo"];
-        if ( info ) then
-            location:SetPoint("TOPLEFT", info, "BOTTOMLEFT", 0, -1);
-        else
-            location:SetPoint("TOPLEFT", button, "TOPLEFT", 12, -38);
-        end
-        location:SetPoint("RIGHT", button, "RIGHT", -10, 0);
-        location:SetJustifyH("LEFT");
-        location:SetTextColor(0.82, 0.82, 0.82);
-    end
-    return location;
-end
-
-function Baercraft_UpdateCharacterLocations()
-    local numChars = GetNumCharacters();
-    for i = 1, MAX_CHARACTERS_DISPLAYED or 10 do
-        local location = Baercraft_GetLocationFontString(i);
-        if ( location ) then
-            if ( i <= numChars ) then
-                local name, race, class, level, zone = GetCharacterInfo(i);
-                if ( zone and zone ~= "" ) then
-                    location:SetText(zone);
-                    location:Show();
-                else
-                    location:SetText("");
-                    location:Hide();
-                end
-            else
-                location:SetText("");
-                location:Hide();
-            end
-        end
-    end
-end
-
-function Baercraft_InstallCharacterLocationFix()
-    if ( BAERCRAFT_OriginalUpdateCharacterList or type(UpdateCharacterList) ~= "function" ) then
-        return;
-    end
-
-    BAERCRAFT_OriginalUpdateCharacterList = UpdateCharacterList;
-    UpdateCharacterList = function(...)
-        BAERCRAFT_OriginalUpdateCharacterList(...);
-        Baercraft_UpdateCharacterLocations();
-    end
-
-    Baercraft_UpdateCharacterLocations();
-end

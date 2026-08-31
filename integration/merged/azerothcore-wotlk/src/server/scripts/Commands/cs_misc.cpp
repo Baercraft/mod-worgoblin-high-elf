@@ -2341,6 +2341,9 @@ public:
             case RACE_OGRE:
                 raceStr = "Ogre";
                 break;
+            case RACE_DARKIRONDWARF:
+                raceStr = "Dark Iron Dwarf";
+                break;
         }
 
         switch (classid)
@@ -2773,7 +2776,7 @@ public:
             if (!data || Acore::ComputeGridCoord(data->posX, data->posY).GetId() != gridId)
                 continue;
 
-            // Skip pooled spawns — Phase 1 already triggered pool rotation via
+            // Skip pooled spawns - Phase 1 already triggered pool rotation via
             // Creature::Respawn() -> PoolMgr::UpdatePool(). Forcing a respawn time
             // here would cause ProcessRespawns() to call UpdatePool() again,
             // spawning duplicates beyond the pool's max_limit.
@@ -2792,7 +2795,7 @@ public:
             if (!data || Acore::ComputeGridCoord(data->posX, data->posY).GetId() != gridId)
                 continue;
 
-            // Skip pooled spawns — same reason as creatures above.
+            // Skip pooled spawns - same reason as creatures above.
             if (sPoolMgr->IsPartOfAPool<GameObject>(pair.first))
                 continue;
 

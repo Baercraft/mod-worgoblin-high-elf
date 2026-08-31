@@ -1,0 +1,4 @@
+-- TEST4: Parent-race reputation/quest-faction cleanup is primarily DBC-side.
+-- This SQL keeps the database-side race definitions consistent where applicable.
+-- Race masks: Worgen 2048, Goblin 256, High Elf 4096, Mag'har 8192, Ogre 16384.
+-- Parent mapping: Human->Worgen, Orc->Goblin/Mag'har/Ogre, Night Elf->High Elf.

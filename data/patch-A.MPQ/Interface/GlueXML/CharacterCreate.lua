@@ -1,235 +1,82 @@
-CHARACTER_FACING_INCREMENT = 2;
-MAX_RACES = 14;
+-- Baercraft clean client overlay: custom races only; Blizzard locale strings stay untouched.
+local BAER_LOCALE=(GetLocale and GetLocale()) or "enUS";
+local BAER_TEXT={};
+BAER_TEXT["enUS"]={};
+BAER_TEXT["enUS"]["WORGEN"]={name="Worgen",zone="Teldrassil",info="Behind the ferocity of the worgen beats a human heart. These cursed warriors have learned to master the beast within and now lend their speed, instincts, and fierce resolve to the Alliance.",abilities={"Viciousness — Increases critical strike chance.","Darkflight — Greatly increases movement speed for a short time.","Aberration — Reduces the duration of curses and diseases.","Flayer — Skinning is faster and your skill is increased.","Language: Common."}};
+BAER_TEXT["enUS"]["GOBLIN"]={name="Goblin",zone="Durotar",info="For goblins, opportunity is worth more than gold. Brilliant engineers and ruthless negotiators, these explosive members of the Horde turn speed, rockets, chemistry and commerce into deadly advantages.",abilities={"Time is Money — Increases attack and casting speed.","Rocket Jump — Launches you forward with a rocket belt.","Rocket Barrage — Fires explosive rockets at an enemy.","Best Deals Anywhere — Grants the best vendor discounts.","Pack Hobgoblin — Calls a personal bank assistant.","Language: Orcish."}};
+BAER_TEXT["enUS"]["HIGHELF"]={name="High Elf",zone="Elwynn Forest",info="The quel'dorei who remained loyal to the Alliance refused to follow their blood elven kin into the Horde. Disciplined and steeped in ancient magic, these high elves combine Thalassian tradition with the keen reflexes of veteran rangers.",abilities={"Quel'dorei Meditation — Restores your primary combat resource through focused meditation.","Swiftness of the Rangers — Grants the practiced agility of high elven rangers.","Language: Thalassian."}};
+BAER_TEXT["enUS"]["MAGHAR"]={name="Mag'har Orc",zone="Durotar",info="The Mag'har are the uncorrupted orc clans who escaped the fel taint that changed so many of their kin. Proud of their Draenor heritage, they bring ancestral strength, hardiness and an unbreakable clan spirit to the Horde.",abilities={"Ancestral Call — Draw upon the strength of your ancestors.","Savage Blood — Grants natural resilience.","Sympathetic Vigor — Strengthens the bond with your companion.","Unwavering Will — Helps resist disabling effects.","Language: Orcish."}};
+BAER_TEXT["enUS"]["OGRE"]={name="Ogre",zone="Durotar",info="The Stonemaul ogres have found a place among the Horde. Their enormous strength, thick hides, fierce clan loyalty and legendary stubbornness make them formidable allies on any battlefield.",abilities={"Ogre's Might — Increases attack power for a short time.","Thick Hide — Increases base health.","Clan Bond — Your pets deal increased damage.","Stubborn as Stone — Reduces the duration of stun effects.","Language: Orcish."}};
+BAER_TEXT["enUS"]["DARKIRONDWARF"]={name="Dark Iron Dwarf",zone="Dun Morogh",info="Forged in the shadow of Blackrock Mountain, the Dark Iron dwarves are a hard-bitten people of master smiths, riflemen and subterranean fighters. Their return to the Alliance brings fiery resolve, ancient craft and a stubborn strength tempered in flame.",abilities={"Fireblood — Purges harmful effects and hardens the body.","Black Anvil Training — Improves your skill with firearms.","Forged in Flame — Grants increased resistance to Fire.","Secrets Below — Reveals nearby treasure.","Languages: Common and Dwarven."}};
+BAER_TEXT["deDE"]={};
+BAER_TEXT["deDE"]["WORGEN"]={name="Worgen",zone="Teldrassil",info="Hinter der Wildheit der Worgen schlägt noch immer ein menschliches Herz. Diese Verfluchten haben gelernt, die Bestie in ihrem Inneren zu beherrschen, und stellen nun Schnelligkeit, Instinkt und unerbittliche Entschlossenheit in den Dienst der Allianz.",abilities={"Bösartigkeit — Erhöht die Chance auf kritische Treffer.","Dunkelflucht — Erhöht für kurze Zeit deutlich das Bewegungstempo.","Aberration — Verringert die Dauer von Flüchen und Krankheiten.","Kürschner — Kürschnerei wird schneller ausgeführt und Euer Können ist erhöht.","Sprache: Gemeinsprache."}};
+BAER_TEXT["deDE"]["GOBLIN"]={name="Goblin",zone="Durotar",info="Für Goblins ist eine Gelegenheit oft mehr wert als Gold. Als geniale Ingenieure und gnadenlose Händler verwandeln diese explosiven Mitglieder der Horde Geschwindigkeit, Raketen, Chemie und Geschäftssinn in tödliche Vorteile.",abilities={"Zeit ist Geld — Erhöht Angriffs- und Zaubertempo.","Raketensprung — Schleudert Euch mit einem Raketengürtel nach vorn.","Raketenbeschuss — Feuert explosive Raketen auf einen Gegner.","Überall die besten Preise — Gewährt die besten Händlerpreise.","Packhobgoblin — Ruft einen persönlichen Bankgehilfen.","Sprache: Orcisch."}};
+BAER_TEXT["deDE"]["HIGHELF"]={name="Hochelf",zone="Wald von Elwynn",info="Die Quel'dorei, die der Allianz treu blieben, weigerten sich, ihren blutelfischen Verwandten in die Horde zu folgen. Diszipliniert und von uralter Magie geprägt verbinden diese Hochelfen thalassische Tradition mit den geschärften Reflexen erfahrener Waldläufer.",abilities={"Quel'dorei-Meditation — Stellt durch konzentrierte Meditation Eure wichtigste Kampfressource wieder her.","Flinkheit der Waldläufer — Verleiht Euch die geübte Beweglichkeit hochelfischer Waldläufer.","Sprache: Thalassisch."}};
+BAER_TEXT["deDE"]["MAGHAR"]={name="Mag'har-Orc",zone="Durotar",info="Die Mag'har sind jene unverdorbenen Orcclans, die dem dämonischen Makel entgingen. Stolz auf ihr Erbe aus Draenor bringen sie die Kraft ihrer Ahnen, große Widerstandsfähigkeit und einen unerschütterlichen Clangeist in die Horde ein.",abilities={"Ruf der Ahnen — Ruft die Stärke Eurer Vorfahren an.","Wildes Blut — Verleiht natürliche Widerstandskraft.","Verbündete Lebenskraft — Stärkt die Bindung zu Eurem Begleiter.","Unerschütterlicher Wille — Hilft gegen Kontrollverlust.","Sprache: Orcisch."}};
+BAER_TEXT["deDE"]["OGRE"]={name="Oger",zone="Durotar",info="Die Oger des Steinbrecherklans haben ihren Platz in der Horde gefunden. Ihre gewaltige Kraft, dicke Haut, starke Clantreue und sprichwörtliche Sturheit machen sie zu furchterregenden Verbündeten.",abilities={"Ogerstärke — Erhöht für kurze Zeit Eure Angriffskraft.","Dicke Haut — Erhöht Eure Grundgesundheit.","Clanbindung — Eure Begleiter verursachen erhöhten Schaden.","Stur wie Stein — Verringert die Dauer von Betäubungseffekten.","Sprache: Orcisch."}};
+BAER_TEXT["deDE"]["DARKIRONDWARF"]={name="Dunkeleisenzwerg",zone="Dun Morogh",info="Im Schatten des Schwarzfels geschmiedet sind die Dunkeleisenzwerge ein unbeugsames Volk aus Meisterschmieden, Schützen und erfahrenen Kämpfern der Tiefen. Ihre Rückkehr zur Allianz bringt feurige Entschlossenheit, uraltes Handwerk und eine im Feuer gehärtete Widerstandskraft.",abilities={"Feuerblut — Reinigt schädliche Effekte und härtet den Körper.","Ausbildung am Schwarzen Amboss — Verbessert den Umgang mit Schusswaffen.","In Flammen geschmiedet — Erhöht den Feuerwiderstand.","Geheimnisse der Tiefe — Spürt Schätze in der Nähe auf.","Sprachen: Gemeinsprache und Zwergisch."}};
+BAER_TEXT["frFR"]={};
+BAER_TEXT["frFR"]["WORGEN"]={name="Worgen",zone="Teldrassil",info="Sous la férocité des worgens bat encore un cœur humain. Ces maudits ont appris à maîtriser la bête qui sommeille en eux et mettent désormais leur vitesse, leur instinct et leur détermination au service de l'Alliance.",abilities={"Acharnement — augmente les chances de coup critique.","Sombre course — augmente fortement la vitesse de déplacement.","Aberration — réduit la durée des malédictions et maladies.","Écorcheur — le dépeçage est plus rapide.","Langue : commun."}};
+BAER_TEXT["frFR"]["GOBLIN"]={name="Gobelin",zone="Durotar",info="Pour un gobelin, une bonne occasion vaut parfois plus que l'or. Ingénieurs brillants et négociateurs impitoyables, ces membres explosifs de la Horde transforment vitesse, fusées, chimie et commerce en avantages mortels.",abilities={"Le temps, c’est de l’argent — augmente la vitesse d’attaque et d’incantation.","Fusée de saut — vous propulse vers l’avant.","Barrage de fusées — lance des roquettes explosives.","Les meilleures affaires — garantit les meilleurs prix.","Hobgobelin de bât — appelle un assistant bancaire.","Langue : orc."}};
+BAER_TEXT["frFR"]["HIGHELF"]={name="Haut-elfe",zone="Forêt d'Elwynn",info="Les quel'dorei restés fidèles à l'Alliance refusèrent de suivre leurs cousins elfes de sang dans la Horde. Disciplinés et imprégnés d'une magie ancienne, ils unissent les traditions thalassiennes aux réflexes aiguisés des forestiers.",abilities={"Méditation quel’dorei — restaure votre ressource de combat principale.","Célérité des forestiers — confère l’agilité des forestiers hauts-elfes.","Langue : thalassien."}};
+BAER_TEXT["frFR"]["MAGHAR"]={name="Orc mag'har",zone="Durotar",info="Les Mag'har sont les clans orcs non corrompus qui échappèrent à la souillure gangrenée. Fiers de leur héritage de Draenor, ils apportent à la Horde la force des ancêtres, l'endurance et un esprit de clan inébranlable.",abilities={"Appel ancestral — invoque la force de vos ancêtres.","Sang sauvage — confère une résistance naturelle.","Vigueur compatissante — renforce le lien avec votre compagnon.","Volonté inébranlable — aide à résister aux effets de contrôle.","Langue : orc."}};
+BAER_TEXT["frFR"]["OGRE"]={name="Ogre",zone="Durotar",info="Les ogres Cognepierre ont trouvé leur place au sein de la Horde. Leur force immense, leur peau épaisse, leur loyauté au clan et leur obstination légendaire en font de redoutables alliés.",abilities={"Puissance ogre — augmente brièvement la puissance d’attaque.","Peau épaisse — augmente les points de vie de base.","Lien du clan — vos familiers infligent davantage de dégâts.","Têtu comme la pierre — réduit la durée des étourdissements.","Langue : orc."}};
+BAER_TEXT["frFR"]["DARKIRONDWARF"]={name="Nain sombrefer",zone="Dun Morogh",info="Forgés dans l’ombre du mont Rochenoire, les nains sombrefers sont des maîtres forgerons, tireurs et combattants des profondeurs. Leur retour au sein de l’Alliance apporte une volonté ardente et une résistance trempée dans les flammes.",abilities={"Sang-de-feu — Dissipe les effets néfastes et endurcit le corps.","Entraînement de l’Enclume noire — Améliore le maniement des armes à feu.","Forgé dans les flammes — Augmente la résistance au Feu.","Secrets des profondeurs — Révèle les trésors proches.","Langues : commun et nain."}};
 
-
--- Baercraft custom-race localization.
--- Keep this in CharacterCreate.lua. The stock client loads its own localized
--- GlueStrings.lua first; patch-A intentionally does not override that file.
--- Only Baercraft custom-race strings are supplied here at runtime.
-local function BaercraftDetectLocale()
-    local locale;
-
-    -- GetLocale() is the normal game API, but some 3.3.5a GlueXML builds
-    -- expose locale information more reliably through the locale CVar.
-    if ( GetLocale ) then
-        locale = GetLocale();
-    end
-    if ( (not locale or locale == "" or locale == "enUS") and GetCVar ) then
-        local cvarLocale = GetCVar("locale");
-        if ( cvarLocale and cvarLocale ~= "" ) then
-            locale = cvarLocale;
-        end
-    end
-
-    if ( locale == "enGB" ) then
-        locale = "enUS";
-    end
-
-    return locale or "enUS";
-end
-
-local BAERCRAFT_LOCALE = BaercraftDetectLocale();
-local BAERCRAFT_CUSTOM_TEXT = {
-    enUS = {
-        ABILITY_INFO_MAGHAR1 = "- Attack power and spell damage increased.",
-        ABILITY_INFO_MAGHAR2 = "- Chance to resist Curse, Disease and Poison effects.",
-        ABILITY_INFO_MAGHAR3 = "- Pets' maximum health increased.",
-        ABILITY_INFO_MAGHAR4 = "- Reduced duration of Stun effects.",
-        ABILITY_INFO_HIGHELF1 = "- May restore mana, energy, runic power, or rage.",
-        ABILITY_INFO_HIGHELF2 = "- Agility increased by 2%.",
-        ABILITY_INFO_HIGHELF3 = "- Increased critical chance with Bows.",
-        ABILITY_INFO_HIGHELF4 = "- Enchanting skill increased.",
-        ABILITY_INFO_GOBLIN1 = "- Always receive the best possible gold discount, regardless of faction.",
-        ABILITY_INFO_GOBLIN2 = "- Alchemy skill increased by 15.",
-        ABILITY_INFO_GOBLIN3 = "- Calls in your friend, Gobber, allowing you bank access for 1 min.",
-        ABILITY_INFO_GOBLIN4 = "- Launches your belt rockets at an enemy, dealing fire damage.",
-        ABILITY_INFO_GOBLIN5 = "- Activates your rocket belt to jump forward.",
-        ABILITY_INFO_GOBLIN6 = "- Attack and casting speed increased by 1%.",
-        ABILITY_INFO_WORGEN1 = "- Resistance to harmful Nature and Shadow effects increased.",
-        ABILITY_INFO_WORGEN2 = "- Increases movement speed by 40% for 10 sec.",
-        ABILITY_INFO_WORGEN3 = "- Switch between human and Worgen forms.",
-        ABILITY_INFO_WORGEN4 = "- Skinning skill increased by 15 and skinning is faster.",
-        ABILITY_INFO_WORGEN5 = "- Run on all fours as fast as a wild animal.",
-        ABILITY_INFO_WORGEN6 = "- Change into your currently inactive form.",
-        ABILITY_INFO_WORGEN7 = "- Critical strike chance increased by 1%.",
-        RACE_INFO_MAGHAR = "The orc clans of Draenor never drank the demon blood that corrupted their distant kin. Proud and defiant, they remained uncorrupted as the Mag'har. With courage and a fierce sense of honor, the Mag'har now fight for their place on Azeroth.",
-        RACE_INFO_HIGHELF = "Once the proud rulers of Quel'Thalas, the high elves drew strength from the Sunwell. After its destruction, some rejected the path taken by the blood elves and scattered across Azeroth. Few in number, they preserve their ancient traditions and wield magic with care.",
-        RACE_INFO_GOBLIN = "Clever, inventive and always looking for profit, goblins have turned their talent for engineering, alchemy and trade into a place among the Horde. Their dangerous inventions are as famous as their sharp business sense.",
-        RACE_INFO_WORGEN = "Behind the Greymane Wall, a terrible curse transformed many citizens of Gilneas into the beasts known as worgen. Having learned to control their feral nature, they now fight to defend their people and their place in the Alliance."
-    },
-    deDE = {
-        ABILITY_INFO_MAGHAR1 = "- Angriffskraft und Zauberschaden sind erhöht.",
-        ABILITY_INFO_MAGHAR2 = "- Erhöhte Chance, Fluch-, Krankheits- und Gifteffekten zu widerstehen.",
-        ABILITY_INFO_MAGHAR3 = "- Die maximale Gesundheit von Begleitern ist erhöht.",
-        ABILITY_INFO_MAGHAR4 = "- Die Dauer von Betäubungseffekten ist verringert.",
-        ABILITY_INFO_HIGHELF1 = "- Kann Mana, Energie, Runenmacht oder Wut wiederherstellen.",
-        ABILITY_INFO_HIGHELF2 = "- Beweglichkeit um 2% erhöht.",
-        ABILITY_INFO_HIGHELF3 = "- Erhöhte kritische Trefferchance mit Bögen.",
-        ABILITY_INFO_HIGHELF4 = "- Verzauberkunstfertigkeit erhöht.",
-        ABILITY_INFO_GOBLIN1 = "- Erhält unabhängig von der Fraktion immer den bestmöglichen Goldrabatt.",
-        ABILITY_INFO_GOBLIN2 = "- Alchemiefertigkeit um 15 erhöht.",
-        ABILITY_INFO_GOBLIN3 = "- Ruft Gobber herbei und ermöglicht 1 Min. lang Zugriff auf die Bank.",
-        ABILITY_INFO_GOBLIN4 = "- Feuert Gürtelraketen auf einen Gegner ab und verursacht Feuerschaden.",
-        ABILITY_INFO_GOBLIN5 = "- Aktiviert den Raketengürtel und springt nach vorn.",
-        ABILITY_INFO_GOBLIN6 = "- Angriffs- und Zaubertempo um 1% erhöht.",
-        ABILITY_INFO_WORGEN1 = "- Widerstand gegen schädliche Natur- und Schatteneffekte erhöht.",
-        ABILITY_INFO_WORGEN2 = "- Erhöht das Bewegungstempo 10 Sek. lang um 40%.",
-        ABILITY_INFO_WORGEN3 = "- Wechselt zwischen Menschen- und Worgengestalt.",
-        ABILITY_INFO_WORGEN4 = "- Kürschnereifertigkeit um 15 erhöht und schnelleres Kürschnern.",
-        ABILITY_INFO_WORGEN5 = "- Läuft auf allen vieren so schnell wie ein wildes Tier.",
-        ABILITY_INFO_WORGEN6 = "- Wechselt in die derzeit inaktive Gestalt.",
-        ABILITY_INFO_WORGEN7 = "- Kritische Trefferchance um 1% erhöht.",
-        RACE_INFO_MAGHAR = "Die Orcclans von Draenor tranken niemals das Dämonenblut, das ihre fernen Verwandten verdarb. Stolz und unbeugsam blieben sie als Mag'har unverdorben. Mit Mut und einem ausgeprägten Ehrgefühl kämpfen die Mag'har nun um ihren Platz auf Azeroth.",
-        RACE_INFO_HIGHELF = "Einst herrschten die Hochelfen stolz über Quel'Thalas und schöpften ihre Kraft aus dem Sonnenbrunnen. Nach seiner Zerstörung lehnten einige den Weg der Blutelfen ab und verstreuten sich über Azeroth. Obwohl nur wenige geblieben sind, bewahren sie ihre alten Traditionen und gehen vorsichtig mit Magie um.",
-        RACE_INFO_GOBLIN = "Gerissen, erfinderisch und stets auf Gewinn bedacht haben sich die Goblins mit ihrem Talent für Ingenieurskunst, Alchemie und Handel einen Platz in der Horde geschaffen. Ihre gefährlichen Erfindungen sind ebenso berühmt wie ihr Geschäftssinn.",
-        RACE_INFO_WORGEN = "Hinter dem Graumähnenwall verwandelte ein schrecklicher Fluch viele Bewohner von Gilneas in die als Worgen bekannten Bestien. Nachdem sie gelernt haben, ihre wilde Natur zu beherrschen, kämpfen sie nun für ihr Volk und ihren Platz in der Allianz."
-    },
-    frFR = {
-        ABILITY_INFO_MAGHAR1 = "- Puissance d'attaque et dégâts des sorts augmentés.",
-        ABILITY_INFO_MAGHAR2 = "- Chances accrues de résister aux malédictions, maladies et poisons.",
-        ABILITY_INFO_MAGHAR3 = "- Points de vie maximum des familiers augmentés.",
-        ABILITY_INFO_MAGHAR4 = "- Durée des effets d'étourdissement réduite.",
-        ABILITY_INFO_HIGHELF1 = "- Peut rendre du mana, de l'énergie, de la puissance runique ou de la rage.",
-        ABILITY_INFO_HIGHELF2 = "- Agilité augmentée de 2%.",
-        ABILITY_INFO_HIGHELF3 = "- Chances de coup critique avec les arcs augmentées.",
-        ABILITY_INFO_HIGHELF4 = "- Compétence en enchantement augmentée.",
-        ABILITY_INFO_GOBLIN1 = "- Bénéficie toujours de la meilleure réduction possible, quelle que soit la réputation.",
-        ABILITY_INFO_GOBLIN2 = "- Compétence en alchimie augmentée de 15.",
-        ABILITY_INFO_GOBLIN3 = "- Appelle Gobber et permet d'accéder à la banque pendant 1 min.",
-        ABILITY_INFO_GOBLIN4 = "- Lance les roquettes de ceinture sur un ennemi et inflige des dégâts de Feu.",
-        ABILITY_INFO_GOBLIN5 = "- Active la ceinture-fusée pour bondir vers l'avant.",
-        ABILITY_INFO_GOBLIN6 = "- Vitesse d'attaque et d'incantation augmentée de 1%.",
-        ABILITY_INFO_WORGEN1 = "- Résistance aux effets néfastes de Nature et d'Ombre augmentée.",
-        ABILITY_INFO_WORGEN2 = "- Augmente la vitesse de déplacement de 40% pendant 10 s.",
-        ABILITY_INFO_WORGEN3 = "- Permet d'alterner entre les formes humaine et worgen.",
-        ABILITY_INFO_WORGEN4 = "- Compétence en dépeçage augmentée de 15 et dépeçage plus rapide.",
-        ABILITY_INFO_WORGEN5 = "- Court à quatre pattes aussi vite qu'un animal sauvage.",
-        ABILITY_INFO_WORGEN6 = "- Adopte la forme actuellement inactive.",
-        ABILITY_INFO_WORGEN7 = "- Chances de coup critique augmentées de 1%.",
-        RACE_INFO_MAGHAR = "Les clans orcs de Draenor n'ont jamais bu le sang démoniaque qui corrompit leurs lointains parents. Fiers et indomptables, les Mag'har sont restés préservés de cette corruption. Avec courage et honneur, ils combattent désormais pour leur place en Azeroth.",
-        RACE_INFO_HIGHELF = "Autrefois fiers maîtres de Quel'Thalas, les hauts-elfes tiraient leur puissance du Puits de soleil. Après sa destruction, certains refusèrent la voie des elfes de sang et se dispersèrent en Azeroth. Peu nombreux, ils préservent leurs anciennes traditions et manient la magie avec prudence.",
-        RACE_INFO_GOBLIN = "Rusés, inventifs et toujours en quête de profit, les gobelins ont gagné leur place dans la Horde grâce à leur talent pour l'ingénierie, l'alchimie et le commerce. Leurs inventions dangereuses sont aussi célèbres que leur sens des affaires.",
-        RACE_INFO_WORGEN = "Derrière le mur de Grisetête, une terrible malédiction transforma de nombreux habitants de Gilnéas en créatures appelées worgens. Ayant appris à maîtriser leur nature sauvage, ils combattent désormais pour leur peuple et leur place au sein de l'Alliance."
-    },
-    esES = {
-        ABILITY_INFO_MAGHAR1 = "- Poder de ataque y daño con hechizos aumentados.",
-        ABILITY_INFO_MAGHAR2 = "- Mayor probabilidad de resistir maldiciones, enfermedades y venenos.",
-        ABILITY_INFO_MAGHAR3 = "- Salud máxima de las mascotas aumentada.",
-        ABILITY_INFO_MAGHAR4 = "- Duración de los efectos de aturdimiento reducida.",
-        ABILITY_INFO_HIGHELF1 = "- Puede restaurar maná, energía, poder rúnico o ira.",
-        ABILITY_INFO_HIGHELF2 = "- Agilidad aumentada un 2%.",
-        ABILITY_INFO_HIGHELF3 = "- Probabilidad de golpe crítico con arcos aumentada.",
-        ABILITY_INFO_HIGHELF4 = "- Habilidad de encantamiento aumentada.",
-        ABILITY_INFO_GOBLIN1 = "- Siempre recibe el mejor descuento posible, sin importar la reputación.",
-        ABILITY_INFO_GOBLIN2 = "- Habilidad de alquimia aumentada 15 p.",
-        ABILITY_INFO_GOBLIN3 = "- Llama a Gobber y permite acceder al banco durante 1 min.",
-        ABILITY_INFO_GOBLIN4 = "- Lanza los cohetes del cinturón contra un enemigo e inflige daño de Fuego.",
-        ABILITY_INFO_GOBLIN5 = "- Activa el cinturón cohete para saltar hacia delante.",
-        ABILITY_INFO_GOBLIN6 = "- Velocidad de ataque y lanzamiento aumentada un 1%.",
-        ABILITY_INFO_WORGEN1 = "- Resistencia a efectos dañinos de Naturaleza y Sombras aumentada.",
-        ABILITY_INFO_WORGEN2 = "- Aumenta la velocidad de movimiento un 40% durante 10 s.",
-        ABILITY_INFO_WORGEN3 = "- Permite cambiar entre forma humana y forma huargen.",
-        ABILITY_INFO_WORGEN4 = "- Habilidad de desuello aumentada 15 p. y desuello más rápido.",
-        ABILITY_INFO_WORGEN5 = "- Corre a cuatro patas tan rápido como un animal salvaje.",
-        ABILITY_INFO_WORGEN6 = "- Adopta la forma que esté inactiva en ese momento.",
-        ABILITY_INFO_WORGEN7 = "- Probabilidad de golpe crítico aumentada un 1%.",
-        RACE_INFO_MAGHAR = "Los clanes orcos de Draenor nunca bebieron la sangre demoníaca que corrompió a sus parientes lejanos. Orgullosos y desafiantes, los Mag'har permanecieron incorruptos. Con valor y un firme sentido del honor, ahora luchan por su lugar en Azeroth.",
-        RACE_INFO_HIGHELF = "Antaño orgullosos gobernantes de Quel'Thalas, los altos elfos obtenían su poder de la Fuente del Sol. Tras su destrucción, algunos rechazaron el camino de los elfos de sangre y se dispersaron por Azeroth. Aunque son pocos, conservan sus antiguas tradiciones y usan la magia con cautela.",
-        RACE_INFO_GOBLIN = "Astutos, inventivos y siempre en busca de beneficios, los goblins se han ganado un lugar en la Horda gracias a su talento para la ingeniería, la alquimia y el comercio. Sus peligrosos inventos son tan famosos como su olfato para los negocios.",
-        RACE_INFO_WORGEN = "Tras el Muro de Cringris, una terrible maldición transformó a muchos habitantes de Gilneas en las bestias conocidas como huargen. Tras aprender a controlar su naturaleza salvaje, ahora luchan por su pueblo y por su lugar en la Alianza."
-    },
-    ruRU = {
-        ABILITY_INFO_MAGHAR1 = "- Сила атаки и урон от заклинаний повышены.",
-        ABILITY_INFO_MAGHAR2 = "- Повышена вероятность сопротивления проклятиям, болезням и ядам.",
-        ABILITY_INFO_MAGHAR3 = "- Максимальный запас здоровья питомцев увеличен.",
-        ABILITY_INFO_MAGHAR4 = "- Длительность эффектов оглушения сокращена.",
-        ABILITY_INFO_HIGHELF1 = "- Может восполнять ману, энергию, силу рун или ярость.",
-        ABILITY_INFO_HIGHELF2 = "- Ловкость повышена на 2%.",
-        ABILITY_INFO_HIGHELF3 = "- Повышена вероятность критического удара при использовании луков.",
-        ABILITY_INFO_HIGHELF4 = "- Навык наложения чар повышен.",
-        ABILITY_INFO_GOBLIN1 = "- Всегда получает максимальную скидку независимо от репутации.",
-        ABILITY_INFO_GOBLIN2 = "- Навык алхимии повышен на 15.",
-        ABILITY_INFO_GOBLIN3 = "- Призывает Гоббера и на 1 мин. открывает доступ к банку.",
-        ABILITY_INFO_GOBLIN4 = "- Выпускает поясные ракеты во врага, нанося урон от огня.",
-        ABILITY_INFO_GOBLIN5 = "- Активирует ракетный пояс и совершает прыжок вперёд.",
-        ABILITY_INFO_GOBLIN6 = "- Скорость атаки и произнесения заклинаний повышена на 1%.",
-        ABILITY_INFO_WORGEN1 = "- Повышено сопротивление вредоносным эффектам сил природы и тьмы.",
-        ABILITY_INFO_WORGEN2 = "- Скорость передвижения повышается на 40% на 10 сек.",
-        ABILITY_INFO_WORGEN3 = "- Переключение между человеческим обликом и обликом воргена.",
-        ABILITY_INFO_WORGEN4 = "- Навык снятия шкур повышен на 15, а снятие шкур происходит быстрее.",
-        ABILITY_INFO_WORGEN5 = "- Бег на четвереньках со скоростью дикого зверя.",
-        ABILITY_INFO_WORGEN6 = "- Переход в неактивный в данный момент облик.",
-        ABILITY_INFO_WORGEN7 = "- Вероятность критического удара повышена на 1%.",
-        RACE_INFO_MAGHAR = "Кланы орков Дренора не пили демоническую кровь и остались неосквернёнными маг'харами. Гордые и непреклонные, они сражаются за своё место в Азероте.",
-        RACE_INFO_HIGHELF = "Высшие эльфы когда-то правили Кель'Таласом и черпали силу из Солнечного Колодца. После его разрушения часть из них отвергла путь эльфов крови и сохранила древние традиции.",
-        RACE_INFO_GOBLIN = "Хитрые и изобретательные гоблины превратили любовь к инженерному делу, алхимии и торговле в прочное место в Орде.",
-        RACE_INFO_WORGEN = "Проклятие превратило многих жителей Гилнеаса в воргенов. Научившись управлять своей звериной природой, они сражаются за свой народ и Альянс."
-    },
-    zhCN = {
-        ABILITY_INFO_MAGHAR1 = "- 攻击强度和法术伤害提高。",
-        ABILITY_INFO_MAGHAR2 = "- 抵抗诅咒、疾病和中毒效果的几率提高。",
-        ABILITY_INFO_MAGHAR3 = "- 宠物的最大生命值提高。",
-        ABILITY_INFO_MAGHAR4 = "- 昏迷效果的持续时间缩短。",
-        ABILITY_INFO_HIGHELF1 = "- 可以恢复法力、能量、符文能量或怒气。",
-        ABILITY_INFO_HIGHELF2 = "- 敏捷提高2%。",
-        ABILITY_INFO_HIGHELF3 = "- 使用弓时的暴击几率提高。",
-        ABILITY_INFO_HIGHELF4 = "- 附魔技能提高。",
-        ABILITY_INFO_GOBLIN1 = "- 无论声望如何，总能获得最佳金币折扣。",
-        ABILITY_INFO_GOBLIN2 = "- 炼金术技能提高15点。",
-        ABILITY_INFO_GOBLIN3 = "- 召唤哥伯尔，使你可以使用银行1分钟。",
-        ABILITY_INFO_GOBLIN4 = "- 向敌人发射腰带火箭，造成火焰伤害。",
-        ABILITY_INFO_GOBLIN5 = "- 启动火箭腰带向前跃进。",
-        ABILITY_INFO_GOBLIN6 = "- 攻击和施法速度提高1%。",
-        ABILITY_INFO_WORGEN1 = "- 对有害自然和暗影效果的抗性提高。",
-        ABILITY_INFO_WORGEN2 = "- 移动速度提高40%，持续10秒。",
-        ABILITY_INFO_WORGEN3 = "- 在人类与狼人形态之间切换。",
-        ABILITY_INFO_WORGEN4 = "- 剥皮技能提高15点，并且剥皮速度更快。",
-        ABILITY_INFO_WORGEN5 = "- 四足奔跑，速度如同野兽。",
-        ABILITY_INFO_WORGEN6 = "- 切换到当前未激活的形态。",
-        ABILITY_INFO_WORGEN7 = "- 暴击几率提高1%。",
-        RACE_INFO_MAGHAR = "德拉诺的兽人氏族从未饮下腐化远亲的恶魔之血，因此以未受污染的玛格汉之名延续至今。骄傲而坚定的他们如今为自己在艾泽拉斯的位置而战。",
-        RACE_INFO_HIGHELF = "高等精灵曾是奎尔萨拉斯骄傲的统治者，并从太阳之井汲取力量。太阳之井毁灭后，一些人拒绝了血精灵选择的道路，继续守护古老传统。",
-        RACE_INFO_GOBLIN = "聪明、富有创造力且永远追逐利润的地精，凭借工程学、炼金术和贸易才能在部落中占据了一席之地。",
-        RACE_INFO_WORGEN = "可怕的诅咒将许多吉尔尼斯居民变成狼人。学会控制野性后，他们为自己的人民以及在联盟中的位置而战。"
-    },
-    zhTW = {
-        ABILITY_INFO_MAGHAR1 = "- 攻擊強度和法術傷害提高。",
-        ABILITY_INFO_MAGHAR2 = "- 抵抗詛咒、疾病和中毒效果的機率提高。",
-        ABILITY_INFO_MAGHAR3 = "- 寵物的最大生命值提高。",
-        ABILITY_INFO_MAGHAR4 = "- 昏迷效果的持續時間縮短。",
-        ABILITY_INFO_HIGHELF1 = "- 可以恢復法力、能量、符文能量或怒氣。",
-        ABILITY_INFO_HIGHELF2 = "- 敏捷提高2%。",
-        ABILITY_INFO_HIGHELF3 = "- 使用弓時的致命一擊機率提高。",
-        ABILITY_INFO_HIGHELF4 = "- 附魔技能提高。",
-        ABILITY_INFO_GOBLIN1 = "- 無論聲望如何，總能獲得最佳金幣折扣。",
-        ABILITY_INFO_GOBLIN2 = "- 鍊金術技能提高15點。",
-        ABILITY_INFO_GOBLIN3 = "- 召喚哥伯爾，使你可以使用銀行1分鐘。",
-        ABILITY_INFO_GOBLIN4 = "- 向敵人發射腰帶火箭，造成火焰傷害。",
-        ABILITY_INFO_GOBLIN5 = "- 啟動火箭腰帶向前躍進。",
-        ABILITY_INFO_GOBLIN6 = "- 攻擊和施法速度提高1%。",
-        ABILITY_INFO_WORGEN1 = "- 對有害自然和暗影效果的抗性提高。",
-        ABILITY_INFO_WORGEN2 = "- 移動速度提高40%，持續10秒。",
-        ABILITY_INFO_WORGEN3 = "- 在人類與狼人形態之間切換。",
-        ABILITY_INFO_WORGEN4 = "- 剝皮技能提高15點，並且剝皮速度更快。",
-        ABILITY_INFO_WORGEN5 = "- 四足奔跑，速度如同野獸。",
-        ABILITY_INFO_WORGEN6 = "- 切換到目前未啟用的形態。",
-        ABILITY_INFO_WORGEN7 = "- 致命一擊機率提高1%。",
-        RACE_INFO_MAGHAR = "德拉諾的獸人氏族從未飲下腐化遠親的惡魔之血，因此以未受污染的瑪格哈之名延續至今。驕傲而堅定的他們如今為自己在艾澤拉斯的位置而戰。",
-        RACE_INFO_HIGHELF = "高等精靈曾是奎爾薩拉斯驕傲的統治者，並從太陽之井汲取力量。太陽之井毀滅後，一些人拒絕了血精靈選擇的道路，繼續守護古老傳統。",
-        RACE_INFO_GOBLIN = "聰明、富有創造力且永遠追逐利潤的哥布林，憑藉工程學、鍊金術和貿易才能在部落中占有一席之地。",
-        RACE_INFO_WORGEN = "可怕的詛咒將許多吉爾尼斯居民變成狼人。學會控制野性後，他們為自己的人民以及在聯盟中的位置而戰。"
-    }
+BAER_TEXT["esES"]={
+ WORGEN={name="Huargen",zone="Teldrassil",info="Tras la ferocidad de los huargen aún late un corazón humano. Han aprendido a dominar a la bestia interior y ponen su velocidad, instinto y determinación al servicio de la Alianza.",abilities={"Sañoso — aumenta la probabilidad de golpe crítico.","Huida oscura — aumenta mucho la velocidad de movimiento durante un breve periodo.","Aberración — reduce la duración de maldiciones y enfermedades.","Desollador — permite desollar con mayor rapidez.","Idioma: común."}},
+ GOBLIN={name="Goblin",zone="Durotar",info="Para un goblin, una oportunidad puede valer más que el oro. Ingenieros brillantes y negociadores despiadados convierten velocidad, cohetes, química y comercio en ventajas letales para la Horda.",abilities={"El tiempo es oro — aumenta la velocidad de ataque y lanzamiento.","Salto con cohete — te impulsa hacia delante.","Tromba de cohetes — dispara cohetes explosivos.","Las mejores ofertas — garantiza los mejores precios.","Hobgoblin de carga — llama a un ayudante bancario.","Idioma: orco."}},
+ HIGHELF={name="Alto elfo",zone="Bosque de Elwynn",info="Los quel'dorei que permanecieron leales a la Alianza se negaron a seguir a sus parientes elfos de sangre a la Horda. Disciplinados y versados en magia antigua, combinan la tradición thalassiana con los reflejos de los forestales.",abilities={"Meditación quel'dorei — restaura tu recurso de combate principal.","Presteza de los forestales — otorga la agilidad de los forestales altos elfos.","Idioma: thalassiano."}},
+ MAGHAR={name="Orco Mag'har",zone="Durotar",info="Los Mag'har son los clanes orcos incorruptos que escaparon de la mácula vil. Orgullosos de su legado de Draenor, aportan a la Horda fuerza ancestral, resistencia y un espíritu de clan inquebrantable.",abilities={"Llamada ancestral — invoca la fuerza de tus antepasados.","Sangre salvaje — otorga resistencia natural.","Vigor afín — fortalece el vínculo con tu compañero.","Voluntad inquebrantable — ayuda a resistir efectos incapacitantes.","Idioma: orco."}},
+ OGRE={name="Ogro",zone="Durotar",info="Los ogros Quebrantarrocas han encontrado su lugar en la Horda. Su enorme fuerza, piel gruesa, lealtad al clan y obstinación legendaria los convierten en aliados temibles.",abilities={"Poder de ogro — aumenta brevemente tu poder de ataque.","Piel gruesa — aumenta tu salud base.","Vínculo del clan — tus mascotas infligen más daño.","Terco como una piedra — reduce la duración de los aturdimientos.","Idioma: orco."}},
+ DARKIRONDWARF={name="Enano Hierro Negro",zone="Dun Morogh",info="Los enanos Hierro Negro fueron templados por el fuego de Roca Negra. Maestros de la forja, las armas de fuego y la guerra subterránea, aportan su tenacidad a la Alianza.",abilities={"Sangre de fuego — elimina efectos perjudiciales.","Entrenamiento del Yunque Negro — mejora el uso de armas de fuego.","Forjado en llamas — aumenta la resistencia al Fuego.","Secretos de las profundidades — revela tesoros cercanos.","Idiomas: común y enánico."}}
 };
-BAERCRAFT_CUSTOM_TEXT.esMX = BAERCRAFT_CUSTOM_TEXT.esES;
-local baercraftText = BAERCRAFT_CUSTOM_TEXT[BAERCRAFT_LOCALE] or BAERCRAFT_CUSTOM_TEXT.enUS;
-for key, value in pairs(baercraftText) do
-    _G[key] = value;
+BAER_TEXT["esMX"]=BAER_TEXT["esES"];
+BAER_TEXT["ruRU"]={
+ WORGEN={name="Ворген",zone="Тельдрассил",info="За звериной яростью воргенов всё ещё бьётся человеческое сердце. Они научились владеть внутренним зверем и служат Альянсу благодаря скорости, инстинктам и несгибаемой воле.",abilities={"Злобность — повышает вероятность критического удара.","Черный бег — значительно повышает скорость передвижения.","Аберрация — сокращает длительность проклятий и болезней.","Скорняк — ускоряет снятие шкур.","Язык: всеобщий."}},
+ GOBLIN={name="Гоблин",zone="Дуротар",info="Для гоблина удачная возможность порой дороже золота. Гениальные инженеры и беспощадные торговцы превращают скорость, ракеты, химию и коммерцию в оружие Орды.",abilities={"Время — деньги — повышает скорость атаки и произнесения заклинаний.","Реактивный прыжок — бросает вас вперед.","Ракетный обстрел — выпускает взрывные ракеты.","Выгодные сделки — лучшие цены у торговцев.","Карманный хобгоблин — вызывает банковского помощника.","Язык: орочий."}},
+ HIGHELF={name="Высший эльф",zone="Элвиннский лес",info="Кель'дорай, сохранившие верность Альянсу, отказались следовать за кровавыми эльфами в Орду. Древняя магия и традиции Талассии сочетаются в них с реакцией опытных следопытов.",abilities={"Медитация кель'дорай — восстанавливает основной боевой ресурс.","Стремительность следопытов — дарует ловкость высших эльфов.","Язык: талассийский."}},
+ MAGHAR={name="Орк маг'хар",zone="Дуротар",info="Маг'хары — незапятнанные орочьи кланы, избежавшие скверны. Гордясь наследием Дренора, они несут Орде силу предков, выносливость и несокрушимый дух клана.",abilities={"Зов предков — призывает силу предков.","Дикая кровь — дает природную стойкость.","Родственная мощь — укрепляет связь со спутником.","Непоколебимая воля — помогает сопротивляться эффектам контроля.","Язык: орочий."}},
+ OGRE={name="Огр",zone="Дуротар",info="Огры клана Каменного Молота нашли своё место в Орде. Огромная сила, толстая шкура, верность клану и легендарное упрямство делают их грозными союзниками.",abilities={"Сила огра — временно повышает силу атаки.","Толстая шкура — увеличивает базовый запас здоровья.","Узы клана — питомцы наносят больше урона.","Упрямство камня — сокращает длительность оглушения.","Язык: орочий."}},
+ DARKIRONDWARF={name="Дворф Черного Железа",zone="Дун Морог",info="Дворфы Черного Железа закалены огнем Черной горы и славятся кузнечным делом, огнестрельным оружием и подземной войной.",abilities={"Огненная кровь — снимает вредоносные эффекты.","Школа Черной Наковальни — улучшает владение огнестрельным оружием.","Закаленный в пламени — повышает сопротивление огню.","Тайны глубин — помогают находить сокровища.","Языки: всеобщий и дворфийский."}}
+};
+BAER_TEXT["zhCN"]={
+ WORGEN={name="狼人",zone="泰达希尔",info="狼人已经学会驾驭体内的野性，并以速度、直觉和坚定意志为联盟效力。",abilities={"恶意 — 提高暴击几率。","疾步夜行 — 短时间提高移动速度。","畸变 — 缩短诅咒和疾病持续时间。","剥皮专家 — 更快进行剥皮。","语言：通用语。"}},
+ GOBLIN={name="地精",zone="杜隆塔尔",info="足智多谋的地精把工程、火箭、化学和贸易变成部落的致命优势。",abilities={"时间就是金钱 — 提高攻击和施法速度。","火箭跳 — 向前推进。","火箭弹幕 — 发射爆炸火箭。","最佳交易 — 获得更优惠的商店价格。","便携式地精 — 呼叫银行助手。","语言：兽人语。"}},
+ HIGHELF={name="高等精灵",zone="艾尔文森林",info="忠于联盟的奎尔多雷保留着古老的萨拉斯传统，并以精湛魔法和游侠技艺作战。",abilities={"奎尔多雷冥想 — 恢复主要战斗资源。","游侠迅捷 — 获得高等精灵游侠的敏捷。","语言：萨拉斯语。"}},
+ MAGHAR={name="玛格汉兽人",zone="杜隆塔尔",info="未受邪能腐化的玛格汉氏族将德拉诺的力量与荣耀带入部落。",abilities={"先祖召唤 — 借用先祖之力。","野性之血 — 获得天然韧性。","共鸣活力 — 强化与伙伴的联系。","坚定意志 — 抵抗控制效果。","语言：兽人语。"}},
+ OGRE={name="食人魔",zone="杜隆塔尔",info="石槌氏族食人魔以强大力量、厚实皮肤、氏族忠诚和顽强意志效忠部落。",abilities={"食人魔之力 — 暂时提高攻击强度。","厚皮 — 提高基础生命值。","氏族纽带 — 宠物造成更多伤害。","顽如磐石 — 缩短昏迷持续时间。","语言：兽人语。"}},
+ DARKIRONDWARF={name="黑铁矮人",zone="丹莫罗",info="黑铁矮人在黑石烈焰中淬炼，擅长锻造、火器与地下作战。",abilities={"火血 — 清除有害效果。","黑铁砧训练 — 强化火器战斗。","烈焰锻造 — 提高火焰抗性。","深处秘藏 — 感知附近宝藏。","语言：通用语和矮人语。"}}
+};
+BAER_TEXT["zhTW"]={
+ WORGEN={name="狼人",zone="泰達希爾",info="狼人已學會駕馭體內的野性，並以速度、直覺與堅定意志為聯盟效力。",abilities={"惡意 — 提高致命一擊機率。","疾步夜行 — 短時間提高移動速度。","畸變 — 縮短詛咒與疾病持續時間。","剝皮專家 — 更快進行剝皮。","語言：通用語。"}},
+ GOBLIN={name="哥布林",zone="杜隆塔爾",info="足智多謀的哥布林把工程、火箭、化學與貿易變成部落的致命優勢。",abilities={"時間就是金錢 — 提高攻擊與施法速度。","火箭跳 — 向前推進。","火箭彈幕 — 發射爆裂火箭。","最佳交易 — 獲得更優惠的商店價格。","隨身地精 — 呼叫銀行助手。","語言：獸人語。"}},
+ HIGHELF={name="高等精靈",zone="艾爾文森林",info="忠於聯盟的奎爾多雷保留古老的薩拉斯傳統，並以精湛魔法與遊俠技藝作戰。",abilities={"奎爾多雷冥想 — 恢復主要戰鬥資源。","遊俠迅捷 — 獲得高等精靈遊俠的敏捷。","語言：薩拉斯語。"}},
+ MAGHAR={name="瑪格哈獸人",zone="杜隆塔爾",info="未受邪能腐化的瑪格哈氏族將德拉諾的力量與榮耀帶入部落。",abilities={"先祖召喚 — 借用先祖之力。","野性之血 — 獲得天然韌性。","共鳴活力 — 強化與夥伴的聯繫。","堅定意志 — 抵抗控制效果。","語言：獸人語。"}},
+ OGRE={name="食人魔",zone="杜隆塔爾",info="石槌氏族食人魔以強大力量、厚實皮膚、氏族忠誠與頑強意志效忠部落。",abilities={"食人魔之力 — 暫時提高攻擊強度。","厚皮 — 提高基礎生命力。","氏族羈絆 — 寵物造成更多傷害。","頑如磐石 — 縮短昏迷持續時間。","語言：獸人語。"}},
+ DARKIRONDWARF={name="黑鐵矮人",zone="丹莫洛",info="黑鐵矮人在黑石烈焰中淬鍊，擅長鍛造、火器與地下作戰。",abilities={"火血 — 清除有害效果。","黑鐵砧訓練 — 強化火器戰鬥。","烈焰鍛造 — 提高火焰抗性。","深處秘藏 — 感知附近寶藏。","語言：通用語與矮人語。"}}
+};
+
+local T=BAER_TEXT[BAER_LOCALE] or BAER_TEXT.enUS;
+local BAER_LABELS={
+  enUS={start="Starting Area",traits="Racial Traits"},
+  deDE={start="Startgebiet",traits="Volksfähigkeiten"},
+  frFR={start="Zone de départ",traits="Traits raciaux"},
+  esES={start="Zona inicial",traits="Rasgos raciales"},
+  esMX={start="Zona inicial",traits="Rasgos raciales"},
+  ruRU={start="Стартовая зона",traits="Расовые способности"},
+  zhCN={start="起始区域",traits="种族特长"},
+  zhTW={start="起始區域",traits="種族特長"}
+};
+
+for _,k in ipairs({"WORGEN","GOBLIN","HIGHELF","MAGHAR","OGRE","DARKIRONDWARF"}) do
+  local e=(T and T[k]) or BAER_TEXT.enUS[k];
+  _G["RACE_INFO_"..k]=e.info; _G["RACE_INFO_"..k.."_FEMALE"]=e.info;
+  _G["LOCATION_INFO_"..k]=e.zone;
+  for i,v in ipairs(e.abilities or {}) do _G["ABILITY_INFO_"..k..i]="- "..v; end
 end
--- CharacterCreate uses gender-specific race flavor keys when available.
-RACE_INFO_MAGHAR_FEMALE = RACE_INFO_MAGHAR;
-RACE_INFO_HIGHELF_FEMALE = RACE_INFO_HIGHELF;
-RACE_INFO_GOBLIN_FEMALE = RACE_INFO_GOBLIN;
-RACE_INFO_WORGEN_FEMALE = RACE_INFO_WORGEN;
+CHARACTER_FACING_INCREMENT = 2;
+MAX_RACES = 16;
 MAX_CLASSES_PER_RACE = 10;
 NUM_CHAR_CUSTOMIZATIONS = 5;
 MIN_CHAR_NAME_LENGTH = 2;
@@ -257,37 +104,43 @@ RACE_ICON_TCOORDS = {
 	["DWARF_MALE"]		= {0.125, 0.25, 0, 0.25},
 	["GNOME_MALE"]		= {0.25, 0.375, 0, 0.25},
 	["NIGHTELF_MALE"]	= {0.375, 0.5, 0, 0.25},
+	["DRAENEI_MALE"]	= {0.5, 0.625, 0, 0.25},
+   	["WORGEN_MALE"]   	= {0.625, 0.750, 0, 0.25},
+    ["HIGHELF_MALE"]    = {0.750, 0.875, 0, 0.25},
+    ["DARKIRONDWARF_MALE"] = {0.125, 0.25, 0, 0.25},
 	
 	["TAUREN_MALE"]		= {0, 0.125, 0.25, 0.5},
 	["SCOURGE_MALE"]	= {0.125, 0.25, 0.25, 0.5},
 	["TROLL_MALE"]		= {0.25, 0.375, 0.25, 0.5},
 	["ORC_MALE"]		= {0.375, 0.5, 0.25, 0.5},
+	["BLOODELF_MALE"]	= {0.5, 0.625, 0.25, 0.5},
+	["GOBLIN_MALE"]    	= {0.625, 0.750, 0.25, 0.5},
+	["MAGHAR_MALE"]     = {0.750, 0.875, 0.25, 0.5},
+	["OGRE_MALE"]       = {0.875, 1.0, 0.25, 0.5},
 
 	["HUMAN_FEMALE"]	= {0, 0.125, 0.5, 0.75},  
 	["DWARF_FEMALE"]	= {0.125, 0.25, 0.5, 0.75},
 	["GNOME_FEMALE"]	= {0.25, 0.375, 0.5, 0.75},
 	["NIGHTELF_FEMALE"]	= {0.375, 0.5, 0.5, 0.75},
+	["DRAENEI_FEMALE"]	= {0.5, 0.625, 0.5, 0.75},
+   	["WORGEN_FEMALE"]  	= {0.625, 0.750, 0.5, 0.75},
+    ["HIGHELF_FEMALE"]  = {0.750, 0.875, 0.5, 0.75},
+    ["DARKIRONDWARF_FEMALE"] = {0.125, 0.25, 0.5, 0.75},
 	
 	["TAUREN_FEMALE"]	= {0, 0.125, 0.75, 1.0},   
 	["SCOURGE_FEMALE"]	= {0.125, 0.25, 0.75, 1.0}, 
 	["TROLL_FEMALE"]	= {0.25, 0.375, 0.75, 1.0}, 
 	["ORC_FEMALE"]		= {0.375, 0.5, 0.75, 1.0}, 
-
-	["BLOODELF_MALE"]	= {0.5, 0.625, 0.25, 0.5},
 	["BLOODELF_FEMALE"]	= {0.5, 0.625, 0.75, 1.0}, 
-	["DRAENEI_MALE"]	= {0.5, 0.625, 0, 0.25},
-	["DRAENEI_FEMALE"]	= {0.5, 0.625, 0.5, 0.75},
-
-   	["GOBLIN_MALE"]     	= {0.625, 0.750, 0.25, 0.5},
-   	["GOBLIN_FEMALE"]   	= {0.625, 0.750, 0.75, 1.0},
-   	["WORGEN_MALE"]     	= {0.625, 0.750, 0, 0.25},
-   	["WORGEN_FEMALE"]   	= {0.625, 0.750, 0.5, 0.75},
-
-    ["HIGHELF_MALE"]        = {0.750, 0.875, 0, 0.25},
-    ["HIGHELF_FEMALE"]    = {0.750, 0.875, 0.5, 0.75},
-	["MAGHAR_MALE"]        = {0.750, 0.875, 0.25, 0.5},
-    ["MAGHAR_FEMALE"]    = {0.750, 0.875, 0.75, 1.0},
+   	["GOBLIN_FEMALE"]  	= {0.625, 0.750, 0.75, 1.0},
+    ["MAGHAR_FEMALE"]   = {0.750, 0.875, 0.75, 1.0},
+    ["OGRE_FEMALE"]     = {0.875, 1.0, 0.75, 1.0},
 };
+CLASS_ID_BY_FILE = {
+	WARRIOR = 1, PALADIN = 2, HUNTER = 3, ROGUE = 4, PRIEST = 5,
+	DEATHKNIGHT = 6, SHAMAN = 7, MAGE = 8, WARLOCK = 9, DRUID = 11,
+};
+
 CLASS_ICON_TCOORDS = {
 	["WARRIOR"]	= {0, 0.25, 0, 0.25},
 	["MAGE"]	= {0.25, 0.49609375, 0, 0.25},
@@ -395,43 +248,27 @@ function CharacterCreateFrame_OnUpdate()
 end
 
 function CharacterCreateEnumerateRaces(...)
-	CharacterCreate.numRaces = select("#", ...)/3;
-	if ( CharacterCreate.numRaces > MAX_RACES ) then
-		message("Too many races!  Update MAX_RACES");
-		return;
-	end
-	local coords;
+	local playable = { HUMAN=true, ORC=true, DWARF=true, NIGHTELF=true, SCOURGE=true, TAUREN=true, GNOME=true, TROLL=true, GOBLIN=true, BLOODELF=true, DRAENEI=true, WORGEN=true, HIGHELF=true, MAGHAR=true, OGRE=true, DARKIRONDWARF=true };
+	local gender = (GetSelectedSex() == SEX_FEMALE) and "FEMALE" or "MALE";
 	local index = 1;
-	local button;
-	local gender;
-	local selectedSex = GetSelectedSex();
-	if ( selectedSex == SEX_MALE ) then
-		gender = "MALE";
-	elseif ( selectedSex == SEX_FEMALE ) then
-		gender = "FEMALE";
-	end
 	for i=1, select("#", ...), 3 do
-		coords = RACE_ICON_TCOORDS[strupper(select(i+1, ...).."_"..gender)];
-		_G["CharacterCreateRaceButton"..index.."NormalTexture"]:SetTexCoord(coords[1], coords[2], coords[3], coords[4]);
-		_G["CharacterCreateRaceButton"..index.."PushedTexture"]:SetTexCoord(coords[1], coords[2], coords[3], coords[4]);
-		button = _G["CharacterCreateRaceButton"..index];
-		button:Show();
-		if ( select(i+2, ...) == 1 ) then
-			button.enable = true;
-			SetButtonDesaturated(button);
-			button.name = select(i, ...)
-			button.tooltip = select(i, ...);
-		else
-			button.enable = false;
-			SetButtonDesaturated(button, 1);
-			button.name = select(i, ...)
-			button.tooltip = _G[strupper(select(i+1, ...).."_".."DISABLED")];
+		local raceName = select(i, ...);
+		local fileString = strupper(select(i+1, ...) or "");
+		local enabled = select(i+2, ...);
+		if playable[fileString] and index <= MAX_RACES then
+			local coords = RACE_ICON_TCOORDS[fileString.."_"..gender];
+			local button = _G["CharacterCreateRaceButton"..index];
+			if coords then
+				_G["CharacterCreateRaceButton"..index.."NormalTexture"]:SetTexCoord(coords[1],coords[2],coords[3],coords[4]);
+				_G["CharacterCreateRaceButton"..index.."PushedTexture"]:SetTexCoord(coords[1],coords[2],coords[3],coords[4]);
+			end
+			button:Show(); button.name=raceName; button.tooltip=raceName;
+			if enabled == 1 then button.enable=true; button:Enable(); SetButtonDesaturated(button); else button.enable=false; button:Disable(); SetButtonDesaturated(button,1); button.tooltip=_G[fileString.."_DISABLED"] or raceName; end
+			index=index+1;
 		end
-		index = index + 1;
 	end
-	for i=CharacterCreate.numRaces + 1, MAX_RACES, 1 do
-		_G["CharacterCreateRaceButton"..i]:Hide();
-	end
+	CharacterCreate.numRaces=index-1;
+	for i=index,MAX_RACES do _G["CharacterCreateRaceButton"..i]:Hide(); end
 end
 
 function CharacterCreateEnumerateClasses(...)
@@ -444,12 +281,15 @@ function CharacterCreateEnumerateClasses(...)
 	local index = 1;
 	local button;
 	for i=1, select("#", ...), 3 do
-		coords = CLASS_ICON_TCOORDS[strupper(select(i+1, ...))];
+		local classFile = strupper(select(i+1, ...));
+		local classID = CLASS_ID_BY_FILE[classFile] or index;
+		coords = CLASS_ICON_TCOORDS[classFile];
 		_G["CharacterCreateClassButton"..index.."NormalTexture"]:SetTexCoord(coords[1], coords[2], coords[3], coords[4]);
 		_G["CharacterCreateClassButton"..index.."PushedTexture"]:SetTexCoord(coords[1], coords[2], coords[3], coords[4]);
 		button = _G["CharacterCreateClassButton"..index];
+		button.classID = classID;
 		button:Show();
-		if ( (select(i+2, ...) == 1) and (IsRaceClassValid(CharacterCreate.selectedRace, index)) ) then
+		if ( select(i+2, ...) == 1 and IsRaceClassValid(GetSelectedRace(), classID) ) then
 			button.enable = true;
 			button:Enable();
 			SetButtonDesaturated(button);
@@ -512,12 +352,23 @@ function SetCharacterRace(id)
 	end
 
 	CharacterCreateRaceScrollFrameScrollBar:SetValue(0);
-	CharacterCreateRaceText:SetText(GetFlavorText("RACE_INFO_"..strupper(fileString), GetSelectedSex()).."|n|n");
-	if ( abilityText and abilityText ~= "" ) then
-		CharacterCreateRaceAbilityText:SetText(abilityText);
-	else
-		CharacterCreateRaceAbilityText:SetText("");
+	local customInfo=_G["RACE_INFO_"..fileString];
+	if customInfo and customInfo ~= "" then CharacterCreateRaceText:SetText(customInfo.."|n|n"); else CharacterCreateRaceText:SetText(GetFlavorText("RACE_INFO_"..fileString,GetSelectedSex()).."|n|n"); end
+	-- 6.2.1: location, racial traits and lore use separate Blizzard UI fields.
+	local labels=BAER_LABELS[BAER_LOCALE] or BAER_LABELS.enUS;
+	local location=_G["LOCATION_INFO_"..fileString] or "";
+	if CharacterCreateRaceLocationText then
+		if location ~= "" then
+			CharacterCreateRaceLocationText:SetText("|cffffd100"..labels.start..":|r "..location);
+		else
+			CharacterCreateRaceLocationText:SetText("");
+		end
 	end
+	local racePanel="";
+	if abilityText and abilityText ~= "" then
+		racePanel="|cffffd100"..labels.traits.."|r\n"..abilityText;
+	end
+	CharacterCreateRaceAbilityText:SetText(racePanel);
 
 	-- Set backdrop colors based on faction
 	local backdropColor = FACTION_BACKDROP_COLOR_TABLE[faction];
@@ -595,10 +446,12 @@ end
 
 function CharacterClass_OnClick(id)
 	PlaySound("gsCharacterCreationClass");
+	local button = _G["CharacterCreateClassButton"..id];
+	local classID = (button and button.classID) or id;
 	local _,_,currClass = GetSelectedClass();
-	if ( currClass ~= id and IsRaceClassValid(GetSelectedRace(), id) ) then
-		SetSelectedClass(id);
-		SetCharacterClass(id);
+	if ( currClass ~= classID and IsRaceClassValid(GetSelectedRace(), classID) ) then
+		SetSelectedClass(classID);
+		SetCharacterClass(classID);
 	 	SetCharacterRace(GetSelectedRace());
 		CharacterChangeFixup();
 	end

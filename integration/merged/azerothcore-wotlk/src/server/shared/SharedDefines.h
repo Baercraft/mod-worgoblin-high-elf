@@ -82,7 +82,8 @@ enum Races
     RACE_WORGEN             = 12, // TITLE Worgen
     RACE_HIGHELF            = 13,  // TITLE High Elf
     RACE_MAGHARORC          = 14,  //, TITLE Mag'har Orc
-    RACE_OGRE          = 15  //, TITLE Ogre
+    RACE_OGRE          = 15, // TITLE Ogre
+    RACE_DARKIRONDWARF = 16, // TITLE Dark Iron Dwarf
     //RACE_ALLIANCEPANDAREN   = 16, // TITLE Tushui Pandaren
     //RACE_HORDEPANDAREN      = 17, // TITLE Huojin Pandaren
     //RACE_NIGHTBORNE         = 18, // TITLE Nightborne

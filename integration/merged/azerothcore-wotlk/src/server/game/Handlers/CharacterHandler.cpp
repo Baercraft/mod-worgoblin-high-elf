@@ -2196,6 +2196,7 @@ void WorldSession::HandleCharFactionOrRaceChangeCallback(std::shared_ptr<Charact
             switch (factionChangeInfo->Race)
             {
             case RACE_DWARF:
+            case RACE_DARKIRONDWARF:
                 stmt->SetData(1, 111);
                 break;
             case RACE_DRAENEI:

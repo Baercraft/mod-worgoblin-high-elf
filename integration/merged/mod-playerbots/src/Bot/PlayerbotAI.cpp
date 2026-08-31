@@ -4392,7 +4392,7 @@ bool PlayerbotAI::canDispel(SpellInfo const* spellInfo, uint32 dispelType)
 bool IsAlliance(uint8 race)
 {
     return race == RACE_HUMAN || race == RACE_DWARF || race == RACE_NIGHTELF || race == RACE_GNOME ||
-           race == RACE_DRAENEI || race == RACE_WORGEN || race == RACE_HIGHELF;
+           race == RACE_DRAENEI || race == RACE_WORGEN || race == RACE_HIGHELF || race == RACE_DARKIRONDWARF;
 }
 
 Player* PlayerbotAI::FindNewMaster()
@@ -4595,11 +4595,11 @@ bool PlayerbotAI::AllowActive(ActivityType activityType)
             return true;
     }
 
-    // bot is inside a BG, dungeon, or raid — always active
+    // bot is inside a BG, dungeon, or raid - always active
     if (!WorldPosition(bot).isOverworld())
         return true;
 
-    // bot is waiting in a BG queue — stay active to speed up join
+    // bot is waiting in a BG queue - stay active to speed up join
     if (bot->InBattlegroundQueue())
         return true;
 
@@ -4678,7 +4678,7 @@ bool PlayerbotAI::AllowActive(ActivityType activityType)
 
             PlayerbotAI* memberBotAI = GET_PLAYERBOT_AI(member);
 
-            // group member is a real player or owned by one — stay active
+            // group member is a real player or owned by one - stay active
             if (!memberBotAI || memberBotAI->HasRealPlayerMaster())
                 return true;
 
@@ -4691,7 +4691,7 @@ bool PlayerbotAI::AllowActive(ActivityType activityType)
         }
     }
 
-    // bot is in LFG queue — stay active
+    // bot is in LFG queue - stay active
     bool isLFG = false;
     if (group)
     {
@@ -4727,7 +4727,7 @@ bool PlayerbotAI::AllowActive(ActivityType activityType)
         }
     }
 
-    // pathfinding only runs for bots forced active by the rules above —
+    // pathfinding only runs for bots forced active by the rules above -
     // skip it for bots that would only be active via random rotation
     if (activityType == DETAILED_MOVE_ACTIVITY)
         return false;
@@ -4749,7 +4749,7 @@ bool PlayerbotAI::AllowActive(ActivityType activityType)
         mod = AutoScaleActivity(mod);
     }
 
-    // deterministic rotation — bot is active if its hash falls below the threshold
+    // deterministic rotation - bot is active if its hash falls below the threshold
     uint32 ActivityNumber = GetFixedBotNumber(100);
     return ActivityNumber < mod;
 }
@@ -4761,7 +4761,7 @@ bool PlayerbotAI::AllowActivity(ActivityType activityType, bool checkNow)
     if (!allowActiveCheckTimer[activityIndex])
         allowActiveCheckTimer[activityIndex] = getMSTime();
 
-    // 4500ms base + 0–499ms per-bot offset = 4500–4999ms, capping at just under 5 seconds
+    // 4500ms base + 0-499ms per-bot offset = 4500-4999ms, capping at just under 5 seconds
     uint32 offset = bot->GetGUID().GetCounter() % 500;
 
     if (!checkNow && getMSTime() < (allowActiveCheckTimer[activityIndex] + 4500 + offset))
@@ -4822,18 +4822,18 @@ void PlayerbotAI::RemoveShapeshift()
     // RemoveAura("tree of life");
 }
 
-// Mirrors Blizzard’s GetAverageItemLevel rules :
+// Mirrors Blizzard's GetAverageItemLevel rules :
 // https://wowpedia.fandom.com/wiki/API_GetAverageItemLevel
 uint32 PlayerbotAI::GetEquipGearScore(Player* player)
 {
     constexpr uint8 TOTAL_SLOTS = 17;  // every slot except Body & Tabard
     uint32 sumLevel = 0;
 
-    /* ---------- 0.  Detect “ignore off-hand” situations --------- */
+    /* ---------- 0.  Detect "ignore off-hand" situations --------- */
     Item* main = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
     Item* off = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
 
-    bool ignoreOffhand = false;  // true → divisor = 16
+    bool ignoreOffhand = false;  // true -> divisor = 16
     if (main)
     {
         bool twoHand = (main->GetTemplate()->InventoryType == INVTYPE_2HWEAPON);

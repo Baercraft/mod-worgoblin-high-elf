@@ -4988,17 +4988,31 @@ void ObjectMgr::GetPlayerClassLevelInfo(uint32 class_, uint8 level, PlayerClassL
 
 void ObjectMgr::GetPlayerLevelInfo(uint32 race, uint32 class_, uint8 level, PlayerLevelInfo* info) const
 {
-    if (level < 1 || race >= sRaceMgr->GetMaxRaces() || class_ >= MAX_CLASSES)
+    if (level < 1 || class_ >= MAX_CLASSES)
         return;
 
-    PlayerInfo const* pInfo = _playerInfo[race][class_];
+    uint32 lookupRace = race;
+    if (race == RACE_HIGHELF)
+        lookupRace = RACE_NIGHTELF;
+    else if (race == RACE_OGRE)
+        lookupRace = RACE_ORC;
+    else if (race == RACE_DARKIRONDWARF)
+        lookupRace = RACE_DWARF;
+
+    PlayerInfo const* pInfo = nullptr;
+    if (race < sRaceMgr->GetMaxRaces())
+        pInfo = _playerInfo[race][class_];
+    if (!pInfo && lookupRace < sRaceMgr->GetMaxRaces())
+        pInfo = _playerInfo[lookupRace][class_];
     if (!pInfo)
         return;
 
     if (level <= sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
         *info = pInfo->levelInfo[level - 1];
-    else
+    else if (race < sRaceMgr->GetMaxRaces() && _playerInfo[race][class_] && _playerInfo[race][class_]->levelInfo)
         BuildPlayerLevelInfo(race, class_, level, info);
+    else
+        BuildPlayerLevelInfo(lookupRace, class_, level, info);
 }
 
 void ObjectMgr::BuildPlayerLevelInfo(uint8 race, uint8 _class, uint8 level, PlayerLevelInfo* info) const
@@ -11177,14 +11191,28 @@ VehicleAccessoryList const* ObjectMgr::GetVehicleAccessoryList(Vehicle* veh) con
 
 PlayerInfo const* ObjectMgr::GetPlayerInfo(uint32 race, uint32 class_) const
 {
-    if (race >= sRaceMgr->GetMaxRaces())
-        return nullptr;
     if (class_ >= MAX_CLASSES)
         return nullptr;
-    PlayerInfo const* info = _playerInfo[race][class_];
-    if (!info)
-        return nullptr;
-    return info;
+
+    PlayerInfo const* info = nullptr;
+    if (race < sRaceMgr->GetMaxRaces())
+        info = _playerInfo[race][class_];
+    if (info)
+        return info;
+
+    // Baercraft custom-race parent fallback.
+    // Keeps progression/talents/class data available even when a custom race has an incomplete DB row.
+    uint32 parentRace = 0;
+    if (race == RACE_HIGHELF)
+        parentRace = RACE_NIGHTELF;
+    else if (race == RACE_OGRE)
+        parentRace = RACE_ORC;
+    else if (race == RACE_DARKIRONDWARF)
+        parentRace = RACE_DWARF;
+
+    if (parentRace && parentRace < sRaceMgr->GetMaxRaces())
+        return _playerInfo[parentRace][class_];
+    return nullptr;
 }
 
 void ObjectMgr::LoadGameObjectQuestItems()

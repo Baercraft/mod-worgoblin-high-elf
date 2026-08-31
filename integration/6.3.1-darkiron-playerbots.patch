@@ -1,0 +1,225 @@
+diff --git a/src/Ai/Base/Actions/EmoteAction.cpp b/src/Ai/Base/Actions/EmoteAction.cpp
+index 0e86288..112204c 100644
+--- a/src/Ai/Base/Actions/EmoteAction.cpp
++++ b/src/Ai/Base/Actions/EmoteAction.cpp
+@@ -881,6 +881,7 @@ uint32 EmoteActionBase::GetNumberOfEmoteVariants(TextEmotes emote, uint8 Race, u
+         {
+             case RACE_HUMAN:
+             case RACE_DWARF:
++            case RACE_DARKIRONDWARF:
+             case RACE_NIGHTELF:
+             case RACE_UNDEAD_PLAYER:
+             case RACE_TROLL:
+@@ -924,6 +925,7 @@ uint32 EmoteActionBase::GetNumberOfEmoteVariants(TextEmotes emote, uint8 Race, u
+         {
+             case RACE_HUMAN:
+             case RACE_DWARF:
++            case RACE_DARKIRONDWARF:
+             case RACE_UNDEAD_PLAYER:
+             case RACE_TROLL:
+             {
+@@ -991,6 +993,7 @@ uint32 EmoteActionBase::GetNumberOfEmoteVariants(TextEmotes emote, uint8 Race, u
+                 return 2;
+             }
+             case RACE_DWARF:
++            case RACE_DARKIRONDWARF:
+             {
+                 if (Gender == GENDER_MALE)
+                     return 3;
+@@ -1014,6 +1017,7 @@ uint32 EmoteActionBase::GetNumberOfEmoteVariants(TextEmotes emote, uint8 Race, u
+         {
+             case RACE_HUMAN:
+             case RACE_DWARF:
++            case RACE_DARKIRONDWARF:
+             case RACE_GNOME:
+             {
+                 if (Gender == GENDER_MALE)
+@@ -1073,6 +1077,7 @@ uint32 EmoteActionBase::GetNumberOfEmoteVariants(TextEmotes emote, uint8 Race, u
+                 return 2;
+             }
+             case RACE_DWARF:
++            case RACE_DARKIRONDWARF:
+             {
+                 if (Gender == GENDER_MALE)
+                     return 3;
+@@ -1109,6 +1114,7 @@ uint32 EmoteActionBase::GetNumberOfEmoteVariants(TextEmotes emote, uint8 Race, u
+                 return 3;
+             }
+             case RACE_DWARF:
++            case RACE_DARKIRONDWARF:
+             case RACE_TAUREN:
+             {
+                 if (Gender == GENDER_MALE)
+@@ -1153,6 +1159,7 @@ uint32 EmoteActionBase::GetNumberOfEmoteVariants(TextEmotes emote, uint8 Race, u
+                 return 2;
+             }
+             case RACE_DWARF:
++            case RACE_DARKIRONDWARF:
+             case RACE_TROLL:
+             {
+                 if (Gender == GENDER_MALE)
+@@ -1183,6 +1190,7 @@ uint32 EmoteActionBase::GetNumberOfEmoteVariants(TextEmotes emote, uint8 Race, u
+                 return 2;
+             }
+             case RACE_DWARF:
++            case RACE_DARKIRONDWARF:
+             case RACE_TROLL:
+             {
+                 if (Gender == GENDER_MALE)
+@@ -1198,6 +1206,7 @@ uint32 EmoteActionBase::GetNumberOfEmoteVariants(TextEmotes emote, uint8 Race, u
+         {
+             case RACE_HUMAN:
+             case RACE_DWARF:
++            case RACE_DARKIRONDWARF:
+             case RACE_NIGHTELF:
+             case RACE_UNDEAD_PLAYER:
+             case RACE_TAUREN:
+@@ -1225,6 +1234,7 @@ uint32 EmoteActionBase::GetNumberOfEmoteVariants(TextEmotes emote, uint8 Race, u
+         {
+             case RACE_HUMAN:
+             case RACE_DWARF:
++            case RACE_DARKIRONDWARF:
+             case RACE_NIGHTELF:
+             case RACE_ORC:
+             case RACE_UNDEAD_PLAYER:
+@@ -1265,6 +1275,7 @@ uint32 EmoteActionBase::GetNumberOfEmoteVariants(TextEmotes emote, uint8 Race, u
+                 return 3;
+             }
+             case RACE_DWARF:
++            case RACE_DARKIRONDWARF:
+             case RACE_TROLL:
+             {
+                 if (Gender == GENDER_MALE)
+@@ -1303,6 +1314,7 @@ uint32 EmoteActionBase::GetNumberOfEmoteVariants(TextEmotes emote, uint8 Race, u
+         {
+             case RACE_HUMAN:
+             case RACE_DWARF:
++            case RACE_DARKIRONDWARF:
+             case RACE_TROLL:
+             {
+                 if (Gender == GENDER_MALE)
+@@ -1348,6 +1360,7 @@ uint32 EmoteActionBase::GetNumberOfEmoteVariants(TextEmotes emote, uint8 Race, u
+                 return 3;
+             }
+             case RACE_DWARF:
++            case RACE_DARKIRONDWARF:
+             {
+                 if (Gender == GENDER_MALE)
+                     return 4;
+@@ -1369,6 +1382,7 @@ uint32 EmoteActionBase::GetNumberOfEmoteVariants(TextEmotes emote, uint8 Race, u
+         {
+             case RACE_HUMAN:
+             case RACE_DWARF:
++            case RACE_DARKIRONDWARF:
+             case RACE_NIGHTELF:
+             case RACE_GNOME:
+             case RACE_ORC:
+@@ -1407,6 +1421,7 @@ uint32 EmoteActionBase::GetNumberOfEmoteVariants(TextEmotes emote, uint8 Race, u
+                 return 3;
+             }
+             case RACE_DWARF:
++            case RACE_DARKIRONDWARF:
+             {
+                 if (Gender == GENDER_MALE)
+                     return 5;
+@@ -1434,6 +1449,7 @@ uint32 EmoteActionBase::GetNumberOfEmoteVariants(TextEmotes emote, uint8 Race, u
+                 return 3;
+             }
+             case RACE_DWARF:
++            case RACE_DARKIRONDWARF:
+             case RACE_TAUREN:
+             {
+                 if (Gender == GENDER_MALE)
+@@ -1494,6 +1510,7 @@ uint32 EmoteActionBase::GetNumberOfEmoteVariants(TextEmotes emote, uint8 Race, u
+                 return 6;
+             }
+             case RACE_DWARF:
++            case RACE_DARKIRONDWARF:
+             {
+                 if (Gender == GENDER_MALE)
+                     return 6;
+diff --git a/src/Ai/Base/Actions/ReviveFromCorpseAction.cpp b/src/Ai/Base/Actions/ReviveFromCorpseAction.cpp
+index 3fc11a5..27b57da 100644
+--- a/src/Ai/Base/Actions/ReviveFromCorpseAction.cpp
++++ b/src/Ai/Base/Actions/ReviveFromCorpseAction.cpp
+@@ -252,7 +252,7 @@ GraveyardStruct const* SpiritHealerAction::GetGrave(bool startZone)
+     std::vector<uint32> races;
+ 
+     if (bot->GetTeamId() == TEAM_ALLIANCE)
+-        races = {RACE_HUMAN, RACE_DWARF, RACE_GNOME, RACE_NIGHTELF, RACE_DRAENEI, RACE_WORGEN, RACE_HIGHELF};
++        races = {RACE_HUMAN, RACE_DWARF, RACE_GNOME, RACE_NIGHTELF, RACE_DRAENEI, RACE_WORGEN, RACE_HIGHELF, RACE_DARKIRONDWARF};
+     else
+         races = {RACE_ORC, RACE_TROLL, RACE_TAUREN, RACE_UNDEAD_PLAYER, RACE_BLOODELF, RACE_GOBLIN, RACE_MAGHARORC, RACE_OGRE};
+ 
+diff --git a/src/Bot/Cmd/ChatHelper.cpp b/src/Bot/Cmd/ChatHelper.cpp
+index c6fccec..fefca44 100644
+--- a/src/Bot/Cmd/ChatHelper.cpp
++++ b/src/Bot/Cmd/ChatHelper.cpp
+@@ -186,6 +186,7 @@ ChatHelper::ChatHelper(PlayerbotAI* botAI) : PlayerbotAIAware(botAI)
+     races[RACE_HIGHELF] = "High Elf";
+     races[RACE_MAGHARORC] = "Mag'har Orc";
+     races[RACE_OGRE] = "Ogre";
++    races[RACE_DARKIRONDWARF] = "Dark Iron Dwarf";
+ }
+ 
+ std::string const ChatHelper::formatMoney(uint32 copper)
+diff --git a/src/Bot/Factory/PlayerbotFactory.cpp b/src/Bot/Factory/PlayerbotFactory.cpp
+index 2928d34..7352aa0 100644
+--- a/src/Bot/Factory/PlayerbotFactory.cpp
++++ b/src/Bot/Factory/PlayerbotFactory.cpp
+@@ -3706,6 +3706,7 @@ void PlayerbotFactory::InitMounts()
+             fast = {23250, 23252, 23251};
+             break;
+         case RACE_DWARF:
++        case RACE_DARKIRONDWARF:
+             slow = {6899, 6777, 6898};
+             fast = {23238, 23239, 23240};
+             break;
+diff --git a/src/Bot/Factory/RandomPlayerbotFactory.cpp b/src/Bot/Factory/RandomPlayerbotFactory.cpp
+index a28dff0..547bbce 100644
+--- a/src/Bot/Factory/RandomPlayerbotFactory.cpp
++++ b/src/Bot/Factory/RandomPlayerbotFactory.cpp
+@@ -24,6 +24,7 @@ constexpr RandomPlayerbotFactory::NameRaceAndGender RandomPlayerbotFactory::Comb
+     {
+         case RACE_ORC:        baseIndex = NameRaceAndGender::OrcMale; break;
+         case RACE_DWARF:      baseIndex = NameRaceAndGender::DwarfMale; break;
++        case RACE_DARKIRONDWARF: baseIndex = NameRaceAndGender::DwarfMale; break; // Dwarf names for Dark Iron Dwarves
+         case RACE_NIGHTELF:   baseIndex = NameRaceAndGender::NightelfMale; break;
+         case RACE_TAUREN:     baseIndex = NameRaceAndGender::TaurenMale; break;
+         case RACE_GNOME:      baseIndex = NameRaceAndGender::GnomeMale; break;
+diff --git a/src/Bot/PlayerbotAI.cpp b/src/Bot/PlayerbotAI.cpp
+index b330682..04c2d68 100644
+--- a/src/Bot/PlayerbotAI.cpp
++++ b/src/Bot/PlayerbotAI.cpp
+@@ -4392,7 +4392,7 @@ bool PlayerbotAI::canDispel(SpellInfo const* spellInfo, uint32 dispelType)
+ bool IsAlliance(uint8 race)
+ {
+     return race == RACE_HUMAN || race == RACE_DWARF || race == RACE_NIGHTELF || race == RACE_GNOME ||
+-           race == RACE_DRAENEI || race == RACE_WORGEN || race == RACE_HIGHELF;
++           race == RACE_DRAENEI || race == RACE_WORGEN || race == RACE_HIGHELF || race == RACE_DARKIRONDWARF;
+ }
+ 
+ Player* PlayerbotAI::FindNewMaster()
+diff --git a/src/Mgr/Travel/TravelNode.cpp b/src/Mgr/Travel/TravelNode.cpp
+index 8723c86..688e81b 100644
+--- a/src/Mgr/Travel/TravelNode.cpp
++++ b/src/Mgr/Travel/TravelNode.cpp
+@@ -1655,15 +1655,16 @@ void TravelNodeMap::generateStartNodes()
+     std::map<uint8, std::string> startNames;
+     startNames[RACE_HUMAN] = "Human and High Elf";
+     startNames[RACE_ORC] = "Orc, Troll, Goblin, Mag'har Orc and Ogre";
+-    startNames[RACE_DWARF] = "Dwarf and Gnome";
++    startNames[RACE_DWARF] = "Dwarf, Gnome and Dark Iron Dwarf";
+     startNames[RACE_NIGHTELF] = "Night Elf and Worgen";
+     startNames[RACE_UNDEAD_PLAYER] = "Undead";
+     startNames[RACE_TAUREN] = "Tauren";
+-    startNames[RACE_GNOME] = "Dwarf and Gnome";
++    startNames[RACE_GNOME] = "Dwarf, Gnome and Dark Iron Dwarf";
+     startNames[RACE_TROLL] = "Orc, Troll, Goblin,  Mag'har Orc and Ogre";
+     startNames[RACE_GOBLIN] = "Orc, Troll, Goblin,  Mag'har Orc and Ogre";
+     startNames[RACE_WORGEN] = "Night Elf and Worgen";
+     startNames[RACE_HIGHELF] = "Human and High Elf";
++    startNames[RACE_DARKIRONDWARF] = "Dwarf, Gnome and Dark Iron Dwarf";
+     startNames[RACE_MAGHARORC] = "Orc, Troll, Goblin,  Mag'har Orc and Ogre";
+ 
+     for (uint32 i = 0; i < sRaceMgr->GetMaxRaces(); i++)

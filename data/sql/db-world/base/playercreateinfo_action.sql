@@ -35,6 +35,7 @@
 (6, 1, 73, 78, 0), -- Heroic Strike (SpecialA: Battle Stance)
 (6, 1, 84, 6603, 0), -- Auto Attack (SpecialB: Defensive Stance)
 (6, 1, 96, 6603, 0), -- Auto Attack (SpecialC: Berserker Stance)
+(6, 1, 73, 78, 0), -- Heroic Strike (SpecialA: Battle Stance)
 (6, 1, 74, 20549, 0), -- War Stomp (SpecialA: Battle Stance)
 -- Gnome Warrior
 (7, 1, 72, 6603, 0), -- Auto Attack (SpecialA: Battle Stance)
@@ -49,13 +50,6 @@
 (8, 1, 73, 78, 0), -- Heroic Strike (SpecialA: Battle Stance)
 (8, 1, 74, 2764, 0), -- Throw (SpecialA: Battle Stance)
 (8, 1, 75, 26297, 0), -- Berserking (SpecialA: Battle Stance)
--- Goblin Warrior
-(9, 1, 72, 6603, 0), -- Auto Attack (SpecialA: Battle Stance)
-(9, 1, 84, 6603, 0), -- Auto Attack (SpecialB: Defensive Stance)
-(9, 1, 96, 6603, 0), -- Auto Attack (SpecialC: Berserker Stance)
-(9, 1, 73, 78, 0), -- Heroic Strike (SpecialA: Battle Stance)
-(9, 1, 81, 69070, 0), -- Rocket Jump (SpecialA: Battle Stance)
-(9, 1, 82, 69041, 0), -- Rocket Barrage (SpecialA: Battle Stance)
 -- Blood Elf Warrior
 (10, 1, 72, 6603, 0), -- Auto Attack (SpecialA: Battle Stance)
 (10, 1, 84, 6603, 0), -- Auto Attack (SpecialB: Defensive Stance)
@@ -68,17 +62,6 @@
 (11, 1, 96, 6603, 0), -- Auto Attack (SpecialC: Berserker Stance)
 (11, 1, 73, 78, 0), -- Heroic Strike (SpecialA: Battle Stance)
 (11, 1, 74, 28880, 0), -- Gift of the Naaru (Warrior) (SpecialA: Battle Stance)
--- Worgen Warrior
-(12, 1, 72, 6603, 0), -- Auto Attack (SpecialA: Battle Stance)
-(12, 1, 84, 6603, 0), -- Auto Attack (SpecialB: Defensive Stance)
-(12, 1, 96, 6603, 0), -- Auto Attack (SpecialC: Berserker Stance)
-(12, 1, 73, 78, 0), -- Heroic Strike (SpecialA: Battle Stance)
--- High Elf Warrior
-(13, 1, 72, 6603, 0), -- Auto Attack (SpecialA: Battle Stance)
-(13, 1, 84, 6603, 0), -- Auto Attack (SpecialB: Defensive Stance)
-(13, 1, 96, 6603, 0), -- Auto Attack (SpecialC: Berserker Stance)
-(13, 1, 73, 78, 0), -- Heroic Strike (SpecialA: Battle Stance)
-(13, 1, 82, 110005, 0), -- Quel’dorei Meditation (SpecialA: Battle Stance)
 -- Human Paladin
 (1, 2, 0, 6603, 0), -- Auto Attack
 (1, 2, 1, 21084, 0), -- Seal of Righteousness
@@ -120,12 +103,6 @@
 (8, 2, 1, 21084, 0), -- Seal of Righteousness
 (8, 2, 2, 635, 0), -- Holy Light
 (8, 2, 3, 26297, 0), -- Berserking
--- Goblin Paladin
-(9, 2, 0, 6603, 0), -- Auto Attack
-(9, 2, 1, 21084, 0), -- Seal of Righteousness
-(9, 2, 2, 635, 0), -- Holy Light
-(9, 2, 9, 69070, 0), -- Rocket Jump
-(9, 2, 10, 69041, 0), -- Rocket Barrage
 -- Blood Elf Paladin
 (10, 2, 0, 6603, 0), -- Auto Attack
 (10, 2, 1, 21084, 0), -- Seal of Righteousness
@@ -136,15 +113,6 @@
 (11, 2, 1, 21084, 0), -- Seal of Righteousness
 (11, 2, 2, 635, 0), -- Holy Light
 (11, 2, 3, 59542, 0), -- Gift of the Naaru (Paladin)
--- Worgen Paladin
-(12, 2, 0, 6603, 0), -- Auto Attack
-(12, 2, 1, 21084, 0), -- Seal of Righteousness
-(12, 2, 2, 635, 0), -- Holy Light
--- High Elf Paladin
-(13, 2, 0, 6603, 0), -- Auto Attack
-(13, 2, 1, 21084, 0), -- Seal of Righteousness
-(13, 2, 2, 635, 0), -- Holy Light
-(13, 2, 3, 110005, 0), -- Quel’dorei Meditation
 -- Human Hunter
 (1, 3, 0, 6603, 0), -- Auto Attack
 (1, 3, 1, 2973, 0), -- Raptor Strike
@@ -186,12 +154,6 @@
 (8, 3, 1, 2973, 0), -- Raptor Strike
 (8, 3, 2, 75, 0), -- Auto Shot
 (8, 3, 3, 26297, 0), -- Berserking
--- Goblin Hunter
-(9, 3, 0, 6603, 0), -- Auto Attack
-(9, 3, 1, 2973, 0), -- Raptor Strike
-(9, 3, 2, 75, 0), -- Auto Shot
-(9, 3, 9, 69070, 0), -- Rocket Jump
-(9, 3, 10, 69041, 0), -- Rocket Barrage
 -- Blood Elf Hunter
 (10, 3, 0, 6603, 0), -- Auto Attack
 (10, 3, 1, 2973, 0), -- Raptor Strike
@@ -202,15 +164,6 @@
 (11, 3, 1, 2973, 0), -- Raptor Strike
 (11, 3, 2, 75, 0), -- Auto Shot
 (11, 3, 3, 59543, 0), -- Gift of the Naaru (Hunter)
--- Worgen Hunter
-(12, 3, 0, 6603, 0), -- Auto Attack
-(12, 3, 1, 2973, 0), -- Raptor Strike
-(12, 3, 2, 75, 0), -- Auto Shot
--- High Elf Hunter
-(13, 3, 0, 6603, 0), -- Auto Attack
-(13, 3, 1, 2973, 0), -- Raptor Strike
-(13, 3, 2, 75, 0), -- Auto Shot
-(13, 3, 3, 110005, 0), -- Quel’dorei Meditation
 -- Human Rogue
 (1, 4, 0, 6603, 0), -- Auto Attack
 (1, 4, 1, 1752, 0), -- Sinister Strike
@@ -260,13 +213,6 @@
 (8, 4, 2, 2098, 0), -- Eviscerate
 (8, 4, 3, 2764, 0), -- Throw
 (8, 4, 4, 26297, 0), -- Berserking
--- Goblin Rogue
-(9, 4, 0, 6603, 0), -- Auto Attack
-(9, 4, 1, 1752, 0), -- Sinister Strike
-(9, 4, 2, 2098, 0), -- Eviscerate
-(9, 4, 3, 2764, 0), -- Throw
-(9, 4, 9, 69070, 0), -- Rocket Jump
-(9, 4, 10, 69041, 0), -- Rocket Barrage
 -- Blood Elf Rogue
 (10, 4, 0, 6603, 0), -- Auto Attack
 (10, 4, 1, 1752, 0), -- Sinister Strike
@@ -279,17 +225,6 @@
 (11, 4, 2, 2098, 0), -- Eviscerate
 (11, 4, 3, 2764, 0), -- Throw
 (11, 4, 4, 80870, 0), -- Gift of the Naaru (Rogue)
--- Worgen Rogue
-(12, 4, 0, 6603, 0), -- Auto Attack
-(12, 4, 1, 1752, 0), -- Sinister Strike
-(12, 4, 2, 2098, 0), -- Eviscerate
-(12, 4, 3, 2764, 0), -- Throw
--- High Elf Rogue
-(13, 4, 0, 6603, 0), -- Auto Attack
-(13, 4, 1, 1752, 0), -- Sinister Strike
-(13, 4, 2, 2098, 0), -- Eviscerate
-(13, 4, 3, 2764, 0), -- Throw
-(13, 4, 4, 110005, 0), -- Quel’dorei Meditation
 -- Human Priest
 (1, 5, 0, 585, 0), -- Smite
 (1, 5, 1, 2050, 0), -- Lesser Heal
@@ -323,11 +258,6 @@
 (8, 5, 0, 585, 0), -- Smite
 (8, 5, 1, 2050, 0), -- Lesser Heal
 (8, 5, 2, 26297, 0), -- Berserking
--- Goblin Priest
-(9, 5, 0, 585, 0), -- Smite
-(9, 5, 1, 2050, 0), -- Lesser Heal
-(9, 5, 9, 69070, 0), -- Rocket Jump
-(9, 5, 10, 69041, 0), -- Rocket Barrage
 -- Blood Elf Priest
 (10, 5, 0, 585, 0), -- Smite
 (10, 5, 1, 2050, 0), -- Lesser Heal
@@ -336,13 +266,6 @@
 (11, 5, 0, 585, 0), -- Smite
 (11, 5, 1, 2050, 0), -- Lesser Heal
 (11, 5, 2, 59544, 0), -- Gift of the Naaru (Priest)
--- Worgen Priest
-(12, 5, 0, 585, 0), -- Smite
-(12, 5, 1, 2050, 0), -- Lesser Heal
--- High Elf Priest
-(13, 5, 0, 585, 0), -- Smite
-(13, 5, 1, 2050, 0), -- Lesser Heal
-(13, 5, 2, 110005, 0), -- Quel’dorei Meditation
 -- Human Death Knight
 (1, 6, 0, 6603, 0), -- Auto Attack
 (1, 6, 1, 49576, 0), -- Death Grip
@@ -416,16 +339,6 @@
 (8, 6, 5, 47541, 0), -- Death Coil
 (8, 6, 10, 26297, 0), -- Berserking
 (8, 6, 11, 41751, 128), -- Black Mushroom
--- Goblin Death Knight
-(9, 6, 0, 6603, 0), -- Auto Attack
-(9, 6, 1, 49576, 0), -- Death Grip
-(9, 6, 2, 45477, 0), -- Icy Touch
-(9, 6, 3, 45462, 0), -- Plague Strike
-(9, 6, 4, 45902, 0), -- Blood Strike
-(9, 6, 5, 47541, 0), -- Death Coil
-(9, 6, 9, 69070, 0), -- Rocket Jump
-(9, 6, 11, 69046, 0), -- Pack Hobgoblin
-(9, 6, 10, 69041, 0), -- Rocket Barrage
 -- Blood Elf Death Knight
 (10, 6, 0, 6603, 0), -- Auto Attack
 (10, 6, 1, 49576, 0), -- Death Grip
@@ -444,23 +357,6 @@
 (11, 6, 5, 47541, 0), -- Death Coil
 (11, 6, 10, 59545, 0), -- Gift of the Naaru (Death Knight)
 (11, 6, 11, 41751, 128), -- Black Mushroom
--- Worgen Death Knight
-(12, 6, 0, 6603, 0), -- Auto Attack
-(12, 6, 1, 49576, 0), -- Death Grip
-(12, 6, 2, 45477, 0), -- Icy Touch
-(12, 6, 3, 45462, 0), -- Plague Strike
-(12, 6, 4, 45902, 0), -- Blood Strike
-(12, 6, 5, 47541, 0), -- Death Coil
-(12, 6, 6, 68992, 0), -- Darkflight
--- High Elf Death Knight
-(13, 6, 0, 6603, 0), -- Auto Attack
-(13, 6, 1, 49576, 0), -- Death Grip
-(13, 6, 2, 45477, 0), -- Icy Touch
-(13, 6, 3, 45462, 0), -- Plague Strike
-(13, 6, 4, 45902, 0), -- Blood Strike
-(13, 6, 5, 47541, 0), -- Death Coil
-(13, 6, 6, 110005, 0), -- Quel’dorei Meditation
-(13, 6, 11, 41751, 128), -- Black Mushroom
 -- Human Shaman
 (1, 7, 0, 6603, 0), -- Auto Attack
 (1, 7, 1, 403, 0), -- Lightning Bolt
@@ -502,12 +398,6 @@
 (8, 7, 1, 403, 0), -- Lightning Bolt
 (8, 7, 2, 331, 0), -- Healing Wave
 (8, 7, 3, 26297, 0), -- Berserking
--- Goblin Shaman
-(9, 7, 0, 6603, 0), -- Auto Attack
-(9, 7, 1, 403, 0), -- Lightning Bolt
-(9, 7, 2, 331, 0), -- Healing Wave
-(9, 7, 9, 69070, 0), -- Rocket Jump
-(9, 7, 10, 69041, 0), -- Rocket Barrage
 -- Blood Elf Shaman
 (10, 7, 0, 6603, 0), -- Auto Attack
 (10, 7, 1, 403, 0), -- Lightning Bolt
@@ -518,15 +408,6 @@
 (11, 7, 1, 403, 0), -- Lightning Bolt
 (11, 7, 2, 331, 0), -- Healing Wave
 (11, 7, 3, 59547, 0), -- Gift of the Naaru (Shaman)
--- Worgen Shaman
-(12, 7, 0, 6603, 0), -- Auto Attack
-(12, 7, 1, 403, 0), -- Lightning Bolt
-(12, 7, 2, 331, 0), -- Healing Wave
--- High Elf Shaman
-(13, 7, 0, 6603, 0), -- Auto Attack
-(13, 7, 1, 403, 0), -- Lightning Bolt
-(13, 7, 2, 331, 0), -- Healing Wave
-(13, 7, 3, 110005, 0), -- Quel’dorei Meditation
 -- Human Mage
 (1, 8, 0, 133, 0), -- Fireball
 (1, 8, 1, 168, 0), -- Frost Armor
@@ -560,11 +441,6 @@
 (8, 8, 0, 133, 0), -- Fireball
 (8, 8, 1, 168, 0), -- Frost Armor
 (8, 8, 2, 26297, 0), -- Berserking
--- Goblin Mage
-(9, 8, 0, 133, 0), -- Fireball
-(9, 8, 1, 168, 0), -- Frost Armor
-(9, 8, 9, 69070, 0), -- Rocket Jump
-(9, 8, 10, 69041, 0), -- Rocket Barrage
 -- Blood Elf Mage
 (10, 8, 0, 133, 0), -- Fireball
 (10, 8, 1, 168, 0), -- Frost Armor
@@ -573,13 +449,6 @@
 (11, 8, 0, 133, 0), -- Fireball
 (11, 8, 1, 168, 0), -- Frost Armor
 (11, 8, 2, 59548, 0), -- Gift of the Naaru (Mage)
--- Worgen Mage
-(12, 8, 0, 133, 0), -- Fireball
-(12, 8, 1, 168, 0), -- Frost Armor
--- High Elf Mage
-(13, 8, 0, 133, 0), -- Fireball
-(13, 8, 1, 168, 0), -- Frost Armor
-(13, 8, 2, 110005, 0), -- Quel’dorei Meditation
 -- Human Warlock
 (1, 9, 0, 686, 0), -- Shadow Bolt
 (1, 9, 1, 687, 0), -- Demon Skin
@@ -613,11 +482,6 @@
 (8, 9, 0, 686, 0), -- Shadow Bolt
 (8, 9, 1, 687, 0), -- Demon Skin
 (8, 9, 2, 26297, 0), -- Berserking
--- Goblin Warlock
-(9, 9, 0, 686, 0), -- Shadow Bolt
-(9, 9, 1, 687, 0), -- Demon Skin
-(9, 9, 9, 69070, 0), -- Rocket Jump
-(9, 9, 10, 69041, 0), -- Rocket Barrage
 -- Blood Elf Warlock
 (10, 9, 0, 686, 0), -- Shadow Bolt
 (10, 9, 1, 687, 0), -- Demon Skin
@@ -626,13 +490,6 @@
 (11, 9, 0, 686, 0), -- Shadow Bolt
 (11, 9, 1, 687, 0), -- Demon Skin
 (11, 9, 2, 80871, 0),
--- Worgen Warlock
-(12, 9, 0, 686, 0), -- Shadow Bolt
-(12, 9, 1, 687, 0), -- Demon Skin
--- High Elf Warlock
-(13, 9, 0, 686, 0), -- Shadow Bolt
-(13, 9, 1, 687, 0), -- Demon Skin
-(13, 9, 2, 110005, 0), -- Quel’dorei Meditation
 -- Human Druid
 (1, 11, 72, 6603, 0), -- Auto Attack (SpecialA: Bear Form)
 (1, 11, 96, 6603,0), -- Auto Attack (SpecialB: Cat Form)
@@ -689,15 +546,6 @@
 (8, 11, 1, 5185, 0), -- Healing Touch
 (8, 11, 2, 26297, 0), -- Berserking
 (8, 11, 74, 26297, 0), -- Berserking (SpecialA: Bear Form)
--- Goblin Druid
-(9, 11, 72, 6603, 0), -- Auto Attack (SpecialA: Bear Form)
-(9, 11, 96, 6603,0), -- Auto Attack (SpecialB: Cat Form)
-(9, 11, 0, 5176, 0), -- Wrath
-(9, 11, 1, 5185, 0), -- Healing Touch
-(9, 11, 9, 69070, 0), -- Rocket Jump
-(9, 11, 10, 69041, 0), -- Rocket Barrage
-(9, 11, 81, 69070, 0), -- Rocket Jump (SpecialA: Bear Form)
-(9, 11, 82, 69041, 0), -- Rocket Barrage (SpecialA: Bear Form)
 -- Blood Elf Druid
 (10, 11, 72, 6603, 0), -- Auto Attack (SpecialA: Bear Form)
 (10, 11, 96, 6603,0), -- Auto Attack (SpecialB: Cat Form)
@@ -712,21 +560,4 @@
 (11, 11, 0, 5176, 0), -- Wrath
 (11, 11, 1, 5185, 0), -- Healing Touch
 (11, 11, 2, 80869, 0), -- Gift of the Naaru (Druid)
-(11, 11, 74, 80869, 0), -- Gift of the Naaru (Druid) (SpecialA: Bear Form)
--- Worgen Druid
-(12, 11, 72, 6603, 0), -- Auto Attack (SpecialA: Bear Form)
-(12, 11, 96, 6603,0), -- Auto Attack (SpecialB: Cat Form)
-(12, 11, 0, 5176, 0), -- Wrath
-(12, 11, 1, 5185, 0), -- Healing Touch
--- High Elf Druid
-(13, 11, 72, 6603, 0), -- Auto Attack (SpecialA: Bear Form)
-(13, 11, 96, 6603,0), -- Auto Attack (SpecialB: Cat Form)
-(13, 11, 0, 5176, 0), -- Wrath
-(13, 11, 1, 5185, 0), -- Healing Touch
-(13, 11, 2, 110005, 0), -- Quel’dorei Meditation
-(13, 11, 74, 110005, 0); -- Quel’dorei Meditation (SpecialA: Bear Form)
-
-
-/* Maghar action bars: inherit Orc class actions; racial spell itself is taught below. */
-INSERT IGNORE INTO `playercreateinfo_action` (`race`,`class`,`button`,`action`,`type`)
-SELECT 14, `class`, `button`, `action`, `type` FROM `playercreateinfo_action` WHERE `race` = 2 AND `action` NOT IN (20572,20573,20574,21563,33697,33702);
+(11, 11, 74, 80869, 0); -- Gift of the Naaru (Druid) (SpecialA: Bear Form)

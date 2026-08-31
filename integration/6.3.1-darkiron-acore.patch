@@ -1,0 +1,145 @@
+diff --git a/src/server/game/Entities/Player/PlayerTaxi.cpp b/src/server/game/Entities/Player/PlayerTaxi.cpp
+index e8d1801..f4bc871 100644
+--- a/src/server/game/Entities/Player/PlayerTaxi.cpp
++++ b/src/server/game/Entities/Player/PlayerTaxi.cpp
+@@ -83,6 +83,9 @@ void PlayerTaxi::InitTaxiNodesForLevel(uint32 race, uint32 chrClass, uint8 level
+         case RACE_OGRE:
+             SetTaximaskNode(23);
+             break;     // Ogre
++        case RACE_DARKIRONDWARF:
++            SetTaximaskNode(6);
++            break;     // Dark Iron Dwarf
+     }
+ 
+     // new continent starting masks (It will be accessible only at new map)
+diff --git a/src/server/game/Globals/ObjectMgr.cpp b/src/server/game/Globals/ObjectMgr.cpp
+index 31d4226..cc52695 100644
+--- a/src/server/game/Globals/ObjectMgr.cpp
++++ b/src/server/game/Globals/ObjectMgr.cpp
+@@ -4996,6 +4996,8 @@ void ObjectMgr::GetPlayerLevelInfo(uint32 race, uint32 class_, uint8 level, Play
+         lookupRace = RACE_NIGHTELF;
+     else if (race == RACE_OGRE)
+         lookupRace = RACE_ORC;
++    else if (race == RACE_DARKIRONDWARF)
++        lookupRace = RACE_DWARF;
+ 
+     PlayerInfo const* pInfo = nullptr;
+     if (race < sRaceMgr->GetMaxRaces())
+@@ -11205,6 +11207,8 @@ PlayerInfo const* ObjectMgr::GetPlayerInfo(uint32 race, uint32 class_) const
+         parentRace = RACE_NIGHTELF;
+     else if (race == RACE_OGRE)
+         parentRace = RACE_ORC;
++    else if (race == RACE_DARKIRONDWARF)
++        parentRace = RACE_DWARF;
+ 
+     if (parentRace && parentRace < sRaceMgr->GetMaxRaces())
+         return _playerInfo[parentRace][class_];
+diff --git a/src/server/game/Handlers/CharacterHandler.cpp b/src/server/game/Handlers/CharacterHandler.cpp
+index 8c6f24d..05d1673 100644
+--- a/src/server/game/Handlers/CharacterHandler.cpp
++++ b/src/server/game/Handlers/CharacterHandler.cpp
+@@ -2196,6 +2196,7 @@ void WorldSession::HandleCharFactionOrRaceChangeCallback(std::shared_ptr<Charact
+             switch (factionChangeInfo->Race)
+             {
+             case RACE_DWARF:
++            case RACE_DARKIRONDWARF:
+                 stmt->SetData(1, 111);
+                 break;
+             case RACE_DRAENEI:
+diff --git a/src/server/game/Spells/Auras/SpellAuraEffects.cpp b/src/server/game/Spells/Auras/SpellAuraEffects.cpp
+index 534674f..913f8d7 100644
+--- a/src/server/game/Spells/Auras/SpellAuraEffects.cpp
++++ b/src/server/game/Spells/Auras/SpellAuraEffects.cpp
+@@ -2349,6 +2349,7 @@ void AuraEffect::HandleAuraTransform(AuraApplication const* aurApp, uint8 mode,
+                                     break;
+                                 // Dwarf
+                                 case RACE_DWARF:
++                                case RACE_DARKIRONDWARF:
+                                     target->SetDisplayId(target->getGender() == GENDER_MALE ? 10141 : 10142);
+                                     break;
+                                 // Gnome
+@@ -2428,6 +2429,7 @@ void AuraEffect::HandleAuraTransform(AuraApplication const* aurApp, uint8 mode,
+                                     break;
+                                 // Dwarf
+                                 case RACE_DWARF:
++                                case RACE_DARKIRONDWARF:
+                                     target->SetDisplayId(target->getGender() == GENDER_MALE ? 25034 : 25045);
+                                     break;
+                                 // Gnome
+diff --git a/src/server/scripts/Commands/cs_misc.cpp b/src/server/scripts/Commands/cs_misc.cpp
+index 272cd6d..9174343 100644
+--- a/src/server/scripts/Commands/cs_misc.cpp
++++ b/src/server/scripts/Commands/cs_misc.cpp
+@@ -2341,6 +2341,9 @@ public:
+             case RACE_OGRE:
+                 raceStr = "Ogre";
+                 break;
++            case RACE_DARKIRONDWARF:
++                raceStr = "Dark Iron Dwarf";
++                break;
+         }
+ 
+         switch (classid)
+diff --git a/src/server/scripts/Pet/pet_generic.cpp b/src/server/scripts/Pet/pet_generic.cpp
+index 57c9817..371a7e7 100644
+--- a/src/server/scripts/Pet/pet_generic.cpp
++++ b/src/server/scripts/Pet/pet_generic.cpp
+@@ -146,7 +146,8 @@ static std::unordered_map<uint8, argentPonyBanner> argentBanners = {
+     {RACE_WORGEN,        {2777, 63406, "Darnassus Champion's Pennant"}},
+     {RACE_HIGHELF,       {2781, 62594, "Stormwind Champion's Pennant"}},
+     {RACE_MAGHARORC,     {2783, 63433, "Orgrimmar Champion's Pennant"}},
+-    {RACE_OGRE,          {2783, 63433, "Orgrimmar Champion's Pennant"}}
++    {RACE_OGRE,          {2783, 63433, "Orgrimmar Champion's Pennant"}},
++    {RACE_DARKIRONDWARF, {2779, 63403, "Ironforge Champion's Pennant"}}
+ };
+ 
+ struct npc_pet_gen_argent_pony_bridle : public ScriptedAI
+diff --git a/src/server/shared/SharedDefines.h b/src/server/shared/SharedDefines.h
+index f4f74b1..4fc75f9 100644
+--- a/src/server/shared/SharedDefines.h
++++ b/src/server/shared/SharedDefines.h
+@@ -82,7 +82,8 @@ enum Races
+     RACE_WORGEN             = 12, // TITLE Worgen
+     RACE_HIGHELF            = 13,  // TITLE High Elf
+     RACE_MAGHARORC          = 14,  //, TITLE Mag'har Orc
+-    RACE_OGRE          = 15  //, TITLE Ogre
++    RACE_OGRE          = 15, // TITLE Ogre
++    RACE_DARKIRONDWARF = 16  // TITLE Dark Iron Dwarf
+     //RACE_ALLIANCEPANDAREN   = 16, // TITLE Tushui Pandaren
+     //RACE_HORDEPANDAREN      = 17, // TITLE Huojin Pandaren
+     //RACE_NIGHTBORNE         = 18, // TITLE Nightborne
+diff --git a/src/server/shared/enuminfo_SharedDefines.cpp b/src/server/shared/enuminfo_SharedDefines.cpp
+index 7838a08..5dab57e 100644
+--- a/src/server/shared/enuminfo_SharedDefines.cpp
++++ b/src/server/shared/enuminfo_SharedDefines.cpp
+@@ -47,12 +47,13 @@ AC_API_EXPORT EnumText EnumUtils<Races>::ToString(Races value)
+         case RACE_HIGHELF: return { "RACE_HIGHELF", "High Elf", "" };
+         case RACE_MAGHARORC: return { "RACE_MAGHARORC", "Mag'har Orc", "" };
+         case RACE_OGRE: return { "RACE_OGRE", "Ogre", "" };
++        case RACE_DARKIRONDWARF: return { "RACE_DARKIRONDWARF", "Dark Iron Dwarf", "" };
+         default: throw std::out_of_range("value");
+     }
+ }
+ 
+ template <>
+-AC_API_EXPORT std::size_t EnumUtils<Races>::Count() { return 15; }
++AC_API_EXPORT std::size_t EnumUtils<Races>::Count() { return 16; }
+ 
+ template <>
+ AC_API_EXPORT Races EnumUtils<Races>::FromIndex(std::size_t index)
+@@ -74,6 +75,7 @@ AC_API_EXPORT Races EnumUtils<Races>::FromIndex(std::size_t index)
+         case 12: return RACE_HIGHELF;
+         case 13: return RACE_MAGHARORC;
+         case 14: return RACE_OGRE;
++        case 15: return RACE_DARKIRONDWARF;
+         default: throw std::out_of_range("index");
+     }
+ }
+@@ -98,6 +100,7 @@ AC_API_EXPORT std::size_t EnumUtils<Races>::ToIndex(Races value)
+         case RACE_HIGHELF: return 12;
+         case RACE_MAGHARORC: return 13;
+         case RACE_OGRE: return 14;
++        case RACE_DARKIRONDWARF: return 15;
+         default: throw std::out_of_range("value");
+     }
+ }
