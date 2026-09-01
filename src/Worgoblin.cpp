@@ -4,6 +4,8 @@
 #include "ScriptMgr.h"
 #include "SpellScript.h"
 #include "Config.h"
+#include "DBCStores.h"
+#include "ReputationMgr.h"
 
 enum Spells
 {
@@ -155,6 +157,15 @@ public:
                 if (!player->HasSpell(669)) player->learnSpell(669, false);
                 for (uint32 spellId : { 110100u, 110101u, 110102u, 110103u })
                     if (!player->HasSpell(spellId)) player->learnSpell(spellId, false);
+
+                // Race 15 uses Orc as its gameplay/reputation parent. The DBC race masks
+                // already contain Ogre, but old characters can still have every home
+                // faction hidden in their saved reputation state. Force only the normal
+                // Horde capital factions visible; standing itself is never overwritten.
+                for (uint32 factionId : { 76u, 530u, 81u, 68u, 911u })
+                    if (FactionEntry const* faction = sFactionStore.LookupEntry(factionId))
+                        player->GetReputationMgr().SetVisible(faction);
+
                 player->InitTalentForLevel();
                 break;
             case 16: // Dark Iron Dwarf: strict Dwarf gameplay fallback
