@@ -400,20 +400,38 @@ end
 
 -- Function to set the background model for character select and create screens
 function SetBackgroundModel(model, name)
-	-- Custom races reuse a stock Glue background/ambience; calculate the key AFTER mapping.
-	if (name == "HighElf" or name == "HIGHELF" or name == "High Elf" or name == "HIGH ELF" or name == "HIGH_ELF") then
-		name = "Human";
-	elseif (name == "Maghar" or name == "MAGHAR" or name == "Mag'har" or name == "MAG'HAR" or name == "Ogre" or name == "OGRE") then
-		name = "Orc";
-	elseif (name == "DarkIronDwarf" or name == "DARKIRONDWARF" or name == "Dark Iron Dwarf" or name == "DARK IRON DWARF" or name == "DARK_IRON_DWARF") then
-		name = "Dwarf";
+	-- Baercraft 6.5.5: custom races always reuse a valid stock 3.3.5a Glue background.
+	-- Normalize first because GetCreateBackgroundModel() can return different case/name variants.
+	local rawName = name or "";
+	local key = strupper(rawName);
+	key = string.gsub(key, "[%s_%-']", "");
+
+	local stockName = rawName;
+	if ( key == "DARKIRONDWARF" or key == "DARKIRON" ) then
+		stockName = "Dwarf";
+	elseif ( key == "MAGHAR" or key == "MAGHARORC" ) then
+		stockName = "Orc";
+	elseif ( key == "OGRE" ) then
+		stockName = "Orc";
+	elseif ( key == "HIGHELF" ) then
+		stockName = "BloodElf";
+	elseif ( key == "DEATHKNIGHT" ) then
+		stockName = "DeathKnight";
 	end
-	local nameupper = strupper(name);
-	local path = "Interface\\Glues\\Models\\UI_"..name.."\\UI_"..name..".m2";
-	if ( model == CharacterCreate ) then SetCharCustomizeBackground(path); else SetCharSelectBackground(path); end
-	local ambience = GlueAmbienceTracks[nameupper];
-	if ambience and ambience ~= "" then PlayGlueAmbience(ambience, 4.0); end
-	SetLighting(model, nameupper);
+
+	local stockUpper = strupper(stockName);
+	local path = "Interface\\Glues\\Models\\UI_"..stockName.."\\UI_"..stockName..".m2";
+	if ( model == CharacterCreate ) then
+		SetCharCustomizeBackground(path);
+	else
+		SetCharSelectBackground(path);
+	end
+
+	local ambience = GlueAmbienceTracks[stockUpper];
+	if ambience and ambience ~= "" then
+		PlayGlueAmbience(ambience, 4.0);
+	end
+	SetLighting(model, stockUpper);
 end
 
 function SecondsToTime(seconds, noSeconds)
