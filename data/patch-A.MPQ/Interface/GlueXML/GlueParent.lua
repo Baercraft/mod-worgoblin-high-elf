@@ -51,7 +51,6 @@ GlueAmbienceTracks["WORGEN"] = "GlueScreenHuman";
 GlueAmbienceTracks["HIGHELF"] = "GlueScreenHuman";
 GlueAmbienceTracks["MAGHAR"] = "GlueScreenOrcTroll";
 GlueAmbienceTracks["OGRE"] = "GlueScreenOrcTroll";
-GlueAmbienceTracks["DARKIRONDWARF"] = "GlueScreenDwarfGnome";
 
 
 -- RaceLights[] duplicates the 3.2.2 color values in the models. Henceforth, the models no longer contain directional lights
@@ -404,10 +403,10 @@ function SetBackgroundModel(model, name)
 	-- Custom races reuse a stock Glue background/ambience; calculate the key AFTER mapping.
 	if (name == "HighElf" or name == "HIGHELF" or name == "High Elf" or name == "HIGH ELF" or name == "HIGH_ELF") then
 		name = "Human";
-	elseif (name == "DarkIronDwarf" or name == "DARKIRONDWARF" or name == "Dark Iron Dwarf" or name == "DARK IRON DWARF") then
-		name = "Dwarf";
 	elseif (name == "Maghar" or name == "MAGHAR" or name == "Mag'har" or name == "MAG'HAR" or name == "Ogre" or name == "OGRE") then
 		name = "Orc";
+	elseif (name == "DarkIronDwarf" or name == "DARKIRONDWARF" or name == "Dark Iron Dwarf" or name == "DARK IRON DWARF" or name == "DARK_IRON_DWARF") then
+		name = "Dwarf";
 	end
 	local nameupper = strupper(name);
 	local path = "Interface\\Glues\\Models\\UI_"..name.."\\UI_"..name..".m2";

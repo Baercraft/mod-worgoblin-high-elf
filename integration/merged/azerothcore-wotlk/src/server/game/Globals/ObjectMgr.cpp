@@ -4994,6 +4994,8 @@ void ObjectMgr::GetPlayerLevelInfo(uint32 race, uint32 class_, uint8 level, Play
     uint32 lookupRace = race;
     if (race == RACE_HIGHELF)
         lookupRace = RACE_NIGHTELF;
+    else if (race == RACE_MAGHARORC)
+        lookupRace = RACE_ORC;
     else if (race == RACE_OGRE)
         lookupRace = RACE_ORC;
     else if (race == RACE_DARKIRONDWARF)
@@ -11205,6 +11207,8 @@ PlayerInfo const* ObjectMgr::GetPlayerInfo(uint32 race, uint32 class_) const
     uint32 parentRace = 0;
     if (race == RACE_HIGHELF)
         parentRace = RACE_NIGHTELF;
+    else if (race == RACE_MAGHARORC)
+        parentRace = RACE_ORC;
     else if (race == RACE_OGRE)
         parentRace = RACE_ORC;
     else if (race == RACE_DARKIRONDWARF)

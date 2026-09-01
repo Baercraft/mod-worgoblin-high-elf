@@ -1,0 +1,5 @@
+Baercraft 6.5 COMPLETE STANDARD (no ARAC)
+Patch-A integrated.
+
+Previous variant notes:
+STANDARD build. patch-A.MPQ = restricted classes. Optional patch-J retained.

@@ -1,0 +1,7 @@
+Baercraft 6.5.1 client hotfix
+Fixes:
+- restores 6.1-style source selectionIndex mapping for filtered custom races
+- forces DARKIRONDWARF Glue faction to Alliance
+- moves race button 16 to the free Alliance-side slot in CharacterCreate.xml
+- maps Dark Iron Glue background/ambience to stock Dwarf assets
+- does not change CharBaseInfo.dbc; compatible with STANDARD and ARAC CharBaseInfo overlays

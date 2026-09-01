@@ -247,28 +247,62 @@ function CharacterCreateFrame_OnUpdate()
 	end
 end
 
+-- Fixed faction layout.  Button slots no longer depend on the order returned by
+-- GetAvailableRaces(), so custom races cannot push Horde races onto the Alliance
+-- banner (or disappear when another race is missing).
+local BAER_RACE_BUTTON_SLOT = {
+    HUMAN=1, DWARF=2, NIGHTELF=3, GNOME=4, DRAENEI=5, WORGEN=6, HIGHELF=7, DARKIRONDWARF=8,
+    ORC=9, SCOURGE=10, TAUREN=11, TROLL=12, BLOODELF=13, GOBLIN=14, OGRE=15, MAGHAR=16,
+};
+
 function CharacterCreateEnumerateRaces(...)
-	local playable = { HUMAN=true, ORC=true, DWARF=true, NIGHTELF=true, SCOURGE=true, TAUREN=true, GNOME=true, TROLL=true, GOBLIN=true, BLOODELF=true, DRAENEI=true, WORGEN=true, HIGHELF=true, MAGHAR=true, OGRE=true, DARKIRONDWARF=true };
-	local gender = (GetSelectedSex() == SEX_FEMALE) and "FEMALE" or "MALE";
-	local index = 1;
-	for i=1, select("#", ...), 3 do
-		local raceName = select(i, ...);
-		local fileString = strupper(select(i+1, ...) or "");
-		local enabled = select(i+2, ...);
-		if playable[fileString] and index <= MAX_RACES then
-			local coords = RACE_ICON_TCOORDS[fileString.."_"..gender];
-			local button = _G["CharacterCreateRaceButton"..index];
-			if coords then
-				_G["CharacterCreateRaceButton"..index.."NormalTexture"]:SetTexCoord(coords[1],coords[2],coords[3],coords[4]);
-				_G["CharacterCreateRaceButton"..index.."PushedTexture"]:SetTexCoord(coords[1],coords[2],coords[3],coords[4]);
-			end
-			button:Show(); button.name=raceName; button.tooltip=raceName;
-			if enabled == 1 then button.enable=true; button:Enable(); SetButtonDesaturated(button); else button.enable=false; button:Disable(); SetButtonDesaturated(button,1); button.tooltip=_G[fileString.."_DISABLED"] or raceName; end
-			index=index+1;
-		end
-	end
-	CharacterCreate.numRaces=index-1;
-	for i=index,MAX_RACES do _G["CharacterCreateRaceButton"..i]:Hide(); end
+    local gender = (GetSelectedSex() == SEX_FEMALE) and "FEMALE" or "MALE";
+    local shown = 0;
+
+    -- Clear every visual slot first.  This is important when changing sex or when
+    -- the server exposes a different set/order of races.
+    for slot=1,MAX_RACES do
+        local button = _G["CharacterCreateRaceButton"..slot];
+        button.selectionIndex = nil;
+        button.raceFile = nil;
+        button.name = nil;
+        button.tooltip = nil;
+        button:Hide();
+    end
+
+    local rawIndex = 1;
+    for i=1, select("#", ...), 3 do
+        local raceName = select(i, ...);
+        local fileString = strupper(select(i+1, ...) or "");
+        local enabled = select(i+2, ...);
+        local slot = BAER_RACE_BUTTON_SLOT[fileString];
+        if slot and slot <= MAX_RACES then
+            local button = _G["CharacterCreateRaceButton"..slot];
+            local coords = RACE_ICON_TCOORDS[fileString.."_"..gender];
+            if coords then
+                _G["CharacterCreateRaceButton"..slot.."NormalTexture"]:SetTexCoord(coords[1],coords[2],coords[3],coords[4]);
+                _G["CharacterCreateRaceButton"..slot.."PushedTexture"]:SetTexCoord(coords[1],coords[2],coords[3],coords[4]);
+            end
+            button:Show();
+            button.name = raceName;
+            button.tooltip = raceName;
+            button.selectionIndex = rawIndex;
+            button.raceFile = fileString;
+            if enabled == 1 then
+                button.enable = true;
+                button:Enable();
+                SetButtonDesaturated(button);
+            else
+                button.enable = false;
+                button:Disable();
+                SetButtonDesaturated(button,1);
+                button.tooltip = _G[fileString.."_DISABLED"] or raceName;
+            end
+            shown = shown + 1;
+        end
+        rawIndex = rawIndex + 1;
+    end
+    CharacterCreate.numRaces = shown;
 end
 
 function CharacterCreateEnumerateClasses(...)
@@ -314,9 +348,9 @@ end
 function SetCharacterRace(id)
 	CharacterCreate.selectedRace = id;
 	local selectedButton;
-	for i=1, CharacterCreate.numRaces, 1 do
+	for i=1, MAX_RACES, 1 do
 		local button = _G["CharacterCreateRaceButton"..i];
-		if ( i == id ) then
+		if ( button.selectionIndex and button.selectionIndex == id ) then
 			_G["CharacterCreateRaceButton"..i.."Text"]:SetText(button.name);
 			button:SetChecked(1);
 			selectedButton = button;
@@ -334,13 +368,26 @@ function SetCharacterRace(id)
 
 	CharacterCreateRaceLabel:SetText(race);
 	fileString = strupper(fileString);
+
+	-- Baercraft: Dark Iron Dwarf is Alliance.  The custom race ID is outside
+	-- Blizzard's original 3.3.5 race set, so some clients report the wrong
+	-- Glue faction even though the server joins the character to Alliance.
+	if ( fileString == "DARKIRONDWARF" ) then
+		faction = "Alliance";
+	end
 	if ( GetSelectedSex() == SEX_MALE ) then
 		gender = "MALE";
 	else
 		gender = "FEMALE";
 	end
 	local coords = RACE_ICON_TCOORDS[fileString.."_"..gender];
-	CharacterCreateRaceIcon:SetTexCoord(coords[1], coords[2], coords[3], coords[4]);
+	if fileString == "DARKIRONDWARF" then
+		CharacterCreateRaceIcon:SetTexture("Interface\\Icons\\INV_Hammer_04");
+		CharacterCreateRaceIcon:SetTexCoord(0,1,0,1);
+	else
+		CharacterCreateRaceIcon:SetTexture("Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Races");
+		CharacterCreateRaceIcon:SetTexCoord(coords[1], coords[2], coords[3], coords[4]);
+	end
 	local raceText = _G["RACE_INFO_"..fileString];
 	local abilityIndex = 1;
 	local tempText = _G["ABILITY_INFO_"..fileString..abilityIndex];
@@ -463,9 +510,11 @@ function CharacterRace_OnClick(self, id)
 		self:SetChecked(1);
 		return;
 	end
-	if ( GetSelectedRace() ~= id ) then
-		SetSelectedRace(id);
-		SetCharacterRace(id);
+	local button = self or _G["CharacterCreateRaceButton"..id];
+	local raceIndex = (button and button.selectionIndex) or id;
+	if ( GetSelectedRace() ~= raceIndex ) then
+		SetSelectedRace(raceIndex);
+		SetCharacterRace(raceIndex);
 		SetSelectedSex(GetSelectedSex());
 		SetCharacterCreateFacing(-15);
 		CharacterCreateEnumerateClasses(GetAvailableClasses());
@@ -516,7 +565,13 @@ function SetCharacterGender(sex)
 	CharacterCreateRaceLabel:SetText(race);
 	fileString = strupper(fileString);
 	local coords = RACE_ICON_TCOORDS[fileString.."_"..gender];
-	CharacterCreateRaceIcon:SetTexCoord(coords[1], coords[2], coords[3], coords[4]);
+	if fileString == "DARKIRONDWARF" then
+		CharacterCreateRaceIcon:SetTexture("Interface\\Icons\\INV_Hammer_04");
+		CharacterCreateRaceIcon:SetTexCoord(0,1,0,1);
+	else
+		CharacterCreateRaceIcon:SetTexture("Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Races");
+		CharacterCreateRaceIcon:SetTexCoord(coords[1], coords[2], coords[3], coords[4]);
+	end
 	
 	CharacterChangeFixup();
 end

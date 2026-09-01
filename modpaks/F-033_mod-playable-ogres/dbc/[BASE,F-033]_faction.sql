@@ -97,3 +97,6 @@ UPDATE `faction` SET `reputation_race_mask_1` = `reputation_race_mask_1` | 16384
 UPDATE `faction` SET `reputation_race_mask_1` = `reputation_race_mask_1` | 16384 WHERE `id` = 1119;
 UPDATE `faction` SET `reputation_race_mask_1` = `reputation_race_mask_1` | 16384 WHERE `id` = 1124;
 UPDATE `faction` SET `reputation_race_mask_2` = `reputation_race_mask_2` | 16384 WHERE `id` = 1126;
+
+-- 6.5 final Ogre home reputation normalization.
+UPDATE faction SET reputation_race_mask_1=16384,reputation_race_mask_2=0,reputation_race_mask_3=0,reputation_race_mask_4=0,reputation_base_1=3100,reputation_flags_1=273,name_enus='Stonemaul Clan',name_frfr='Clan Cognepierre',name_dede='Steinbrecherklan',name_zhcn='石槌氏族',name_zhtw='石槌氏族',name_eses='Clan Quebrantapiedras',name_esmx='Clan Quebrantapiedras',name_ruru='Клан Каменного Молота' WHERE id=1170;

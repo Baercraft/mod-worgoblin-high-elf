@@ -5,11 +5,6 @@
 #include "SpellScript.h"
 #include "Config.h"
 
-// Local race IDs keep the module compilable even before the custom core enum is visible.
-static constexpr uint8 BAERCRAFT_RACE_HIGHELF = 13;
-static constexpr uint8 BAERCRAFT_RACE_OGRE = 15;
-static constexpr uint8 BAERCRAFT_RACE_DARKIRONDWARF = 16;
-
 enum Spells
 {
     BEST_DEALS_ANYWHERE = 69044,
@@ -34,41 +29,6 @@ public:
     {
         if (sConfigMgr->GetOption<bool>("Announce.enable", true))
             ChatHandler(player->GetSession()).SendSysMessage("This server is running the Worgoblin and High Elf modules.");
-
-        // Baercraft 6.2.5: harden custom-race languages/racials for existing characters.
-        // This deliberately supplements the DB create-spell path so older characters are repaired on login.
-        // Recalculate talent points for custom races after the parent-race fallback is available.
-        if (player->getRace() == BAERCRAFT_RACE_HIGHELF || player->getRace() == BAERCRAFT_RACE_OGRE || player->getRace() == BAERCRAFT_RACE_DARKIRONDWARF)
-            player->InitTalentForLevel();
-
-        switch (player->getRace())
-        {
-            case BAERCRAFT_RACE_HIGHELF:
-                if (!player->HasSpell(668))
-                    player->learnSpell(668);   // Language Common
-                if (!player->HasSpell(813))
-                    player->learnSpell(813);   // Language Thalassian
-                break;
-            case BAERCRAFT_RACE_OGRE:
-                if (!player->HasSpell(669))
-                    player->learnSpell(669);   // Language Orcish
-                for (uint32 spellId : { 110100u, 110101u, 110102u, 110103u })
-                    if (!player->HasSpell(spellId))
-                        player->learnSpell(spellId);
-                break;
-            case BAERCRAFT_RACE_DARKIRONDWARF:
-                if (!player->HasSpell(668))
-                    player->learnSpell(668);   // Language Common
-                if (!player->HasSpell(672))
-                    player->learnSpell(672);   // Language Dwarven
-                // Stable WotLK mechanics used as Dark Iron racials.
-                for (uint32 spellId : { 20594u, 20595u, 24445u, 2481u })
-                    if (!player->HasSpell(spellId))
-                        player->learnSpell(spellId);
-                break;
-            default:
-                break;
-        }
     }
 
     void OnPlayerGetReputationPriceDiscount(Player const* player, FactionTemplateEntry const* factionTemplate, float& discount) override
@@ -173,8 +133,42 @@ private:
     }
 };
 
+
+class BaercraftRaceRepair : public PlayerScript
+{
+public:
+    BaercraftRaceRepair() : PlayerScript("BaercraftRaceRepair") { }
+    void OnPlayerLogin(Player* player) override
+    {
+        if (!player) return;
+        switch (uint8(player->getRace()))
+        {
+            case 13: // High Elf
+                if (!player->HasSpell(668)) player->learnSpell(668, false);
+                if (!player->HasSpell(813)) player->learnSpell(813, false);
+                player->InitTalentForLevel();
+                break;
+            case 14: // Mag'har
+                if (!player->HasSpell(669)) player->learnSpell(669, false);
+                break;
+            case 15: // Ogre
+                if (!player->HasSpell(669)) player->learnSpell(669, false);
+                for (uint32 spellId : { 110100u, 110101u, 110102u, 110103u })
+                    if (!player->HasSpell(spellId)) player->learnSpell(spellId, false);
+                player->InitTalentForLevel();
+                break;
+            case 16: // Dark Iron Dwarf: strict Dwarf gameplay fallback
+                // Race 16 inherits its spells/skills/classes from Dwarf (race 3) in SQL/DBC.
+                // Do not inject separate pseudo-racials here; that caused race data to diverge.
+                player->InitTalentForLevel();
+                break;
+            default: break;
+        }
+    }
+};
 void Add_Worgoblin()
 {
+    new BaercraftRaceRepair();
     new worgoblin();
     RegisterSpellScript(spell_rocket_barrage);
     new player_worgen_running_wild();

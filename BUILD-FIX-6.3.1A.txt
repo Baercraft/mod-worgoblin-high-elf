@@ -1,0 +1,11 @@
+Baercraft 6.3.1A STANDARD build fix
+
+- Fixed PlayerScript hook:
+  OnLogin(Player*) -> OnPlayerLogin(Player*)
+  This matches current AzerothCore PlayerScript API.
+- Rewrote text/source files as valid UTF-8 (no BOM, LF).
+- modules.lib linker errors are downstream errors when module compilation fails.
+
+If Visual Studio still reports an invalid UTF-8 byte, check the filename in the
+first C4828 diagnostic. If it names HunterPetStorage_spell.cpp, that file is
+from the HunterPetStorage/other module or core tree and is not part of this mod.

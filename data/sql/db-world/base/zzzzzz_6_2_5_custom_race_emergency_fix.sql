@@ -20,16 +20,20 @@ SELECT 15,src.`class`,src.`map`,src.`zone`,src.`position_x`,src.`position_y`,src
 FROM `playercreateinfo` src WHERE src.`race`=2 AND src.`class` IN (1,3,7,8,9);
 
 -- Clone every Orc starting skill to Ogre via the RaceMask. This includes Orcish and weapon/class skills.
-UPDATE `playercreateinfo_skills`
-SET `racemask`=`racemask`|@OGRE_MASK
-WHERE (`racemask` & @ORC_MASK)<>0;
+INSERT IGNORE INTO `playercreateinfo_skills` (`raceMask`,`classMask`,`skill`,`rank`,`comment`)
+SELECT @OGRE_MASK, `classMask`, `skill`, `rank`, CONCAT('Ogre parent: ', COALESCE(`comment`,''))
+FROM `playercreateinfo_skills`
+WHERE (`raceMask` & @ORC_MASK)<>0;
 
 -- Explicit Ogre racial skill line. Avoid deleting any inherited skills.
 INSERT IGNORE INTO `playercreateinfo_skills` (`raceMask`,`classMask`,`skill`,`rank`,`comment`)
 VALUES (@OGRE_MASK,0,793,0,'Ogre - Racial');
 
 -- Guarantee High Elf languages in starting skills.
-UPDATE `playercreateinfo_skills` SET `racemask`=`racemask`|@HIGH_ELF_MASK WHERE `skill` IN (98,137);
+INSERT IGNORE INTO `playercreateinfo_skills` (`raceMask`,`classMask`,`skill`,`rank`,`comment`)
+SELECT @HIGH_ELF_MASK, `classMask`, `skill`, `rank`, CONCAT('High Elf parent: ', COALESCE(`comment`,''))
+FROM `playercreateinfo_skills`
+WHERE `skill` IN (98,137);
 
 -- Guarantee language spells + Ogre racials for every valid class (classmask 0 = all classes in this AC loader).
 DELETE FROM `playercreateinfo_spell_custom`
