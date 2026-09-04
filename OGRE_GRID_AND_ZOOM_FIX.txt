@@ -1,0 +1,10 @@
+Ogre race-grid and CharacterCreate camera fix
+
+- Visual Horde order is fixed to:
+  Orc, Undead, Tauren, Troll, Blood Elf, Goblin, Mag'har, Ogre.
+- Ogre is therefore always the final Horde entry.
+- Buttons retain the real GetAvailableRaces selection index internally.
+- Ogre CharacterCreate scale:
+  normal classes = 0.70 - but dont work right now
+  Death Knight   = 0.62 - but dont work right now
+- In-world model/player scale is not changed.

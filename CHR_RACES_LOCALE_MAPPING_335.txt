@@ -1,0 +1,20 @@
+ChrRaces.dbc locale mapping - WoW 3.3.5a
+===========================================
+
+Each localized name is a 16-offset locstring followed by a mask.
+Actual client locale slot order used by 3.3.5a:
+  0 enUS
+  1 koKR
+  2 frFR
+  3 deDE
+  4 zhCN
+  5 zhTW
+  6 esES
+  7 esMX
+  8 ruRU
+  9-15 reserved/unused here
+
+The previous CSV header incorrectly treated enGB/enCN/enTW as separate runtime
+slots. That shifted French into the German slot, which is why a deDE client
+showed French race names. The active ChrRaces.dbc and this CSV are now aligned
+to the real client slots.

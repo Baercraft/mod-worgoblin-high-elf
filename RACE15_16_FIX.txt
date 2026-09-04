@@ -1,0 +1,2 @@
+Ogre restored as race ID 15. Dark Iron Dwarf installed as race ID 16 from stable reference. Race 26 integration removed. Active DBCs rebuilt for Ogre 15 and Dark Iron 16.
+Final UI fix: ChrRaces playable records reordered to Alliance-first (Dark Iron slot 8) and Horde-second (Ogre slot 16). DarkIronDwarf background remaps fully to Dwarf including ambience/lighting; DK background remains handled by the client class background logic. Optional patch-J CharacterCreate.xml synchronized to the 16-race layout.

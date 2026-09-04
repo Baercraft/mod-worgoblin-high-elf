@@ -400,38 +400,29 @@ end
 
 -- Function to set the background model for character select and create screens
 function SetBackgroundModel(model, name)
-	-- Baercraft 6.5.5: custom races always reuse a valid stock 3.3.5a Glue background.
-	-- Normalize first because GetCreateBackgroundModel() can return different case/name variants.
-	local rawName = name or "";
-	local key = strupper(rawName);
-	key = string.gsub(key, "[%s_%-']", "");
-
-	local stockName = rawName;
-	if ( key == "DARKIRONDWARF" or key == "DARKIRON" ) then
-		stockName = "Dwarf";
-	elseif ( key == "MAGHAR" or key == "MAGHARORC" ) then
-		stockName = "Orc";
-	elseif ( key == "OGRE" ) then
-		stockName = "Orc";
-	elseif ( key == "HIGHELF" ) then
-		stockName = "BloodElf";
-	elseif ( key == "DEATHKNIGHT" ) then
-		stockName = "DeathKnight";
+	-- Custom races reuse stable WotLK backgrounds.  Remap BEFORE calculating
+	-- ambience/lighting keys so Dark Iron never looks for DARKIRONDWARF assets.
+	if (name == "DarkIronDwarf" or name == "DARKIRONDWARF" or name == "Dark Iron Dwarf") then
+		name = "Dwarf";
 	end
 
-	local stockUpper = strupper(stockName);
-	local path = "Interface\\Glues\\Models\\UI_"..stockName.."\\UI_"..stockName..".m2";
+	if (name == "HighElf" or name == "HIGHELF" or name == "High Elf" or name == "HIGH ELF" or name == "HIGH_ELF") then
+		name = "Human";
+	end
+
+	if (name == "Maghar" or name == "MAGHAR" or name == "Mag'har" or name == "MAG'HAR" or name == "Ogre" or name == "OGRE") then
+		name = "Orc";
+	end
+
+	local nameupper = strupper(name);
+    local path = "Interface\\Glues\\Models\\UI_"..name.."\\UI_"..name..".m2";
 	if ( model == CharacterCreate ) then
 		SetCharCustomizeBackground(path);
 	else
 		SetCharSelectBackground(path);
 	end
-
-	local ambience = GlueAmbienceTracks[stockUpper];
-	if ambience and ambience ~= "" then
-		PlayGlueAmbience(ambience, 4.0);
-	end
-	SetLighting(model, stockUpper);
+	PlayGlueAmbience(GlueAmbienceTracks[nameupper], 4.0);
+	SetLighting(model, nameupper)
 end
 
 function SecondsToTime(seconds, noSeconds)

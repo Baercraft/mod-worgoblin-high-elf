@@ -4,8 +4,6 @@
 #include "ScriptMgr.h"
 #include "SpellScript.h"
 #include "Config.h"
-#include "DBCStores.h"
-#include "ReputationMgr.h"
 
 enum Spells
 {
@@ -50,6 +48,9 @@ class spell_rocket_barrage : public SpellScript
     void HandleDamage(SpellEffIndex /*effIndex*/)
     {
         Unit* caster = GetCaster();
+        if (!caster)
+            return;
+
         int32 basePoints = 0 + caster->GetLevel() * 2;
         basePoints += caster->SpellBaseDamageBonusDone(GetSpellInfo()->GetSchoolMask()) * 0.429; //BM=0.429 here, don't ask me how.
         basePoints += caster->GetTotalAttackPowerValue(caster->getClass() != CLASS_HUNTER ? BASE_ATTACK : RANGED_ATTACK) * 0.25; // 0.25=BonusCoefficient, hardcoding it here
@@ -135,51 +136,8 @@ private:
     }
 };
 
-
-class BaercraftRaceRepair : public PlayerScript
-{
-public:
-    BaercraftRaceRepair() : PlayerScript("BaercraftRaceRepair") { }
-    void OnPlayerLogin(Player* player) override
-    {
-        if (!player) return;
-        switch (uint8(player->getRace()))
-        {
-            case 13: // High Elf
-                if (!player->HasSpell(668)) player->learnSpell(668, false);
-                if (!player->HasSpell(813)) player->learnSpell(813, false);
-                player->InitTalentForLevel();
-                break;
-            case 14: // Mag'har
-                if (!player->HasSpell(669)) player->learnSpell(669, false);
-                break;
-            case 15: // Ogre
-                if (!player->HasSpell(669)) player->learnSpell(669, false);
-                for (uint32 spellId : { 110100u, 110101u, 110102u, 110103u })
-                    if (!player->HasSpell(spellId)) player->learnSpell(spellId, false);
-
-                // Race 15 uses Orc as its gameplay/reputation parent. The DBC race masks
-                // already contain Ogre, but old characters can still have every home
-                // faction hidden in their saved reputation state. Force only the normal
-                // Horde capital factions visible; standing itself is never overwritten.
-                for (uint32 factionId : { 76u, 530u, 81u, 68u, 911u })
-                    if (FactionEntry const* faction = sFactionStore.LookupEntry(factionId))
-                        player->GetReputationMgr().SetVisible(faction);
-
-                player->InitTalentForLevel();
-                break;
-            case 16: // Dark Iron Dwarf: strict Dwarf gameplay fallback
-                // Race 16 inherits its spells/skills/classes from Dwarf (race 3) in SQL/DBC.
-                // Do not inject separate pseudo-racials here; that caused race data to diverge.
-                player->InitTalentForLevel();
-                break;
-            default: break;
-        }
-    }
-};
 void Add_Worgoblin()
 {
-    new BaercraftRaceRepair();
     new worgoblin();
     RegisterSpellScript(spell_rocket_barrage);
     new player_worgen_running_wild();

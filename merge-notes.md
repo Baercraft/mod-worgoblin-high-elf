@@ -340,3 +340,8 @@ These don't seem relevant to AHE, possibly except for DK quests, but I'll look i
 
 #### SpellCategory.dbc
 None of the mods I've merged so far has actually used this file, so I guess I'll just use it as-is.
+
+## Ogre framing + 3.3.5 locale fix
+- Character creation Ogre ModelFFX scale: 0.82; world/in-game model scale unchanged.
+- ChrRaces locstring slot order corrected to actual 3.3.5 client locale indexes.
+- deDE now reads German rather than the old French-offset slot.

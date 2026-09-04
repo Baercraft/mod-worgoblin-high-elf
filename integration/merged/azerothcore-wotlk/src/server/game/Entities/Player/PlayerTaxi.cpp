@@ -83,9 +83,6 @@ void PlayerTaxi::InitTaxiNodesForLevel(uint32 race, uint32 chrClass, uint8 level
         case RACE_OGRE:
             SetTaximaskNode(23);
             break;     // Ogre
-        case RACE_DARKIRONDWARF:
-            SetTaximaskNode(6);
-            break;     // Dark Iron Dwarf
     }
 
     // new continent starting masks (It will be accessible only at new map)

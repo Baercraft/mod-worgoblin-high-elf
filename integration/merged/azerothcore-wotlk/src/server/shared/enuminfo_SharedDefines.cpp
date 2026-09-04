@@ -53,7 +53,7 @@ AC_API_EXPORT EnumText EnumUtils<Races>::ToString(Races value)
 }
 
 template <>
-AC_API_EXPORT std::size_t EnumUtils<Races>::Count() { return 16; }
+AC_API_EXPORT std::size_t EnumUtils<Races>::Count() { return 10; }
 
 template <>
 AC_API_EXPORT Races EnumUtils<Races>::FromIndex(std::size_t index)

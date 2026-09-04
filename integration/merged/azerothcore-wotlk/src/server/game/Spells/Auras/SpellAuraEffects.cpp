@@ -2349,7 +2349,6 @@ void AuraEffect::HandleAuraTransform(AuraApplication const* aurApp, uint8 mode, 
                                     break;
                                 // Dwarf
                                 case RACE_DWARF:
-                                case RACE_DARKIRONDWARF:
                                     target->SetDisplayId(target->getGender() == GENDER_MALE ? 10141 : 10142);
                                     break;
                                 // Gnome
@@ -2429,7 +2428,6 @@ void AuraEffect::HandleAuraTransform(AuraApplication const* aurApp, uint8 mode, 
                                     break;
                                 // Dwarf
                                 case RACE_DWARF:
-                                case RACE_DARKIRONDWARF:
                                     target->SetDisplayId(target->getGender() == GENDER_MALE ? 25034 : 25045);
                                     break;
                                 // Gnome

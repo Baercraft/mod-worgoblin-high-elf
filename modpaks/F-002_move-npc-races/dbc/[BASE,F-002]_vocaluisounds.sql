@@ -1,5 +1,15 @@
--- [F-30] mod-worgoblin: creaturedisplayinfoextra
--- Moving Skeleton entry to the new race ID (25)
+-- [F-30] mod-worgoblin: vocaluisounds
+-- Moving Skeleton entry to the new race id (25) – the others aren't really needed
 
-DELETE FROM `vocaluisounds` WHERE `id` = 848;
-INSERT INTO `vocaluisounds` (`id`, `vocal_ui_enum`, `race_id`, `normal_sound_id_1`, `normal_sound_id_2`, `pissed_sound_id_1`, `pissed_sound_id_2`) VALUES (848, 0, 25, 0, 0, 0, 0);
+UPDATE `vocaluisounds` SET `race_id` = @FelOrc            WHERE `race_id` = 12;
+UPDATE `vocaluisounds` SET `race_id` = @Naga              WHERE `race_id` = 13;
+UPDATE `vocaluisounds` SET `race_id` = @Broken            WHERE `race_id` = 14;
+UPDATE `vocaluisounds` SET `race_id` = @Skeleton          WHERE `race_id` = 15;
+UPDATE `vocaluisounds` SET `race_id` = @Vrykul            WHERE `race_id` = 16;
+UPDATE `vocaluisounds` SET `race_id` = @Tuskarr           WHERE `race_id` = 17;
+UPDATE `vocaluisounds` SET `race_id` = @ForestTroll       WHERE `race_id` = 18;
+UPDATE `vocaluisounds` SET `race_id` = @Taunka            WHERE `race_id` = 19;
+UPDATE `vocaluisounds` SET `race_id` = @NorthrendSkeleton WHERE `race_id` = 20;
+UPDATE `vocaluisounds` SET `race_id` = @IceTroll          WHERE `race_id` = 21;
+
+-- race_id: 848

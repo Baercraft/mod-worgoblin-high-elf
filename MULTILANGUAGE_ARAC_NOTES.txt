@@ -1,0 +1,23 @@
+ARAC + MULTILANGUAGE UPDATE
+===========================
+
+Race slots:
+  15 = Ogre (Horde)
+  16 = Dark Iron Dwarf (Alliance)
+
+ARAC client UI:
+  CharBaseInfo.dbc now exposes all 10 WotLK classes for both race 15 and race 16.
+
+Server ARAC:
+  Run data/sql/arac_race15_16.sql AFTER the regular ARAC/base race SQL. It clones all currently ARAC-enabled Orc class combinations to Ogre and Dwarf combinations to Dark Iron Dwarf.
+
+Localization:
+  The active patch no longer replaces Blizzard's complete GlueStrings.lua with an English copy. CustomRaceLocale.lua only adds/replaces custom-race strings and selects them via GetLocale().
+  Supported custom-race UI locales: enUS fallback, deDE, frFR, esES, ruRU, zhCN, zhTW.
+  Standard Blizzard races/classes therefore continue using the language of the installed client.
+
+Dark Iron icon:
+  Uses Interface\Icons\Achievement_Zone_Blackrock_01 in the race button and race information portrait. This is a native WotLK asset and fits Blackrock/Dark Iron visually.
+
+Custom racial text:
+  Ogre and Dark Iron Dwarf now have Blizzard-style racial descriptions in the character creation screen. This update changes the UI descriptions; it does not yet create brand-new spell mechanics/Spell.dbc entries for these proposed racials.

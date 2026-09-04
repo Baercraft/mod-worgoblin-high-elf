@@ -24,7 +24,6 @@ constexpr RandomPlayerbotFactory::NameRaceAndGender RandomPlayerbotFactory::Comb
     {
         case RACE_ORC:        baseIndex = NameRaceAndGender::OrcMale; break;
         case RACE_DWARF:      baseIndex = NameRaceAndGender::DwarfMale; break;
-        case RACE_DARKIRONDWARF: baseIndex = NameRaceAndGender::DwarfMale; break; // Dwarf names for Dark Iron Dwarves
         case RACE_NIGHTELF:   baseIndex = NameRaceAndGender::NightelfMale; break;
         case RACE_TAUREN:     baseIndex = NameRaceAndGender::TaurenMale; break;
         case RACE_GNOME:      baseIndex = NameRaceAndGender::GnomeMale; break;
@@ -283,7 +282,7 @@ std::string const RandomPlayerbotFactory::CreateRandomBotName(NameRaceAndGender 
     }
 
     // TRUE RANDOM NAME GENERATION
-    LOG_ERROR("playerbots", "Conlang name generation failed. True random name fallback.");
+    LOG_ERROR("playerbots", "Con​lang name generation failed. True random name fallback.");
     tries = 10;
     while (--tries)
     {
