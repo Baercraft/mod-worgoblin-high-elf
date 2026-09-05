@@ -4,7 +4,7 @@ DELETE FROM `creature`
 WHERE `guid` BETWEEN @GUID AND @GUID + 21;
 
 INSERT INTO `creature`
-    (`guid`, `id`, `map`, `zoneId`, `areaId`,
+    (`guid`, `id1`, `map`, `zoneId`, `areaId`,
      `spawnMask`, `phaseMask`, `equipment_id`,
      `position_x`, `position_y`, `position_z`, `orientation`,
      `spawntimesecs`, `wander_distance`, `currentwaypoint`,
