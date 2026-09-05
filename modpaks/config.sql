@@ -23,6 +23,7 @@ SET @Worgen                      =   12;
 SET @HighElf                     =   13;
 SET @MagharOrc                   =   14;
 SET @Ogre                        =   15;
+SET @DarkIronDwarf               =   16;
 SET @Gilnean                     =   23;
 
 -- NPC Races
@@ -101,6 +102,7 @@ SET @GoblinRacials               = 790;
 SET @HighElfRacials              = 791;
 SET @MagharOrcRacials            = 792;
 SET @OgreRacials                 = 793;
+SET @DarkIronDwarfRacials        = 794;
 
 -- Racial spells
 SET @WorgenRacial1               =  68975; -- Viciousness
@@ -123,8 +125,21 @@ SET @MagharOrcRacial2            = 110002; -- Savage Blood
 SET @MagharOrcRacial3            = 110003; -- Sympathetic Vigor
 SET @MagharOrcRacial4            = 110004; -- Unwavering Will (maybe change to Open Skies: 10% mounted speed boost?)
 
+-- Ogre racials use proven WotLK spell IDs; no custom Spell.dbc rows required
+SET @OgreRacial1                 = 20549; -- War Stomp
+SET @OgreRacial2                 = 20550; -- Endurance
+SET @OgreRacial3                 = 20573; -- Hardiness
+SET @OgreRacial4                 = 20575; -- Command
+
+-- Dark Iron uses the stable dwarf racial spell set as its initial server-side racial package
+SET @DarkIronDwarfRacial1        = 20594; -- Stoneform
+SET @DarkIronDwarfRacial2        = 20595; -- Gun Specialization
+SET @DarkIronDwarfRacial3        = 20596; -- Frost Resistance
+SET @DarkIronDwarfRacial4        = 2481;  -- Find Treasure
+SET @DarkIronDwarfRacial5        = 59224; -- Mace Specialization
+
 -- Factions
-SET @AllianceMask                = @HumanMask    | @DwarfMask  | @NightElfMask | @GnomeMask  | @DraeneiMask   | @WorgenMask   | @HighElfMask;
+SET @AllianceMask                = @HumanMask    | @DwarfMask  | @NightElfMask | @GnomeMask  | @DraeneiMask   | @WorgenMask   | @HighElfMask | @DarkIronDwarfMask;
 SET @HordeMask                   = @OrcMask      | @UndeadMask | @TaurenMask   | @TrollMask  | @GoblinMask    | @BloodElfMask | @MagharOrcMask | @OgreMask;
 SET @UndercityMask               = @UndeadMask   | @BloodElfMask; -- Mostly for easy reputation split
 SET @BarrensBros                 = @HordeMask    & ~@UndercityMask; -- Mostly for easy reputation split
@@ -161,12 +176,13 @@ SET @TaurenHelmetMask            = 1 << 6;   -- race ID 6  → 64
 SET @GnomeHelmetMask             = 1 << 7;   -- race ID 7  → 128
 SET @TrollHelmetMask             = 1 << 8;   -- race ID 8  → 256
 SET @GoblinHelmetMask            = 1 << 9;   -- race ID 9  → 512
-SET @GoblinHelmetMask            = 1 << 10;  -- race ID 10 → 1024
+SET @BloodElfHelmetMask          = 1 << 10;  -- race ID 10 → 1024
 SET @DraeneiHelmetMask           = 1 << 11;  -- race ID 11 → 2048
 SET @WorgenHelmetMask            = 1 << 12;  -- race ID 12 → 4096
 SET @HighElfHelmetMask           = 1 << 13;  -- race ID 13 → 8192
 SET @MagharOrcHelmetMask         = 1 << 14;  -- race ID 14 → 16384
 SET @OgreHelmetMask              = 1 << 15;  -- race ID 15 → 32768
+SET @DarkIronDwarfHelmetMask     = 1 << 16;  -- race ID 16 → 65536
 
 -- Classes
 SET @Warrior                   =    1;

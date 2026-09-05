@@ -1,8 +1,12 @@
--- skilllineability: 1 inserts, 27 updates, 0 deletes
+-- skilllineability: Ogre racial links + existing race-mask extensions
 
--- New entries (racials will go here)
--- DELETE FROM `skilllineability` WHERE `id` = 31463;
--- INSERT INTO `skilllineability` (`id`, `skill_line`, `spell_id`, `required_races`, `required_classes`, `excluded_races`, `excluded_classes`, `min_skill_value`, `spell_parent_id`, `acquire_method`, `skill_grey_level`, `skill_yellow_level`, `character_points_1`, `character_points_2`) VALUES (31463, @OgreRacials, spellID, @OgreMask, @AllClassMask, 0, 0, 1, 0, 2, 0, 0, 0, 0);
+-- Ogre racial abilities. IDs are unique inside SkillLineAbility.dbc.
+DELETE FROM `skilllineability` WHERE `id` BETWEEN 31540 AND 31543;
+INSERT INTO `skilllineability` (`id`, `skill_line`, `spell_id`, `required_races`, `required_classes`, `excluded_races`, `excluded_classes`, `min_skill_value`, `spell_parent_id`, `acquire_method`, `skill_grey_level`, `skill_yellow_level`, `character_points_1`, `character_points_2`) VALUES
+(31540, @OgreRacials, @OgreRacial1, @OgreMask, @AllClassMask, 0, 0, 1, 0, 2, 0, 0, 0, 0),
+(31541, @OgreRacials, @OgreRacial2, @OgreMask, @AllClassMask, 0, 0, 1, 0, 2, 0, 0, 0, 0),
+(31542, @OgreRacials, @OgreRacial3, @OgreMask, @AllClassMask, 0, 0, 1, 0, 2, 0, 0, 0, 0),
+(31543, @OgreRacials, @OgreRacial4, @OgreMask, @AllClassMask, 0, 0, 1, 0, 2, 0, 0, 0, 0);
 
 -- Changed values
 UPDATE `skilllineability` SET `required_races` = `required_races` | @OgreMask WHERE `id` = 592;

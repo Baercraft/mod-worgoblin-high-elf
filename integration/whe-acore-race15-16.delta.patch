@@ -1,0 +1,68 @@
+--- /mnt/data/sourcepatch_orig/mod-worgoblin-high-elf-master/integration/whe-acore.patch	2026-09-05 00:13:25.000000000 +0000
++++ /mnt/data/sourcepatch_work/mod-worgoblin-high-elf-master/integration/whe-acore.patch	2026-09-05 08:46:35.065322275 +0000
+@@ -42,6 +42,9 @@
+ +        case RACE_OGRE:
+ +            SetTaximaskNode(23);
+ +            break;     // Ogre
+++        case RACE_DARKIRONDWARF:
+++            SetTaximaskNode(6);
+++            break;     // Dark Iron Dwarf (Dwarf start network)
+      }
+  
+      // new continent starting masks (It will be accessible only at new map)
+@@ -500,7 +503,8 @@
+ +    {RACE_WORGEN,        {2777, 63406, "Darnassus Champion's Pennant"}},
+ +    {RACE_HIGHELF,       {2781, 62594, "Stormwind Champion's Pennant"}},
+ +    {RACE_MAGHARORC,     {2783, 63433, "Orgrimmar Champion's Pennant"}},
+-+    {RACE_OGRE,          {2783, 63433, "Orgrimmar Champion's Pennant"}}
+++    {RACE_OGRE,          {2783, 63433, "Orgrimmar Champion's Pennant"}},
+++    {RACE_DARKIRONDWARF, {2777, 63406, "Ironforge Champion's Pennant"}}
+  };
+  
+  struct npc_pet_gen_argent_pony_bridle : public ScriptedAI
+@@ -516,6 +520,7 @@
+ +        case RACE_HIGHELF: return { "RACE_HIGHELF", "High Elf", "" };
+ +        case RACE_MAGHARORC: return { "RACE_MAGHARORC", "Mag'har Orc", "" };
+ +        case RACE_OGRE: return { "RACE_OGRE", "Ogre", "" };
+++        case RACE_DARKIRONDWARF: return { "RACE_DARKIRONDWARF", "Dark Iron Dwarf", "" };
+          default: throw std::out_of_range("value");
+      }
+  }
+@@ -528,6 +533,7 @@
+ +        case 12: return RACE_HIGHELF;
+ +        case 13: return RACE_MAGHARORC;
+ +        case 14: return RACE_OGRE;
+++        case 15: return RACE_DARKIRONDWARF;
+          default: throw std::out_of_range("index");
+      }
+  }
+@@ -540,6 +546,7 @@
+ +        case RACE_HIGHELF: return 12;
+ +        case RACE_MAGHARORC: return 13;
+ +        case RACE_OGRE: return 14;
+++        case RACE_DARKIRONDWARF: return 15;
+          default: throw std::out_of_range("value");
+      }
+  }
+@@ -568,8 +575,9 @@
+ +    RACE_WORGEN             = 12, // TITLE Worgen
+ +    RACE_HIGHELF            = 13,  // TITLE High Elf
+ +    RACE_MAGHARORC          = 14,  //, TITLE Mag'har Orc
+-+    RACE_OGRE          = 15  //, TITLE Ogre
+-+    //RACE_ALLIANCEPANDAREN   = 16, // TITLE Tushui Pandaren
+++    RACE_OGRE               = 15, // TITLE Ogre
+++    RACE_DARKIRONDWARF      = 16, // TITLE Dark Iron Dwarf
+++    //RACE_ALLIANCEPANDAREN   = 17, // TITLE Tushui Pandaren
+ +    //RACE_HORDEPANDAREN      = 17, // TITLE Huojin Pandaren
+ +    //RACE_NIGHTBORNE         = 18, // TITLE Nightborne
+ +    //RACE_HIGHMOUNTAINTAUREN = 19, // TITLE Highmountain Tauren
+@@ -616,7 +624,8 @@
+ +    HighElf           = 13,
+ +    MagharOrc         = 14,
+ +    Ogre              = 15,
+-+//  AlliancePandaren  = 16,
+++    DarkIronDwarf     = 16,
+++//  AlliancePandaren  = 17,
+ +//  HordePandaren     = 17,
+ +//  Nightborne        = 18,
+ +// HighmountainTauren = 19,
