@@ -1,0 +1,18 @@
+Fixes in this build
+===================
+1. Race masks in modpaks/config.sql
+   Goblin      ID 9  = 256
+   Blood Elf   ID 10 = 512
+   Ogre        ID 15 = 16384
+   Dark Iron   ID 16 = 32768
+
+The old config accidentally assigned @GoblinMask twice. The second assignment
+(512) overwrote the actual Goblin mask (256), so SQL using @GoblinMask could
+hit Blood Elves instead. This build defines @BloodElfMask separately.
+
+2. Ogre CharacterCreate framing
+   Camera stays on camera 0.
+   Normal Ogre:      SetPosition(0, -3.50, -0.30)
+   Ogre DeathKnight: SetPosition(0, -4.25, -0.35)
+
+The depth adjustment is now made on the Y axis after UpdateCustomizationScene().

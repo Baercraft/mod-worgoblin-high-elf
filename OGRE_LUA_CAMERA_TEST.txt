@@ -1,0 +1,11 @@
+Ogre Lua camera test
+====================
+This build deliberately tests the CharacterCreate ModelFFX camera path.
+For Ogre only, CharacterCreate:SetCamera(1) is forced AFTER every
+UpdateCustomizationScene() call. Other races remain on camera 0.
+
+This is an experimental diagnostic fix. If the Ogre framing changes,
+we have confirmed the active control point is CharacterCreate.lua and
+can tune the correct camera next. If it does not change at all, camera
+selection is being controlled natively and further Lua scale/position
+changes are not useful.

@@ -1,0 +1,16 @@
+Ogre CharacterCreate persistent scale fix
+==========================================
+
+Problem:
+The previous scale was applied in SetCharacterRace(), but the WotLK client calls
+UpdateCustomizationScene() continuously. That rebuilds/resets the CharacterCreate
+ModelFFX state, so the scale could be lost immediately.
+
+Fix:
+- SetCharacterRace() now only remembers whether the selected race is OGRE.
+- CharacterCreate_UpdateModel() applies the Ogre scale AFTER UpdateCustomizationScene().
+- Normal Ogre classes: 0.68
+- Ogre Death Knight:   0.58
+- All other races:     1.00
+
+This changes only the character creation preview, never the in-world player scale.

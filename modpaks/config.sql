@@ -47,12 +47,13 @@ SET @TaurenMask                  = 1 << (6 - 1);   -- race ID 6  → 32
 SET @GnomeMask                   = 1 << (7 - 1);   -- race ID 7  → 64
 SET @TrollMask                   = 1 << (8 - 1);   -- race ID 8  → 128
 SET @GoblinMask                  = 1 << (9 - 1);   -- race ID 9  → 256
-SET @GoblinMask                  = 1 << (10 - 1);  -- race ID 10 → 512
+SET @BloodElfMask                = 1 << (10 - 1);  -- race ID 10 → 512
 SET @DraeneiMask                 = 1 << (11 - 1);  -- race ID 11 → 1024
 SET @WorgenMask                  = 1 << (12 - 1);  -- race ID 12 → 2048
 SET @HighElfMask                 = 1 << (13 - 1);  -- race ID 13 → 4096
 SET @MagharOrcMask               = 1 << (14 - 1);  -- race ID 14 → 8192
 SET @OgreMask                    = 1 << (15 - 1);  -- race ID 15 → 16384
+SET @DarkIronDwarfMask           = 1 << (16 - 1);  -- race ID 16 → 32768
 
 -- New Race Models
 SET @WorgenMaleModel             = 3141; -- bipedal

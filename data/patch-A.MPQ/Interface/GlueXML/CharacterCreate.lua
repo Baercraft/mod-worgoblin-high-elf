@@ -352,19 +352,11 @@ function SetCharacterRace(id)
 	local backgroundFilename = GetCreateBackgroundModel();
 	SetBackgroundModel(CharacterCreate, backgroundFilename);
 
-	-- Ogre is much taller than normal playable races.  Keep this strictly in
-	-- the CharacterCreate scene; it does not affect the in-world player scale.
-	if ( fileString == "OGRE" and CharacterCreate.SetModelScale ) then
-		local _, classFileName = GetSelectedClass();
-		if ( classFileName == "DEATHKNIGHT" ) then
-			-- The Death Knight background/camera crops more aggressively.
-			CharacterCreate:SetModelScale(0.62);
-		else
-			CharacterCreate:SetModelScale(0.70);
-		end
-	elseif ( CharacterCreate.SetModelScale ) then
-		CharacterCreate:SetModelScale(1.0);
-	end
+	-- Remember whether the selected race is the Ogre.  UpdateCustomizationScene()
+	-- can reset ModelFFX scaling, so the actual scale is applied every frame in
+	-- CharacterCreate_UpdateModel() after the scene update.
+	CharacterCreate.isOgreRace = (fileString == "OGRE");
+	CharacterCreate:SetCamera(0);
 end
 
 function SetCharacterClass(id)
@@ -409,9 +401,27 @@ function CharacterCreate_OnKeyDown(key)
 	end
 end
 
+-- Ogre uses a much taller model than the stock playable races.
+-- Force the alternate embedded model camera after the native customization
+-- scene has been rebuilt.  Doing this here is important: the native call
+-- resets the camera whenever race/class/sex/customization changes.
 function CharacterCreate_UpdateModel(self)
 	UpdateCustomizationScene();
-	self:AdvanceTime();
+	self:SetCamera(0);
+
+	-- Ogre camera framing fix. Old ModelFrames use SetPosition(X, Y, Z),
+	-- where Y is the useful depth axis. The earlier attempts changed Z/scale,
+	-- which is why they barely affected the framing.
+	if ( CharacterCreate.isOgreRace ) then
+		local _, classFileName = GetSelectedClass();
+		if ( classFileName == "DEATHKNIGHT" ) then
+			self:SetPosition(0, -4.25, -0.35);
+		else
+			self:SetPosition(0, -3.50, -0.30);
+		end
+	else
+		self:SetPosition(0, 0, 0);
+	end
 end
 
 function CharacterCreate_Okay()

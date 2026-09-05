@@ -5,6 +5,6 @@ Ogre race-grid and CharacterCreate camera fix
 - Ogre is therefore always the final Horde entry.
 - Buttons retain the real GetAvailableRaces selection index internally.
 - Ogre CharacterCreate scale:
-  normal classes = 0.70 - but dont work right now
-  Death Knight   = 0.62 - but dont work right now
+  normal classes = 0.70
+  Death Knight   = 0.62
 - In-world model/player scale is not changed.

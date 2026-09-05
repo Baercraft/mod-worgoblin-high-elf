@@ -1,0 +1,15 @@
+Ogre Character Creation Camera Fix
+===================================
+The previous SetModelScale approach was removed because the 3.3.5 character
+creation scene can reset/ignore model scaling.
+
+The Ogre preview is now moved backwards using PlayerModel:SetPosition() after
+every UpdateCustomizationScene():
+
+  normal classes: Z = -1.40
+  Death Knight:   Z = -1.85
+  vertical offset Y = -0.03
+
+These values affect CharacterCreate only. In-world Ogre scale is unchanged.
+The values are defined near CharacterCreate_UpdateModel() in CharacterCreate.lua
+so they can be tuned easily if desired.
