@@ -1,0 +1,16 @@
+Custom races / ARAC / Two Forms server fix
+==========================================
+
+- Race 12-16 have all 10 WotLK class combinations in data/sql/db-world/base/00_custom_races_arac_playercreateinfo.sql.
+- This fixes Player::Create invalid race/class pair rejections when CharBaseInfo.dbc exposes ARAC classes.
+- Parent-race skill masks are extended for Worgen, High Elf, Mag'har, Ogre and Dark Iron Dwarf.
+- Worgen Two Forms is now C++ only in src/Worgoblin.cpp.
+- Male Worgen learn Two Forms 68996; female Worgen learn 68995.
+- On entering combat (attacking OR being attacked), all human-form transform auras are removed so the native Worgen form is restored.
+- Darkflight also forces Worgen form.
+- Legacy Eluna racials.lua and teach_riding_worgen.lua were removed to avoid duplicate handlers.
+- open-azeroth-spirit-healers.sql uses creature.id1 for the user's ACDB 335.16-style schema.
+
+Important install note:
+Replace the whole module folder (recommended). Do not keep old lua_scripts/racials.lua or
+lua_scripts/teach_riding_worgen.lua alongside this build.

@@ -20,6 +20,16 @@ enum WorgenRiding
     SPELL_RW_JOURN_FEMALE    = 110011,
 };
 
+
+
+enum WorgenForms
+{
+    SPELL_TWO_FORMS_MALE       = 68996,
+    SPELL_TWO_FORMS_FEMALE     = 68995,
+    SPELL_PRE_WORGEN_HUMAN_MALE   = 68994,
+    SPELL_PRE_WORGEN_HUMAN_FEMALE = 110020,
+    SPELL_DARKFLIGHT           = 68992,
+};
 class worgoblin : public PlayerScript {
 
 public:
@@ -29,8 +39,59 @@ public:
     {
         if (sConfigMgr->GetOption<bool>("Announce.enable", true))
             ChatHandler(player->GetSession()).SendSysMessage("This server is running the Worgoblin and High Elf modules.");
+
+        EnsureWorgenTwoForms(player);
     }
 
+    void OnPlayerCreate(Player* player) override
+    {
+        EnsureWorgenTwoForms(player);
+    }
+
+    void OnPlayerEnterCombat(Player* player, Unit* /*enemy*/) override
+    {
+        ForceWorgenCombatForm(player);
+    }
+
+    void OnPlayerSpellCast(Player* player, Spell* spell, bool /*skipCheck*/) override
+    {
+        if (!player || !spell || player->getRace() != RACE_WORGEN)
+            return;
+
+        if (spell->GetSpellInfo()->Id == SPELL_DARKFLIGHT)
+            ForceWorgenCombatForm(player);
+    }
+
+private:
+    static uint32 GetTwoFormsSpell(Player const* player)
+    {
+        return player->getGender() == GENDER_FEMALE ? SPELL_TWO_FORMS_FEMALE : SPELL_TWO_FORMS_MALE;
+    }
+
+    static void EnsureWorgenTwoForms(Player* player)
+    {
+        if (!player || player->getRace() != RACE_WORGEN)
+            return;
+
+        uint32 spellId = GetTwoFormsSpell(player);
+        if (!player->HasSpell(spellId))
+            player->learnSpell(spellId);
+    }
+
+    static void ForceWorgenCombatForm(Player* player)
+    {
+        if (!player || player->getRace() != RACE_WORGEN)
+            return;
+
+        // Two Forms is implemented as a transform aura. Removing any human-form
+        // variant lets the core restore the player's native Worgen display.
+        player->RemoveAurasDueToSpell(SPELL_TWO_FORMS_MALE);
+        player->RemoveAurasDueToSpell(SPELL_TWO_FORMS_FEMALE);
+        player->RemoveAurasDueToSpell(SPELL_PRE_WORGEN_HUMAN_MALE);
+        player->RemoveAurasDueToSpell(SPELL_PRE_WORGEN_HUMAN_FEMALE);
+    }
+
+public:
     void OnPlayerGetReputationPriceDiscount(Player const* player, FactionTemplateEntry const* factionTemplate, float& discount) override
     {
         if (!factionTemplate || !factionTemplate->faction)

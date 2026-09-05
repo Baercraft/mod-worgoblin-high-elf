@@ -1,0 +1,5 @@
+Delete these two files from the module if they still exist:
+lua_scripts/racials.lua
+lua_scripts/teach_riding_worgen.lua
+
+Two Forms and Running Wild are handled in C++ in this build.
