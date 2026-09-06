@@ -352,10 +352,7 @@ function SetCharacterRace(id)
 	local backgroundFilename = GetCreateBackgroundModel();
 	SetBackgroundModel(CharacterCreate, backgroundFilename);
 
-	-- Remember whether the selected race is the Ogre.  UpdateCustomizationScene()
-	-- can reset ModelFFX scaling, so the actual scale is applied every frame in
-	-- CharacterCreate_UpdateModel() after the scene update.
-	CharacterCreate.isOgreRace = (fileString == "OGRE");
+	-- Use the standard character-create camera for every race, including Ogre.
 	CharacterCreate:SetCamera(0);
 end
 
@@ -401,27 +398,9 @@ function CharacterCreate_OnKeyDown(key)
 	end
 end
 
--- Ogre uses a much taller model than the stock playable races.
--- Force the alternate embedded model camera after the native customization
--- scene has been rebuilt.  Doing this here is important: the native call
--- resets the camera whenever race/class/sex/customization changes.
 function CharacterCreate_UpdateModel(self)
 	UpdateCustomizationScene();
 	self:SetCamera(0);
-
-	-- Ogre camera framing fix. Old ModelFrames use SetPosition(X, Y, Z),
-	-- where Y is the useful depth axis. The earlier attempts changed Z/scale,
-	-- which is why they barely affected the framing.
-	if ( CharacterCreate.isOgreRace ) then
-		local _, classFileName = GetSelectedClass();
-		if ( classFileName == "DEATHKNIGHT" ) then
-			self:SetPosition(0, -4.25, -0.35);
-		else
-			self:SetPosition(0, -3.50, -0.30);
-		end
-	else
-		self:SetPosition(0, 0, 0);
-	end
 end
 
 function CharacterCreate_Okay()
