@@ -78,6 +78,28 @@ enum CustomRaceRacials
     SPELL_DARKIRON_FIND_TREASURE  = 2481,
     SPELL_DARKIRON_MACE_SPEC      = 59224,
 };
+
+// Canonical level-1 weapon/armor proficiency spells from AzerothCore's native
+// playercreateinfo skill setup.  These are used only as an additive safety net:
+// native combinations already know them, while ARAC/custom-race combinations
+// can otherwise miss the proficiency even when the DBC masks are correct.
+enum StarterProficiencySpells
+{
+    SPELL_PROF_POLEARMS          = 200,
+    SPELL_PROF_PLATE             = 750,
+    SPELL_PROF_TWO_HANDED_SWORDS= 202,
+    SPELL_PROF_MAIL              = 8737,
+    SPELL_PROF_AXES              = 196,
+    SPELL_PROF_TWO_HANDED_AXES   = 197,
+    SPELL_PROF_SWORDS            = 201,
+    SPELL_PROF_DUAL_WIELD        = 674,
+    SPELL_PROF_SHIELD            = 9116,
+    SPELL_PROF_WANDS             = 5009,
+    SPELL_PROF_MACES             = 198,
+    SPELL_PROF_LEATHER           = 9077,
+    SPELL_PROF_STAVES            = 227,
+};
+
 class worgoblin : public PlayerScript {
 
 public:
@@ -89,20 +111,20 @@ public:
             ChatHandler(player->GetSession()).SendSysMessage("This server is running the Worgoblin and High Elf modules.");
 
         EnsureWorgenTwoForms(player);
-
-        // Character creation is saved to the character database before the
-        // PlayerScript::OnPlayerCreate hook is fired.  Therefore language
-        // skills granted only from OnPlayerCreate are not guaranteed to be
-        // present on the first real login.  Re-assert only the language
-        // skills/spells here.  The 6.5 SkillRaceClassInfo DBC validates these
-        // race/class combinations, and the HasSkill/HasSpell guards make this
-        // idempotent for existing characters.
-        EnsureCustomRaceLanguages(player);
+        EnsureStarterClassProficiencies(player);
+        EnsureCustomRaceArmorSkills(player);
+        // FULLFIX 6.5.10: the core can revalidate/remove custom-race languages
+        // after OnPlayerCreate. Re-check them after the character has fully
+        // loaded. EnsureLanguage/EnsureSpell are idempotent, so this does not
+        // duplicate valid spells or skills.
+        EnsureCustomRaceLanguagesAndRacials(player);
     }
 
     void OnPlayerCreate(Player* player) override
     {
         EnsureWorgenTwoForms(player);
+        EnsureStarterClassProficiencies(player);
+        EnsureCustomRaceArmorSkills(player);
         EnsureCustomRaceLanguagesAndRacials(player);
     }
 
@@ -120,7 +142,117 @@ public:
             ForceWorgenCombatForm(player);
     }
 
+    bool OnPlayerCanFlyInZone(Player* /*player*/, uint32 mapId, uint32 zoneId, SpellInfo const* /*bySpell*/) override
+    {
+        // patch-A keeps the Fly Anywhere-capable DBC set installed at all times.
+        // This switch makes the feature runtime-configurable without swapping DBCs.
+        if (sConfigMgr->GetOption<bool>("Worgoblin.FlyAnywhere.Enable", true))
+            return true;
+
+        // WotLK normally does not permit player-controlled flying in the classic
+        // Eastern Kingdoms/Kalimdor world maps. Returning false here stops the
+        // flight check before the permissive Fly Anywhere DBCs can allow it.
+        if (mapId == 0 || mapId == 1)
+            return false;
+
+        // The Burning Crusade starting regions share map 530 with Outland but
+        // were not normal flying zones in WotLK. zoneId is the parent zone id,
+        // so this also covers their subareas.
+        if (mapId == 530)
+        {
+            switch (zoneId)
+            {
+                case 3430: // Eversong Woods
+                case 3433: // Ghostlands
+                case 3487: // Silvermoon City
+                case 3524: // Azuremyst Isle
+                case 3525: // Bloodmyst Isle
+                case 3557: // The Exodar
+                case 4080: // Isle of Quel'Danas
+                    return false;
+                default:
+                    break;
+            }
+        }
+
+        // Outland/Northrend and all other maps continue through AzerothCore's
+        // normal checks (riding skill, Cold Weather Flying, no-fly areas, etc.).
+        return true;
+    }
+
 private:
+    static void EnsureStarterClassProficiencies(Player* player)
+    {
+        if (!player)
+            return;
+
+        // Class masks are the same masks used by playercreateinfo_skills in the
+        // stock WotLK/AzerothCore data.  We deliberately do not key this on race:
+        // ARAC means an unusual race must receive the same starter proficiencies
+        // as a native member of that class.  EnsureSpell is idempotent, so native
+        // combinations are unchanged.
+        uint32 classMask = 1u << (player->getClass() - 1);
+
+        if (classMask & 32u) // Death Knight
+        {
+            EnsureSpell(player, SPELL_PROF_POLEARMS);
+            EnsureSpell(player, SPELL_PROF_PLATE);
+        }
+        if (classMask & 35u) // Warrior, Paladin, Death Knight
+        {
+            EnsureSpell(player, SPELL_PROF_TWO_HANDED_SWORDS);
+            EnsureSpell(player, SPELL_PROF_MAIL);
+        }
+        if (classMask & 37u) // Warrior, Hunter, Death Knight
+        {
+            EnsureSpell(player, SPELL_PROF_AXES);
+            EnsureSpell(player, SPELL_PROF_TWO_HANDED_AXES);
+        }
+        if (classMask & 39u) // Warrior, Paladin, Hunter, Death Knight
+            EnsureSpell(player, SPELL_PROF_SWORDS);
+        if (classMask & 40u) // Rogue, Death Knight
+            EnsureSpell(player, SPELL_PROF_DUAL_WIELD);
+        if (classMask & 67u) // Warrior, Paladin, Shaman
+            EnsureSpell(player, SPELL_PROF_SHIELD);
+        if (classMask & 400u) // Priest, Mage, Warlock
+            EnsureSpell(player, SPELL_PROF_WANDS);
+        if (classMask & 1107u) // Warrior, Paladin, Priest, Shaman, Druid
+            EnsureSpell(player, SPELL_PROF_MACES);
+        if (classMask & 1135u) // Warrior, Paladin, Hunter, Rogue, DK, Shaman, Druid
+            EnsureSpell(player, SPELL_PROF_LEATHER);
+        if (classMask & 1488u) // Priest, Shaman, Mage, Warlock, Druid
+            EnsureSpell(player, SPELL_PROF_STAVES);
+    }
+
+    static void EnsureSkill(Player* player, uint16 skillId)
+    {
+        if (!player->HasSkill(skillId))
+            player->SetSkill(skillId, 0, 1, 1);
+    }
+
+    static void EnsureCustomRaceArmorSkills(Player* player)
+    {
+        if (!player || player->getRace() < CUSTOM_RACE_ID_HIGHELF || player->getRace() > CUSTOM_RACE_ID_DARKIRONDWARF)
+            return;
+
+        uint32 classMask = 1u << (player->getClass() - 1);
+
+        // Cloth is a baseline armor proficiency for every playable class.
+        EnsureSkill(player, 415);
+
+        // These are the canonical playercreateinfo_skills class masks.
+        // Explicitly setting the SkillLine is important: learning only the
+        // proficiency spell does not reliably initialize the skill for custom races.
+        if (classMask & 1135u) // Warrior, Paladin, Hunter, Rogue, DK, Shaman, Druid
+            EnsureSkill(player, 414); // Leather
+        if (classMask & 35u)   // Warrior, Paladin, DK
+            EnsureSkill(player, 413); // Mail
+        if (classMask & 32u)   // Death Knight
+            EnsureSkill(player, 293); // Plate
+        if (classMask & 67u)   // Warrior, Paladin, Shaman
+            EnsureSkill(player, 433); // Shield
+    }
+
     static void EnsureLanguage(Player* player, uint16 skillId, uint32 languageSpellId)
     {
         // AzerothCore checks both the language skill and the language spell.
@@ -136,30 +268,6 @@ private:
     {
         if (!player->HasSpell(spellId))
             player->learnSpell(spellId);
-    }
-
-    static void EnsureCustomRaceLanguages(Player* player)
-    {
-        if (!player)
-            return;
-
-        switch (player->getRace())
-        {
-            case CUSTOM_RACE_ID_HIGHELF:
-                EnsureLanguage(player, CUSTOM_SKILL_LANGUAGE_COMMON, SPELL_LANGUAGE_COMMON);
-                EnsureLanguage(player, CUSTOM_SKILL_LANGUAGE_THALASSIAN, SPELL_LANGUAGE_THALASSIAN);
-                break;
-            case CUSTOM_RACE_ID_MAGHARORC:
-            case CUSTOM_RACE_ID_OGRE:
-                EnsureLanguage(player, CUSTOM_SKILL_LANGUAGE_ORCISH, SPELL_LANGUAGE_ORCISH);
-                break;
-            case CUSTOM_RACE_ID_DARKIRONDWARF:
-                EnsureLanguage(player, CUSTOM_SKILL_LANGUAGE_COMMON, SPELL_LANGUAGE_COMMON);
-                EnsureLanguage(player, CUSTOM_SKILL_LANGUAGE_DWARVEN, SPELL_LANGUAGE_DWARVEN);
-                break;
-            default:
-                break;
-        }
     }
 
     static void EnsureCustomRaceLanguagesAndRacials(Player* player)

@@ -27,3 +27,16 @@ Worgoblin.RunningWild.FreeApprentice = 1
 #        Default:     1
 
 Worgoblin.RunningWild.FreeJourneyman = 1
+
+#
+#    Worgoblin.FlyAnywhere.Enable (bool)
+#        Description: Enables player-controlled flying in Azeroth while keeping the same patch-A/DBC set.
+#                     1 = Fly Anywhere enabled (current patch-A behavior).
+#                     0 = WotLK-style flight restrictions: no flying in classic EK/Kalimdor and
+#                         no flying in the TBC starting regions/Isle of Quel'Danas. Outland and
+#                         Northrend continue to use AzerothCore's normal riding/no-fly checks.
+#                     Changing this option only requires a worldserver restart after the module
+#                     has been compiled once; no DBC swap is needed.
+#        Default:     1
+
+Worgoblin.FlyAnywhere.Enable = 1

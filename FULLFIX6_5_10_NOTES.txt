@@ -1,0 +1,6 @@
+FULLFIX 6.5.10
+- Restores custom-race languages on login as well as character creation.
+- Explicitly initializes Cloth/Leather/Mail/Plate/Shield SkillLines for races 13-16 by the canonical class masks.
+- Keeps 6.5.9 ARAC parity, FlyAnywhere config, dedicated Ogre/Dark Iron racial SkillLines and 6.5.8 Mag'har face fix.
+- Makes Mag'har Sympathetic Vigor (German: Verbuendete Lebenskraft) visible in the spellbook by clearing the hidden-client-side flag from spell 110003.
+- Faction Free remains disabled/not integrated.

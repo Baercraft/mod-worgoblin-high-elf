@@ -1,0 +1,14 @@
+FULLFIX 6.5.9
+
+- Keeps 6.5.8 Mag'har face/eye and language-blocker corrections.
+- Keeps dedicated Ogre (794) and Dark Iron (795) racial SkillLines.
+- Synchronizes SkillLine.dbc and SkillLineAbility.dbc between server and Patch-A.
+- Verifies all 68 weapon/class SkillRaceClassInfo rows from F-029 mod-arac cover races 1-16.
+- Removes duplicate SkillRaceClassInfo row 947 for Companion Pets (the unwanted "Companion 1/5" entry).
+- Adds an additive C++ fallback for canonical starter weapon/armor proficiencies based on CLASS, not race.
+  This specifically covers Leather, Shield, Maces, Staves and the other native starter proficiencies for ARAC combinations.
+- Existing characters are not blocked; missing canonical proficiencies are repaired on login.
+- Faction Free is NOT enabled.
+- FlyAnywhere config from 6.5.7 is retained.
+
+Build note: C++ changes require recompiling the server module.
