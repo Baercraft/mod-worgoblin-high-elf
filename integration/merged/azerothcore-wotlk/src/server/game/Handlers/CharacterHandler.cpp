@@ -807,6 +807,10 @@ void WorldSession::HandlePlayerLoginFromDB(LoginQueryHolder const& holder)
         return;
     }
 
+    // WHE: keep the reputation watch bar hidden. Reputation values and faction
+    // reactions are unaffected; only the client-side watched faction is cleared.
+    pCurrChar->SetUInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX, uint32(-1));
+
     pCurrChar->GetMotionMaster()->Initialize();
     pCurrChar->SendDungeonDifficulty(false);
 
@@ -1322,7 +1326,10 @@ void WorldSession::HandleSetWatchedFactionOpcode(WorldPacket& recvData)
 {
     uint32 fact;
     recvData >> fact;
-    GetPlayer()->SetUInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX, fact);
+
+    // WHE: deliberately suppress the reputation watch bar. The reputation
+    // system itself remains fully functional; we only refuse visual tracking.
+    GetPlayer()->SetUInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX, uint32(-1));
 }
 
 void WorldSession::HandleSetFactionInactiveOpcode(WorldPacket& recvData)

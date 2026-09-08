@@ -1,6 +1,6 @@
 diff -ruN originals/azerothcore-wotlk/src/server/game/Entities/Player/Player.cpp merged/azerothcore-wotlk/src/server/game/Entities/Player/Player.cpp
---- originals/azerothcore-wotlk/src/server/game/Entities/Player/Player.cpp	2026-06-29 14:54:51.338569100 +0200
-+++ merged/azerothcore-wotlk/src/server/game/Entities/Player/Player.cpp	2026-08-12 19:54:27.950993000 +0200
+--- originals/azerothcore-wotlk/src/server/game/Entities/Player/Player.cpp	2026-09-08 21:53:22.000000000 +0000
++++ merged/azerothcore-wotlk/src/server/game/Entities/Player/Player.cpp	2026-09-08 21:53:22.000000000 +0000
 @@ -828,7 +828,7 @@
      switch (timer)
      {
@@ -11,8 +11,8 @@ diff -ruN originals/azerothcore-wotlk/src/server/game/Entities/Player/Player.cpp
              {
                  if (!IsAlive() || HasWaterBreathingAura() || GetSession()->GetSecurity() >= AccountTypes(sWorld->getIntConfig(CONFIG_DISABLE_BREATHING)))
 diff -ruN originals/azerothcore-wotlk/src/server/game/Entities/Player/PlayerTaxi.cpp merged/azerothcore-wotlk/src/server/game/Entities/Player/PlayerTaxi.cpp
---- originals/azerothcore-wotlk/src/server/game/Entities/Player/PlayerTaxi.cpp	2026-06-29 15:12:32.439405200 +0200
-+++ merged/azerothcore-wotlk/src/server/game/Entities/Player/PlayerTaxi.cpp	2026-09-06 21:39:07.946808700 +0200
+--- originals/azerothcore-wotlk/src/server/game/Entities/Player/PlayerTaxi.cpp	2026-09-08 21:53:22.000000000 +0000
++++ merged/azerothcore-wotlk/src/server/game/Entities/Player/PlayerTaxi.cpp	2026-09-08 21:53:22.000000000 +0000
 @@ -51,7 +51,7 @@
              break;     // Night Elf
          case RACE_UNDEAD_PLAYER:
@@ -49,8 +49,8 @@ diff -ruN originals/azerothcore-wotlk/src/server/game/Entities/Player/PlayerTaxi
  
      // new continent starting masks (It will be accessible only at new map)
 diff -ruN originals/azerothcore-wotlk/src/server/game/Entities/Player/PlayerUpdates.cpp merged/azerothcore-wotlk/src/server/game/Entities/Player/PlayerUpdates.cpp
---- originals/azerothcore-wotlk/src/server/game/Entities/Player/PlayerUpdates.cpp	2026-06-29 14:54:51.343569400 +0200
-+++ merged/azerothcore-wotlk/src/server/game/Entities/Player/PlayerUpdates.cpp	2026-09-06 17:25:19.895274500 +0200
+--- originals/azerothcore-wotlk/src/server/game/Entities/Player/PlayerUpdates.cpp	2026-09-08 21:53:22.000000000 +0000
++++ merged/azerothcore-wotlk/src/server/game/Entities/Player/PlayerUpdates.cpp	2026-09-08 21:53:22.000000000 +0000
 @@ -1301,6 +1301,8 @@
      // in PvE, only opposition team capital
      switch (zone->team)
@@ -70,8 +70,8 @@ diff -ruN originals/azerothcore-wotlk/src/server/game/Entities/Player/PlayerUpda
          // overwrite for battlegrounds, maybe batter some zone flags but current
          // known not 100% fit to this
 diff -ruN originals/azerothcore-wotlk/src/server/game/Globals/ObjectMgr.cpp merged/azerothcore-wotlk/src/server/game/Globals/ObjectMgr.cpp
---- originals/azerothcore-wotlk/src/server/game/Globals/ObjectMgr.cpp	2026-06-29 14:54:51.353569400 +0200
-+++ merged/azerothcore-wotlk/src/server/game/Globals/ObjectMgr.cpp	2026-08-16 19:04:51.835922100 +0200
+--- originals/azerothcore-wotlk/src/server/game/Globals/ObjectMgr.cpp	2026-09-08 21:53:22.000000000 +0000
++++ merged/azerothcore-wotlk/src/server/game/Globals/ObjectMgr.cpp	2026-09-08 21:53:22.000000000 +0000
 @@ -1890,10 +1890,10 @@
  {
      uint8 customizationID;
@@ -130,9 +130,32 @@ diff -ruN originals/azerothcore-wotlk/src/server/game/Globals/ObjectMgr.cpp merg
          FactionEntry const* factionEntry = sFactionStore.LookupEntry(factionId);
  
 diff -ruN originals/azerothcore-wotlk/src/server/game/Handlers/CharacterHandler.cpp merged/azerothcore-wotlk/src/server/game/Handlers/CharacterHandler.cpp
---- originals/azerothcore-wotlk/src/server/game/Handlers/CharacterHandler.cpp	2026-06-26 17:27:34.202487200 +0200
-+++ merged/azerothcore-wotlk/src/server/game/Handlers/CharacterHandler.cpp	2026-09-06 21:55:11.719586100 +0200
-@@ -2219,6 +2219,12 @@
+--- originals/azerothcore-wotlk/src/server/game/Handlers/CharacterHandler.cpp	2026-09-08 21:53:22.000000000 +0000
++++ merged/azerothcore-wotlk/src/server/game/Handlers/CharacterHandler.cpp	2026-09-08 22:02:47.351849874 +0000
+@@ -807,6 +807,10 @@
+         return;
+     }
+ 
++    // WHE: keep the reputation watch bar hidden. Reputation values and faction
++    // reactions are unaffected; only the client-side watched faction is cleared.
++    pCurrChar->SetUInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX, uint32(-1));
++
+     pCurrChar->GetMotionMaster()->Initialize();
+     pCurrChar->SendDungeonDifficulty(false);
+ 
+@@ -1322,7 +1326,10 @@
+ {
+     uint32 fact;
+     recvData >> fact;
+-    GetPlayer()->SetUInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX, fact);
++
++    // WHE: deliberately suppress the reputation watch bar. The reputation
++    // system itself remains fully functional; we only refuse visual tracking.
++    GetPlayer()->SetUInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX, uint32(-1));
+ }
+ 
+ void WorldSession::HandleSetFactionInactiveOpcode(WorldPacket& recvData)
+@@ -2219,6 +2226,12 @@
              case RACE_BLOODELF:
                  stmt->SetData(1, 137);
                  break;
@@ -146,8 +169,8 @@ diff -ruN originals/azerothcore-wotlk/src/server/game/Handlers/CharacterHandler.
  
              trans->Append(stmt);
 diff -ruN originals/azerothcore-wotlk/src/server/game/Spells/Auras/SpellAuraEffects.cpp merged/azerothcore-wotlk/src/server/game/Spells/Auras/SpellAuraEffects.cpp
---- originals/azerothcore-wotlk/src/server/game/Spells/Auras/SpellAuraEffects.cpp	2026-06-29 15:28:25.877191500 +0200
-+++ merged/azerothcore-wotlk/src/server/game/Spells/Auras/SpellAuraEffects.cpp	2026-09-06 21:59:45.242335200 +0200
+--- originals/azerothcore-wotlk/src/server/game/Spells/Auras/SpellAuraEffects.cpp	2026-09-08 21:53:22.000000000 +0000
++++ merged/azerothcore-wotlk/src/server/game/Spells/Auras/SpellAuraEffects.cpp	2026-09-08 21:53:22.000000000 +0000
 @@ -2311,10 +2311,26 @@
                                  case RACE_BLOODELF:
                                      target->SetDisplayId(target->getGender() == GENDER_MALE ? 17829 : 17830);
@@ -475,8 +498,8 @@ diff -ruN originals/azerothcore-wotlk/src/server/game/Spells/Auras/SpellAuraEffe
                                      break;
                                  case DisplayRace::NightElf:
 diff -ruN originals/azerothcore-wotlk/src/server/scripts/Commands/cs_misc.cpp merged/azerothcore-wotlk/src/server/scripts/Commands/cs_misc.cpp
---- originals/azerothcore-wotlk/src/server/scripts/Commands/cs_misc.cpp	2026-06-29 14:54:51.387777300 +0200
-+++ merged/azerothcore-wotlk/src/server/scripts/Commands/cs_misc.cpp	2026-09-06 22:01:11.779760300 +0200
+--- originals/azerothcore-wotlk/src/server/scripts/Commands/cs_misc.cpp	2026-09-08 21:53:22.000000000 +0000
++++ merged/azerothcore-wotlk/src/server/scripts/Commands/cs_misc.cpp	2026-09-08 21:53:22.000000000 +0000
 @@ -2326,6 +2326,24 @@
              case RACE_DRAENEI:
                  raceStr = "Draenei";
@@ -503,8 +526,8 @@ diff -ruN originals/azerothcore-wotlk/src/server/scripts/Commands/cs_misc.cpp me
  
          switch (classid)
 diff -ruN originals/azerothcore-wotlk/src/server/scripts/Commands/cs_modify.cpp merged/azerothcore-wotlk/src/server/scripts/Commands/cs_modify.cpp
---- originals/azerothcore-wotlk/src/server/scripts/Commands/cs_modify.cpp	2026-06-26 17:27:34.466097000 +0200
-+++ merged/azerothcore-wotlk/src/server/scripts/Commands/cs_modify.cpp	2026-08-28 15:00:07.947267700 +0200
+--- originals/azerothcore-wotlk/src/server/scripts/Commands/cs_modify.cpp	2026-09-08 21:53:22.000000000 +0000
++++ merged/azerothcore-wotlk/src/server/scripts/Commands/cs_modify.cpp	2026-09-08 21:53:22.000000000 +0000
 @@ -415,7 +415,7 @@
      static bool HandleModifyASpeedCommand(ChatHandler* handler, float allSpeed)
      {
@@ -569,8 +592,8 @@ diff -ruN originals/azerothcore-wotlk/src/server/scripts/Commands/cs_modify.cpp 
              return false;
          }
 diff -ruN originals/azerothcore-wotlk/src/server/scripts/EasternKingdoms/ScarletEnclave/chapter1.cpp merged/azerothcore-wotlk/src/server/scripts/EasternKingdoms/ScarletEnclave/chapter1.cpp
---- originals/azerothcore-wotlk/src/server/scripts/EasternKingdoms/ScarletEnclave/chapter1.cpp	2026-06-26 17:27:34.528788300 +0200
-+++ merged/azerothcore-wotlk/src/server/scripts/EasternKingdoms/ScarletEnclave/chapter1.cpp	2026-06-25 00:08:46.451545400 +0200
+--- originals/azerothcore-wotlk/src/server/scripts/EasternKingdoms/ScarletEnclave/chapter1.cpp	2026-09-08 21:53:22.000000000 +0000
++++ merged/azerothcore-wotlk/src/server/scripts/EasternKingdoms/ScarletEnclave/chapter1.cpp	2026-09-08 21:53:22.000000000 +0000
 @@ -330,8 +330,24 @@
          uint32 spellId;
          switch (target->GetDisplayId())
@@ -597,8 +620,8 @@ diff -ruN originals/azerothcore-wotlk/src/server/scripts/EasternKingdoms/Scarlet
              case 25357: spellId = 51541; break; // draenei male
              case 25361: spellId = 51537; break; // dwarf female
 diff -ruN originals/azerothcore-wotlk/src/server/scripts/Pet/pet_generic.cpp merged/azerothcore-wotlk/src/server/scripts/Pet/pet_generic.cpp
---- originals/azerothcore-wotlk/src/server/scripts/Pet/pet_generic.cpp	2026-06-26 17:27:34.825000300 +0200
-+++ merged/azerothcore-wotlk/src/server/scripts/Pet/pet_generic.cpp	2026-09-06 21:39:51.345699200 +0200
+--- originals/azerothcore-wotlk/src/server/scripts/Pet/pet_generic.cpp	2026-09-08 21:53:22.000000000 +0000
++++ merged/azerothcore-wotlk/src/server/scripts/Pet/pet_generic.cpp	2026-09-08 21:53:22.000000000 +0000
 @@ -141,7 +141,13 @@
      {RACE_GNOME,         {2779, 63396, "Gnomeregan Champion's Pennant"}},
      {RACE_TROLL,         {2784, 63399, "Darkspear Champion's Pennant"}},
@@ -614,51 +637,9 @@ diff -ruN originals/azerothcore-wotlk/src/server/scripts/Pet/pet_generic.cpp mer
  };
  
  struct npc_pet_gen_argent_pony_bridle : public ScriptedAI
-diff -ruN originals/azerothcore-wotlk/src/server/shared/enuminfo_SharedDefines.cpp merged/azerothcore-wotlk/src/server/shared/enuminfo_SharedDefines.cpp
---- originals/azerothcore-wotlk/src/server/shared/enuminfo_SharedDefines.cpp	2026-06-29 15:46:46.380132200 +0200
-+++ merged/azerothcore-wotlk/src/server/shared/enuminfo_SharedDefines.cpp	2026-09-06 21:41:04.658536400 +0200
-@@ -42,6 +42,12 @@
-         case RACE_TROLL: return { "RACE_TROLL", "Troll", "" };
-         case RACE_BLOODELF: return { "RACE_BLOODELF", "Blood Elf", "" };
-         case RACE_DRAENEI: return { "RACE_DRAENEI", "Draenei", "" };
-+        case RACE_GOBLIN: return { "RACE_GOBLIN", "Goblin", "" };
-+        case RACE_WORGEN: return { "RACE_WORGEN", "Worgen", "" };
-+        case RACE_HIGHELF: return { "RACE_HIGHELF", "High Elf", "" };
-+        case RACE_MAGHARORC: return { "RACE_MAGHARORC", "Mag'har Orc", "" };
-+        case RACE_OGRE: return { "RACE_OGRE", "Ogre", "" };
-+        case RACE_DARKIRONDWARF: return { "RACE_DARKIRONDWARF", "Dark Iron Dwarf", "" };
-         default: throw std::out_of_range("value");
-     }
- }
-@@ -64,6 +70,12 @@
-         case 7: return RACE_TROLL;
-         case 8: return RACE_BLOODELF;
-         case 9: return RACE_DRAENEI;
-+        case 10: return RACE_GOBLIN;
-+        case 11: return RACE_WORGEN;
-+        case 12: return RACE_HIGHELF;
-+        case 13: return RACE_MAGHARORC;
-+        case 14: return RACE_OGRE;
-+        case 15: return RACE_DARKIRONDWARF;
-         default: throw std::out_of_range("index");
-     }
- }
-@@ -83,6 +95,12 @@
-         case RACE_TROLL: return 7;
-         case RACE_BLOODELF: return 8;
-         case RACE_DRAENEI: return 9;
-+        case RACE_GOBLIN: return 10;
-+        case RACE_WORGEN: return 11;
-+        case RACE_HIGHELF: return 12;
-+        case RACE_MAGHARORC: return 13;
-+        case RACE_OGRE: return 14;
-+        case RACE_DARKIRONDWARF: return 15;
-         default: throw std::out_of_range("value");
-     }
- }
 diff -ruN originals/azerothcore-wotlk/src/server/shared/SharedDefines.h merged/azerothcore-wotlk/src/server/shared/SharedDefines.h
---- originals/azerothcore-wotlk/src/server/shared/SharedDefines.h	2026-06-26 17:27:34.863277500 +0200
-+++ merged/azerothcore-wotlk/src/server/shared/SharedDefines.h	2026-09-06 21:50:42.855137400 +0200
+--- originals/azerothcore-wotlk/src/server/shared/SharedDefines.h	2026-09-08 21:53:22.000000000 +0000
++++ merged/azerothcore-wotlk/src/server/shared/SharedDefines.h	2026-09-08 21:53:22.000000000 +0000
 @@ -76,19 +76,39 @@
      RACE_TAUREN             = 6,  // TITLE Tauren
      RACE_GNOME              = 7,  // TITLE Gnome
@@ -758,9 +739,51 @@ diff -ruN originals/azerothcore-wotlk/src/server/shared/SharedDefines.h merged/a
  };
  
  // Class value is index in ChrClasses.dbc
+diff -ruN originals/azerothcore-wotlk/src/server/shared/enuminfo_SharedDefines.cpp merged/azerothcore-wotlk/src/server/shared/enuminfo_SharedDefines.cpp
+--- originals/azerothcore-wotlk/src/server/shared/enuminfo_SharedDefines.cpp	2026-09-08 21:53:22.000000000 +0000
++++ merged/azerothcore-wotlk/src/server/shared/enuminfo_SharedDefines.cpp	2026-09-08 21:53:22.000000000 +0000
+@@ -42,6 +42,12 @@
+         case RACE_TROLL: return { "RACE_TROLL", "Troll", "" };
+         case RACE_BLOODELF: return { "RACE_BLOODELF", "Blood Elf", "" };
+         case RACE_DRAENEI: return { "RACE_DRAENEI", "Draenei", "" };
++        case RACE_GOBLIN: return { "RACE_GOBLIN", "Goblin", "" };
++        case RACE_WORGEN: return { "RACE_WORGEN", "Worgen", "" };
++        case RACE_HIGHELF: return { "RACE_HIGHELF", "High Elf", "" };
++        case RACE_MAGHARORC: return { "RACE_MAGHARORC", "Mag'har Orc", "" };
++        case RACE_OGRE: return { "RACE_OGRE", "Ogre", "" };
++        case RACE_DARKIRONDWARF: return { "RACE_DARKIRONDWARF", "Dark Iron Dwarf", "" };
+         default: throw std::out_of_range("value");
+     }
+ }
+@@ -64,6 +70,12 @@
+         case 7: return RACE_TROLL;
+         case 8: return RACE_BLOODELF;
+         case 9: return RACE_DRAENEI;
++        case 10: return RACE_GOBLIN;
++        case 11: return RACE_WORGEN;
++        case 12: return RACE_HIGHELF;
++        case 13: return RACE_MAGHARORC;
++        case 14: return RACE_OGRE;
++        case 15: return RACE_DARKIRONDWARF;
+         default: throw std::out_of_range("index");
+     }
+ }
+@@ -83,6 +95,12 @@
+         case RACE_TROLL: return 7;
+         case RACE_BLOODELF: return 8;
+         case RACE_DRAENEI: return 9;
++        case RACE_GOBLIN: return 10;
++        case RACE_WORGEN: return 11;
++        case RACE_HIGHELF: return 12;
++        case RACE_MAGHARORC: return 13;
++        case RACE_OGRE: return 14;
++        case RACE_DARKIRONDWARF: return 15;
+         default: throw std::out_of_range("value");
+     }
+ }
 diff -ruN originals/azerothcore-wotlk/src/tools/mmaps_generator/MapBuilder.cpp merged/azerothcore-wotlk/src/tools/mmaps_generator/MapBuilder.cpp
---- originals/azerothcore-wotlk/src/tools/mmaps_generator/MapBuilder.cpp	2026-06-26 17:27:34.914277500 +0200
-+++ merged/azerothcore-wotlk/src/tools/mmaps_generator/MapBuilder.cpp	2026-08-08 00:18:49.553121200 +0200
+--- originals/azerothcore-wotlk/src/tools/mmaps_generator/MapBuilder.cpp	2026-09-08 21:53:22.000000000 +0000
++++ merged/azerothcore-wotlk/src/tools/mmaps_generator/MapBuilder.cpp	2026-09-08 21:53:22.000000000 +0000
 @@ -98,7 +98,7 @@
      {
          std::vector<std::string> files;
