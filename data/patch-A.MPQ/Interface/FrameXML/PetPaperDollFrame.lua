@@ -632,3 +632,20 @@ function PetExpBar_Update()
 	PetPaperDollFrameExpBar:SetMinMaxValues(min(0, currXP), nextXP);
 	PetPaperDollFrameExpBar:SetValue(currXP);
 end
+
+-- CORELESS: keep reputation fully functional but never show the watched-reputation bar.
+-- This replaces the old server-core watched-faction workaround.
+local CorelessRepWatchHider = CreateFrame("Frame")
+CorelessRepWatchHider:RegisterEvent("PLAYER_ENTERING_WORLD")
+CorelessRepWatchHider:RegisterEvent("UPDATE_FACTION")
+CorelessRepWatchHider:RegisterEvent("PLAYER_XP_UPDATE")
+
+local function CorelessHideReputationWatchBar()
+    if ReputationWatchBar then ReputationWatchBar:Hide() end
+    if ReputationWatchStatusBar then ReputationWatchStatusBar:Hide() end
+end
+
+CorelessRepWatchHider:SetScript("OnEvent", CorelessHideReputationWatchBar)
+if ReputationWatchBar and ReputationWatchBar.Show then
+    hooksecurefunc(ReputationWatchBar, "Show", CorelessHideReputationWatchBar)
+end
