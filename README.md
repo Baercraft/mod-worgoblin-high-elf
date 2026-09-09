@@ -1,24 +1,18 @@
 # mod-worgoblin-high-elf
 
-> [!WARNING]
->
-> ## Work in Progress
->
-> This module is **not finished yet** and is still under active development.
->
-> It is currently intended for testing, development and experienced AzerothCore users. Features, DBC files, SQL structure and compatibility may still change between versions.
->
-> Bugs are expected, especially with unusual race/class combinations, ARAC and PlayerBots integration.
->
-> **Please make backups before installing or updating the module.**
+> 🚧 **Work in Progress / Development Version**
 
-A ready-to-use custom race module for **AzerothCore 3.3.5a**.
+A ready-to-use custom race module for **AzerothCore 3.3.5a**, focused on providing additional playable races.
 
-This project is based on the original Worgoblin and High Elf projects and has since been expanded with additional playable races, localization work, compatibility improvements and experimental ARAC support.
+The main idea behind this fork is simple:
 
-The main goal of this repository is to provide a more integrated installation that requires as little manual patching and assembly as possible.
+> **Put the module into your AzerothCore `modules` directory, install the provided DBC files and `patch-A.MPQ`, compile the server normally, and play.**
 
-However, the project is still actively being developed and should **not yet be considered a finished or fully stable release**.
+The goal is to keep custom-race integration as self-contained as possible inside the module instead of requiring users to manually modify or maintain additional patches inside the AzerothCore source tree.
+
+This project is still under active development. Features, DBC files, SQL data and compatibility may continue to change while the project is brought closer to the functionality and quality of Medviten's work, especially regarding the integration of additional playable races.
+
+**Please make backups before installing or updating the module.**
 
 ---
 
@@ -30,42 +24,57 @@ His work on `mod-worgoblin-high-elf`, continued development, testing, ideas and 
 
 This repository would not exist in its current form without his work and assistance.
 
-Rather than replacing his approach, this repository takes a slightly different direction:
+The purpose of this fork is **not to replace Medviten's project**. Instead, it follows a somewhat different approach to installation and maintenance.
 
-* Medviten's project follows a more modular approach and experiments with systems such as modpaks.
-* This repository focuses primarily on providing a more **ready-to-use and integrated installation**.
+Medviten's project continues to be an important foundation and reference for this work, while this fork focuses strongly on providing a package that can be installed with as few manual modifications to AzerothCore itself as possible.
 
-Both approaches have their advantages and can benefit from fixes and discoveries made in either project.
+There are now several technical differences between both versions, but fixes, discoveries and improvements from either project can continue to benefit the other.
 
 ---
 
-# Purpose
+# Project Goal – As Few Core Changes As Possible
 
-Custom races in WoW 3.3.5a require changes across several systems at the same time:
+Custom playable races in WoW 3.3.5a normally require changes across several different systems:
 
 * AzerothCore server data
 * DBC files
-* Client patches
+* Client files
 * SQL
 * Race/class definitions
+* Starting data
 * Racials and skills
-* Localization
+* Reputation
+* Languages
+* Character creation
+* Client UI data
 
-Using several independent follow-up patches can provide more flexibility, but it also increases the possibility of mismatched files or installation-order problems.
+Traditionally, this can result in several separate patches, manual source changes and different DBC versions that must all remain synchronized.
 
-For that reason, this repository attempts to provide a more complete and consistent base package.
+This fork attempts to avoid that wherever possible.
 
-The goal is to make installation as close as possible to:
+The intended installation model is:
 
-> **Install the module, install the client patch, compile AzerothCore and play.**
+```text
+AzerothCore
+└── modules
+    └── mod-worgoblin-high-elf
+```
 
-Where possible, related fixes are integrated directly rather than distributed across multiple optional patches.
+plus the supplied client and server data.
+
+The module contains the server-side compatibility work required by this project wherever that functionality can reasonably be implemented without modifying the AzerothCore core itself.
+
+The long-term goal is:
+
+> **No manual AzerothCore core patching for the custom-race system.**
+
+Simply install the module, use the supplied DBC files and client patch, compile AzerothCore normally and let the module handle the additional race integration.
 
 ---
 
 # Playable Races
 
-In addition to the original WoW 3.3.5a races, the project currently includes the following custom playable races:
+In addition to the original WoW 3.3.5a races, the project currently includes:
 
 * **Worgen**
 * **Goblin**
@@ -74,60 +83,51 @@ In addition to the original WoW 3.3.5a races, the project currently includes the
 * **Ogre**
 * **Dark Iron Dwarf**
 
-Further improvements and additional races may be added over time.
+Additional races are planned.
+
+The project is still being developed with the intention of remaining as close as reasonably possible to the functionality established by Medviten when introducing and integrating additional playable races.
+
+Because this fork uses a different technical approach in several areas, the implementation may not always be identical.
 
 ---
 
 # Features
 
-The project aims to integrate the custom races into AzerothCore while preserving the standard WoW 3.3.5a systems as much as possible.
-
-Development includes support for:
+Development currently includes support for:
 
 * Custom playable races
 * Starting locations
+* Starting quests and race handling
 * Languages
 * Racial abilities
 * Starting skills
-* Reputation
+* Reputation integration
 * Character creation
 * Race/class definitions
 * Armor and weapon proficiencies
 * Client-side race definitions
-* Worgen features
-* PlayerBots compatibility
-* Multiple client languages
-* Experimental All Races All Classes support
+* Worgen-specific functionality
+* **Two Forms**
+* **Running Wild**
+* Druid forms
+* Custom race SkillLines
+* Custom achievements
+* Parent-race compatibility
+* ARAC – All Races All Classes
+* PlayerBots compatibility through a dedicated PlayerBots version
+* Multi-language client support
 
 Not every feature or race/class combination should currently be considered complete.
 
 ---
 
-# Ready-to-use Approach
+# 🌍 Multi-Language Support
 
-This repository intentionally follows a more integrated approach.
+One of the major focuses of this fork is **multi-language support**.
 
-Instead of requiring users to manually combine many DBC modifications, modpaks and follow-up patches, the goal is to provide a known compatible set of files.
+Many WoW 3.3.5a custom-race projects were primarily designed around the English client. Adding new races, however, affects far more than simply displaying a translated race name.
 
-This should make installation easier for users who simply want to use the additional races without having to manually rebuild every individual DBC modification.
-
-It also helps reduce problems caused by:
-
-* Incorrect patch order
-* Missing follow-up patches
-* Mismatched DBC files
-* SQL and DBC data being out of sync
-* Different versions of optional patches being mixed together
-
-The ready-to-use approach does **not** mean that the project is already finished. The integrated package itself is still under active development and testing.
-
----
-
-# Multi-Language Support
-
-One of the major focuses and advantages of this fork is **improved multi-language support**.
-
-Many custom-race projects for WoW 3.3.5a were primarily developed around an English client. This project attempts to make the additional races usable across multiple client locales.
+For this reason, the DBC files supplied with this project have been **modified and extended with localization support for the custom races and their related data**.
 
 Localization work includes areas such as:
 
@@ -136,36 +136,39 @@ Localization work includes areas such as:
 * Character creation
 * Locations
 * Languages
-* Racials
-* Client DBC data
+* Racial abilities
+* SkillLines
+* Client DBC entries
 * Custom UI elements
+* Additional custom-race related text
 
-Current localization work includes support for:
+## Currently supported client languages
 
-* English (`enUS`)
-* German (`deDE`)
-* French (`frFR`)
-* Spanish (`esES`)
-* Russian (`ruRU`)
-* Simplified Chinese (`zhCN`)
-* Traditional Chinese (`zhTW`)
+| Locale | Language                 |
+| ------ | ------------------------ |
+| `enUS` | 🇺🇸 English             |
+| `deDE` | 🇩🇪 German              |
+| `frFR` | 🇫🇷 French              |
+| `esES` | 🇪🇸 Spanish             |
+| `ruRU` | 🇷🇺 Russian             |
+| `zhCN` | 🇨🇳 Simplified Chinese  |
+| `zhTW` | 🇹🇼 Traditional Chinese |
 
-Where a translation does not yet exist, English may be used as a fallback instead of leaving the client entry empty.
+The supplied DBC files have been adapted and extended accordingly.
 
-Localization is still being improved and contributions or corrections from native speakers are very welcome.
+Where a translation is not yet available, **English may be used as a fallback** instead of leaving the corresponding client entry empty.
+
+Localization is still being improved. Corrections and improved translations from native speakers are very welcome.
 
 ---
 
 # ARAC – All Races All Classes
 
-Support for **All Races All Classes (ARAC)** is currently being integrated directly into the project.
+Support for **All Races All Classes (ARAC)** is being integrated into the project.
 
-> [!IMPORTANT]
-> **ARAC is still work in progress and should currently be considered experimental.**
+ARAC allows race/class combinations that are normally unavailable in WoW 3.3.5a.
 
-The long-term goal is to support race/class combinations without requiring users to manually combine several separate follow-up DBC patches.
-
-Current ARAC development includes:
+Development includes:
 
 * Race/class availability
 * Armor proficiencies
@@ -175,122 +178,118 @@ Current ARAC development includes:
 * Class abilities
 * Custom race support
 
-Some unusual race/class combinations may still have missing abilities, incorrect proficiencies or other issues.
+ARAC remains under development and unusual race/class combinations may still expose issues.
 
-Testing and detailed bug reports are very welcome.
+## Future ARAC installation
+
+This project is moving away from the old `patch-J.MPQ` approach.
+
+### `patch-J.MPQ` will no longer be used in future versions.
+
+Instead, the project is intended to provide an **alternative `patch-A.MPQ` version** for installations where ARAC should be disabled.
+
+The intention is therefore to provide two matching client configurations rather than requiring `patch-J.MPQ` to override parts of another patch.
+
+For example:
+
+```text
+patch-A.MPQ
+└── ARAC-enabled client configuration
+
+Alternative patch-A.MPQ
+└── ARAC-disabled client configuration
+```
+
+This keeps the client setup easier to understand and avoids stacking patches whose purpose is to undo or override data from another patch.
+
+More information will be provided as this system is finalized.
+
+---
+
+# Client and Server DBC Files
+
+Custom races require changes to several DBC tables.
+
+The DBC files supplied with this project have therefore been **modified, synchronized and extended specifically for this module**.
+
+They contain data required for areas such as:
+
+* Custom races
+* Race/class combinations
+* Racial abilities
+* SkillLines
+* Character creation
+* Reputation-related integration
+* Client localization
+* Custom race descriptions
+* Additional language entries
+
+Because the client and server must agree on this data, it is strongly recommended to use the DBC files supplied with the matching version of the module.
+
+**Do not randomly mix DBC files from different releases.**
 
 ---
 
 # Client Patch
 
-The project uses **`patch-A.MPQ`** as its primary client patch.
+The project uses:
 
-It contains the client-side files required by the custom races, including modified DBC files and other race-related client data.
+```text
+patch-A.MPQ
+```
 
-This repository does **not** use `patch-J.MPQ`.
+as its primary client patch.
 
-The goal is to maintain one consistent client configuration instead of requiring an additional patch to reverse or disable parts of the primary patch.
+It contains the client-side data required for the additional playable races, including the modified DBC files and related client resources.
 
----
+## No future patch-J requirement
 
-# Worgen
+Older approaches used an additional `patch-J.MPQ` for optional behavior.
 
-The original Worgoblin project remains an important foundation of this module.
+This project is moving away from that design.
 
-Development includes support for features such as:
+Future releases are intended to use **only `patch-A.MPQ`**, with an alternative Patch-A package being provided when ARAC should be disabled.
 
-* Playable Worgen
-* Worgen models
-* Worgen racial abilities
-* Running Wild
-* Druid forms
-* Two Forms
-* Alliance handling
-
-Some functionality originates directly from the original Worgoblin projects while other parts have been modified or expanded.
-
----
-
-# Goblin
-
-Goblin support originates from the original Worgoblin module.
-
-The project contains the client and server modifications required to make Goblins playable in WoW 3.3.5a and continues to integrate them with the other custom-race systems.
-
----
-
-# High Elf
-
-High Elf support originates from the **AzerothCore High Elf** project by Abracadaniel22.
-
-The race has since received additional compatibility, integration and localization work.
-
----
-
-# Mag'har Orc
-
-Mag'har Orcs are available as an additional Horde race.
-
-Development includes support for their:
-
-* Race definition
-* Languages
-* Racials
-* Starting data
-* Class compatibility
-* Reputation
-
----
-
-# Ogre
-
-Ogres are available as a playable Horde race.
-
-Their integration includes custom race data, racial abilities and compatibility work with the existing AzerothCore systems.
-
-Ogre integration is still being tested and improved.
-
----
-
-# Dark Iron Dwarf
-
-Dark Iron Dwarves are available as an additional Alliance race.
-
-They use the existing Dwarf systems as a foundation while receiving their own custom race definition and racial support.
-
-Their integration is also still under active development.
+This should make the client installation more predictable and reduce problems caused by patch priority or incompatible combinations of Patch-A and Patch-J.
 
 ---
 
 # PlayerBots
 
-PlayerBots support is provided through a dedicated fork of `mod-playerbots`:
+PlayerBots compatibility is provided through a dedicated adapted version of `mod-playerbots`:
 
 **[Baercraft/mod-playerbots](https://github.com/Baercraft/mod-playerbots)**
 
-This fork contains compatibility work for the additional custom races and is intended to be used together with this project.
+The adapted PlayerBots module contains the compatibility work required for the additional playable races.
 
-> [!NOTE]
-> PlayerBots compatibility is also **still under development**.
+The same philosophy applies here:
 
-Some custom races or unusual race/class combinations may not yet work perfectly with bot generation or automated character creation.
+> **No additional manual AzerothCore core modifications should be necessary just to use the custom races with PlayerBots.**
 
-Keeping the PlayerBots modifications in a separate fork allows PlayerBots-specific changes to be developed without forcing them on users who do not use PlayerBots.
+Users who want PlayerBots install the adapted PlayerBots module alongside this custom-race module.
 
-PlayerBots compatibility will continue to be updated as the custom race system expands.
+Users who do not use PlayerBots do not need it.
+
+Keeping PlayerBots integration separate also prevents PlayerBots-specific modifications from being forced on normal installations.
+
+PlayerBots compatibility is still under development and will continue to be adapted as additional races and race/class combinations are introduced.
 
 ---
 
 # Installation
 
-> [!CAUTION]
-> This is currently a development version.
->
-> Back up your AzerothCore databases, DBC files and WoW client before installing or updating.
+> ⚠️ **This is currently a development version.**
+
+Before installing or updating, back up:
+
+* Your AzerothCore databases
+* Your existing DBC directory
+* Your WoW client
+* Your current module version
 
 ## 1. Install the module
 
-Copy the module into your AzerothCore modules directory:
+Copy or clone the repository into the AzerothCore module directory:
 
 ```text
 AzerothCore/
@@ -298,19 +297,31 @@ AzerothCore/
     └── mod-worgoblin-high-elf/
 ```
 
+The important point is that the module belongs inside the normal AzerothCore `modules` directory.
+
+**No additional manual source patch to the AzerothCore core is intended to be required.**
+
 ---
 
 ## 2. Install the server DBC files
 
-Copy the provided server DBC files into the DBC directory used by your AzerothCore installation.
+Copy the supplied server DBC files into the DBC directory used by your AzerothCore installation.
 
-The exact directory is configured through `DataDir` in `worldserver.conf`.
+The directory used by the server is configured through:
 
-**Back up your existing DBC directory before replacing any files.**
+```text
+DataDir
+```
+
+in `worldserver.conf`.
+
+Back up your existing DBC files before replacing them.
+
+The server and client DBC versions should always come from the same module release.
 
 ---
 
-## 3. Install patch-A.MPQ
+## 3. Install `patch-A.MPQ`
 
 Copy:
 
@@ -328,15 +339,23 @@ World of Warcraft/
     └── patch-A.MPQ
 ```
 
+That's the primary client-side installation required by the module.
+
+Future releases will no longer rely on `patch-J.MPQ`.
+
+If ARAC should be disabled, an alternative Patch-A version is planned instead.
+
 ---
 
 ## 4. Compile AzerothCore
 
-After installing or updating the module, compile AzerothCore normally.
+Compile AzerothCore normally with the module inside the `modules` directory.
 
-Changes to the module's C++ source code require recompilation.
+No separate manual modification of AzerothCore source files should be required for the custom-race integration supplied by this project.
 
-See the official AzerothCore documentation for information about installing and compiling modules:
+Changes to the module's own C++ source code naturally require recompilation.
+
+For general AzerothCore module installation instructions, see:
 
 https://www.azerothcore.org/wiki/installing-a-module
 
@@ -344,69 +363,81 @@ https://www.azerothcore.org/wiki/installing-a-module
 
 ## 5. Database Updates
 
-The module contains SQL updates required for the additional races and related systems.
+The module contains the SQL updates required by the additional races and related systems.
 
-Depending on your AzerothCore configuration, these updates may be applied through the AzerothCore database updater.
+Normally these should be handled by the AzerothCore module database updater.
 
-Check the worldserver startup log to verify that the required module SQL updates were successfully applied.
-
-If necessary, SQL updates can also be imported manually.
+Check the `worldserver` startup log after installing or updating the module to verify that the SQL updates were successfully applied.
 
 ---
 
 ## 6. Client Executable
 
-Custom races require a WoW 3.3.5a client that allows modified client files.
+Custom races require a WoW 3.3.5a client capable of loading modified client files.
 
-You may therefore need a patched WoW executable with signature checks disabled.
+A patched executable with the appropriate signature checks disabled may therefore be necessary.
 
-A commonly used patcher is available here:
+A commonly used patcher is:
 
 https://github.com/anzz1/WoWPatcher335
 
-Always keep a backup of your original executable.
+Always keep a backup of the original executable.
+
+---
+
+# Quick Installation Summary
+
+For an existing AzerothCore installation, the intended process is essentially:
+
+```text
+1. Copy mod-worgoblin-high-elf into AzerothCore/modules/
+2. Copy the supplied server DBC files to the server DataDir/dbc directory
+3. Copy patch-A.MPQ into World of Warcraft/Data/
+4. Compile AzerothCore normally
+5. Start worldserver and allow the module SQL updates to run
+6. Create a new custom-race character and test
+```
+
+There should be **no need to manually patch AzerothCore core source files** for the custom-race integration provided by this module.
+
+That simplicity is one of the primary goals of this fork.
 
 ---
 
 # Development Status
 
-This project is currently in **active development**.
+This project is still in **active development**.
 
-The current focus includes:
+The current goal is not merely to add races that can be selected on the character creation screen. The intention is to integrate them properly into the existing WoW 3.3.5a and AzerothCore systems.
 
-* Improving ARAC compatibility
-* Testing race/class combinations
-* Correct armor and weapon skills
-* Correct class SkillLines
+Current development includes:
+
+* Improving race integration
+* Remaining as close as possible to Medviten's custom-race functionality
+* Adding additional playable races
 * Improving racial abilities
-* Correcting custom race reputation
-* Improving starting data
+* Correcting starting skills
+* Correcting armor and weapon proficiencies
+* Improving reputation integration
+* Improving Worgen functionality
+* Testing race/class combinations
+* Expanding ARAC support
 * Expanding localization
-* Improving PlayerBots compatibility
 * Keeping client and server DBC data synchronized
-* Reducing the number of separate installation steps
+* Improving PlayerBots compatibility
+* Reducing manual installation steps
+* Eliminating unnecessary AzerothCore core modifications
+* Replacing the old Patch-J approach with cleaner Patch-A variants
 
-Some systems are already working well, while others are still being redesigned or tested.
+Some systems already work well while others remain under testing.
 
-Users should currently expect possible issues with:
-
-* ARAC combinations
-* Starting skills
-* Armor and weapon proficiencies
-* Racials
-* Languages
-* Reputation
-* Druid forms
-* PlayerBots
-* Characters created with older development versions
-
-For reliable testing, creating a **new character** after major updates is recommended.
+**This should therefore still be considered a development version rather than a finished release.**
 
 ---
 
 # Bug Reports
 
-Bug reports and testing feedback are very welcome.
+Testing and bug reports are very welcome.
 
 When reporting a problem, please include whenever possible:
 
@@ -416,27 +447,28 @@ When reporting a problem, please include whenever possible:
 * Class
 * Client locale
 * Whether ARAC is enabled
+* Whether PlayerBots is installed
 * Whether the character was newly created
-* Relevant worldserver log output
+* Relevant `worldserver` log output
 
-For race/class problems, please describe exactly which skill, spell, racial, armor type or weapon proficiency is missing.
-
-This makes problems significantly easier to reproduce and fix.
+For race/class problems, please describe exactly which skill, spell, racial ability, armor type, weapon proficiency, reputation entry or other functionality is missing or incorrect.
 
 ---
 
 # Updating
 
-Because this project is still under active development, files and database structures may change between versions.
+Because this project is under active development, module code, SQL and DBC data may change between versions.
 
 Before updating:
 
 * Back up your world database
-* Back up your DBC directory
+* Back up your server DBC directory
 * Back up `patch-A.MPQ`
 * Keep your previous working module version
 
-Do not assume that characters created with one development version will always behave identically after a future update.
+Always keep the module, server DBC files and client Patch-A from compatible releases together.
+
+Characters created with older development versions may contain outdated race or skill data. For major updates, testing with a **newly created character** is recommended.
 
 ---
 
@@ -446,17 +478,17 @@ This project builds upon the work of many developers in the AzerothCore and WoW 
 
 Special thanks to:
 
-* **[Medviten](https://github.com/Medviten/mod-worgoblin-high-elf)** – for his continued development of the combined project, testing, ideas and especially his tireless support
+* **[Medviten](https://github.com/Medviten/mod-worgoblin-high-elf)** – for his continued development of the combined project, extensive testing, ideas, assistance and especially his tireless support
 * **heyitsbench** and **Helias** – original Worgoblin modules
 * **idempotentiation** – Worgoblin fork and compatibility work
 * **Abracadaniel22** – AzerothCore High Elf and Fly Anywhere modules
 * **heyitsbench** – original ARAC module
 * **ChromWolf** – updated ARAC work
 * **Justurn / Zeppelin-Craft** – inspiration for modular DBC handling
-* The AzerothCore community
+* The **AzerothCore community**
 * Everyone who has helped test, debug, translate and improve the project
 
-A large part of the original project's foundation and credits comes from Medviten's combined `mod-worgoblin-high-elf` project.
+A large part of the foundation, research and original credits behind this project comes from Medviten's combined `mod-worgoblin-high-elf` project.
 
 ---
 
@@ -464,7 +496,19 @@ A large part of the original project's foundation and credits comes from Medvite
 
 Testing, fixes, translations and compatibility improvements are welcome.
 
-This project is still evolving, so contributions that improve compatibility across different races, classes and client languages are particularly useful.
+In particular, help is appreciated with:
+
+* Additional client languages
+* Translation corrections
+* Race/class testing
+* Racials
+* Reputation
+* DBC compatibility
+* ARAC
+* PlayerBots
+* Additional playable races
+
+The project is still evolving, so detailed testing and reproducible bug reports are especially valuable.
 
 ---
 
