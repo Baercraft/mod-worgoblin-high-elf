@@ -118,5 +118,6 @@ class spell_costume_override : public AuraScript
 
 void AddSC_mod_race_costumes()
 {
-    RegisterSpellScript(spell_costume_override);
+    // Optional legacy costume script intentionally not registered here.
+    // Parent-race transformations are handled by mod_coreless_compat.cpp.
 }

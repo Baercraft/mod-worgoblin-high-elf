@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Random.h"
 #include "SpellScript.h"
+#include "Spell.h"
 #include "SpellAuraEffects.h"
 #include "Creature.h"
 
@@ -17,6 +18,11 @@ namespace
     constexpr uint8 RACE_OGRE = 15;
     constexpr uint8 RACE_DARK_IRON = 16;
     constexpr uint8 RACE_ZANDALARI = 17;
+
+    constexpr uint32 SPELL_TWO_FORMS = 68996;
+    constexpr uint32 SPELL_DARKFLIGHT = 68992;
+    constexpr uint32 HUMAN_MALE_DISPLAY = 19723;
+    constexpr uint32 HUMAN_FEMALE_DISPLAY = 20464;
 
     enum ParentRace : uint8 { PARENT_NONE, PARENT_HUMAN, PARENT_ORC, PARENT_DWARF, PARENT_TROLL, PARENT_BLOODELF };
 
@@ -179,6 +185,99 @@ namespace
         }
     }
 
+    void EnsureCustomRaceRacials(Player* player)
+    {
+        auto LearnIfMissing = [player](uint32 spellId)
+        {
+            if (spellId && !player->HasSpell(spellId))
+                player->learnSpell(spellId);
+        };
+
+        switch (player->getRace())
+        {
+            case RACE_WORGEN_CUSTOM:
+                // Two Forms is handled entirely in C++ in FINAL FIX7.
+                LearnIfMissing(SPELL_TWO_FORMS);
+                break;
+
+            case RACE_HIGH_ELF:
+                // High Elf: class-specific meditation plus shared racials.
+                LearnIfMissing(player->getClass() == CLASS_DEATH_KNIGHT ? 110007 : 110005);
+                LearnIfMissing(110006); // Swiftness of the Rangers
+                LearnIfMissing(110008); // Bow Specialization
+                LearnIfMissing(110009); // Enchanting Specialization
+                break;
+
+            case RACE_MAGHAR_ORC:
+                // Mag'har custom racial package.
+                LearnIfMissing(110001); // Ancestral Call
+                LearnIfMissing(110002); // Savage Blood
+                LearnIfMissing(110003); // Sympathetic Vigor
+                LearnIfMissing(110004); // Unwavering Will
+                break;
+
+            case RACE_OGRE:
+                // Ogre uses the racial package shown in the character-creation UI:
+                // War Stomp, Endurance, Hardiness and Command. Older module SQL
+                // incorrectly granted the Mag'har package to Ogres, so remove it.
+                for (uint32 spellId : std::array<uint32, 4>{ 110001, 110002, 110003, 110004 })
+                    if (player->HasSpell(spellId))
+                        player->removeSpell(spellId, SPEC_MASK_ALL, false);
+
+                LearnIfMissing(20549); // War Stomp
+                LearnIfMissing(20550); // Endurance
+                LearnIfMissing(20573); // Hardiness
+                LearnIfMissing(20574); // Command
+                break;
+
+            case RACE_DARK_IRON:
+                // Dark Iron currently inherits the WotLK dwarf racial package.
+                LearnIfMissing(20594); // Stoneform
+                LearnIfMissing(20595); // Gun Specialization
+                LearnIfMissing(20596); // Frost Resistance
+                LearnIfMissing(2481);  // Find Treasure
+                LearnIfMissing(59224); // Mace Specialization
+                break;
+
+            default:
+                break;
+        }
+    }
+
+
+    bool IsHumanWorgenDisplay(Player const* player)
+    {
+        uint32 displayId = player->GetDisplayId();
+        return displayId == HUMAN_MALE_DISPLAY || displayId == HUMAN_FEMALE_DISPLAY;
+    }
+
+    void ForceWorgenForm(Player* player)
+    {
+        if (!player || player->getRace() != RACE_WORGEN_CUSTOM)
+            return;
+
+        if (IsHumanWorgenDisplay(player))
+            player->SetDisplayId(player->GetNativeDisplayId());
+    }
+
+    void ToggleTwoForms(Player* player)
+    {
+        if (!player || player->getRace() != RACE_WORGEN_CUSTOM)
+            return;
+
+        // Worgen cannot remain in human form while in combat.
+        if (player->IsInCombat())
+        {
+            ForceWorgenForm(player);
+            return;
+        }
+
+        if (IsHumanWorgenDisplay(player))
+            player->SetDisplayId(player->GetNativeDisplayId());
+        else
+            player->SetDisplayId(GenderDisplay(player, HUMAN_MALE_DISPLAY, HUMAN_FEMALE_DISPLAY));
+    }
+
     void EnsureStartTaxi(Player* player)
     {
         uint32 node = 0;
@@ -208,19 +307,40 @@ public:
 
     void OnPlayerCreate(Player* player) override
     {
+        // Character creation runs before the Player is attached to a Map.
+        // Only touch the taxi mask here; learnSpell/removeSpell can reach
+        // map-dependent code and must wait until OnPlayerLogin.
         EnsureStartTaxi(player);
-        NormalizeCustomRaceLanguages(player);
     }
 
     void OnPlayerLogin(Player* player) override
     {
+        // At this point the player is fully placed in the world. This is the
+        // safe place for language normalization and also covers race/faction
+        // changes, which require a relog before normal play continues.
         EnsureStartTaxi(player);
         NormalizeCustomRaceLanguages(player);
+        EnsureCustomRaceRacials(player);
     }
 
-    void OnPlayerUpdateFaction(Player* player) override
+    void OnPlayerSpellCast(Player* player, Spell* spell, bool /*skipCheck*/) override
     {
-        NormalizeCustomRaceLanguages(player);
+        if (!player || !spell || player->getRace() != RACE_WORGEN_CUSTOM)
+            return;
+
+        SpellInfo const* spellInfo = spell->GetSpellInfo();
+        if (!spellInfo)
+            return;
+
+        if (spellInfo->Id == SPELL_TWO_FORMS)
+            ToggleTwoForms(player);
+        else if (spellInfo->Id == SPELL_DARKFLIGHT)
+            ForceWorgenForm(player);
+    }
+
+    void OnPlayerEnterCombat(Player* player, Unit* /*enemy*/) override
+    {
+        ForceWorgenForm(player);
     }
 };
 
