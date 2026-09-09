@@ -5,6 +5,13 @@
 #include "SpellScript.h"
 #include "Config.h"
 
+// Custom race IDs used by this module.
+// AzerothCore itself does not define RACE_WORGEN in SharedDefines.
+enum CustomRaces
+{
+    RACE_CUSTOM_WORGEN = 12,
+};
+
 enum Spells
 {
     BEST_DEALS_ANYWHERE = 69044,
@@ -20,8 +27,8 @@ enum WorgenRiding
     SPELL_RW_JOURN_FEMALE    = 110011,
 };
 
-class worgoblin : public PlayerScript {
-
+class worgoblin : public PlayerScript
+{
 public:
     worgoblin() : PlayerScript("worgoblin") { }
 
@@ -52,14 +59,18 @@ class spell_rocket_barrage : public SpellScript
             return;
 
         int32 basePoints = 0 + caster->GetLevel() * 2;
-        basePoints += caster->SpellBaseDamageBonusDone(GetSpellInfo()->GetSchoolMask()) * 0.429; //BM=0.429 here, don't ask me how.
+        basePoints += caster->SpellBaseDamageBonusDone(GetSpellInfo()->GetSchoolMask()) * 0.429; // BM=0.429 here, don't ask me how.
         basePoints += caster->GetTotalAttackPowerValue(caster->getClass() != CLASS_HUNTER ? BASE_ATTACK : RANGED_ATTACK) * 0.25; // 0.25=BonusCoefficient, hardcoding it here
         SetEffectValue(basePoints);
     }
 
     void Register() override
     {
-        OnEffectLaunchTarget += SpellEffectFn(spell_rocket_barrage::HandleDamage, EFFECT_0, SPELL_EFFECT_SCHOOL_DAMAGE);
+        OnEffectLaunchTarget += SpellEffectFn(
+            spell_rocket_barrage::HandleDamage,
+            EFFECT_0,
+            SPELL_EFFECT_SCHOOL_DAMAGE
+        );
     }
 };
 
@@ -68,16 +79,26 @@ class player_worgen_running_wild : public PlayerScript
 public:
     player_worgen_running_wild() : PlayerScript("player_worgen_running_wild") { }
 
-    void OnPlayerLogin(Player* player) override { HandleWorgen(player); }
-    void OnPlayerLevelChanged(Player* player, uint8 /*oldLevel*/) override { HandleWorgen(player); }
+    void OnPlayerLogin(Player* player) override
+    {
+        HandleWorgen(player);
+    }
+
+    void OnPlayerLevelChanged(Player* player, uint8 /*oldLevel*/) override
+    {
+        HandleWorgen(player);
+    }
 
 private:
     void HandleWorgen(Player* player)
     {
-        if (player->getRace() != RACE_WORGEN)
+        // Worgen is a custom race in this module and is not defined
+        // as RACE_WORGEN by the base AzerothCore.
+        if (player->getRace() != RACE_CUSTOM_WORGEN)
             return;
 
-        // riding-skill spells don't reliably show up on AC for DKs, so give them the fast RW at creation
+        // Riding-skill spells don't reliably show up on AC for DKs,
+        // so give them the fast Running Wild spell at creation.
         if (player->getClass() == CLASS_DEATH_KNIGHT)
         {
             uint32 rwSpell    = GetRWSpell(player, true);
@@ -94,13 +115,21 @@ private:
 
         uint8 level = player->GetLevel();
 
-        if (sConfigMgr->GetOption<bool>("Worgoblin.RunningWild.FreeApprentice", true)
-            && level >= 20 && !player->HasSpell(SPELL_APPRENTICE_RIDING))
+        if (sConfigMgr->GetOption<bool>(
+                "Worgoblin.RunningWild.FreeApprentice", true)
+            && level >= 20
+            && !player->HasSpell(SPELL_APPRENTICE_RIDING))
+        {
             player->learnSpell(SPELL_APPRENTICE_RIDING);
+        }
 
-        if (sConfigMgr->GetOption<bool>("Worgoblin.RunningWild.FreeJourneyman", true)
-            && level >= 40 && !player->HasSpell(SPELL_JOURNEYMAN_RIDING))
+        if (sConfigMgr->GetOption<bool>(
+                "Worgoblin.RunningWild.FreeJourneyman", true)
+            && level >= 40
+            && !player->HasSpell(SPELL_JOURNEYMAN_RIDING))
+        {
             player->learnSpell(SPELL_JOURNEYMAN_RIDING);
+        }
 
         SyncRunningWild(player);
     }
@@ -108,25 +137,28 @@ private:
     uint32 GetRWSpell(Player* player, bool journeyman) const
     {
         bool isMale = player->getGender() == GENDER_MALE;
+
         if (journeyman)
             return isMale ? SPELL_RW_JOURN_MALE : SPELL_RW_JOURN_FEMALE;
+
         return isMale ? SPELL_RW_APPR_MALE : SPELL_RW_APPR_FEMALE;
     }
 
     void SyncRunningWild(Player* player)
     {
-        // Only reached for non-DKs, so these HasSpell checks are trustworthy here.
+        // Only reached for non-DKs, so these HasSpell checks
+        // are trustworthy here.
         bool hasJourneyman = player->HasSpell(SPELL_JOURNEYMAN_RIDING);
         bool hasApprentice = player->HasSpell(SPELL_APPRENTICE_RIDING);
 
         if (!hasJourneyman && !hasApprentice)
-            return; // no riding skill yet, nothing to sync
+            return; // No riding skill yet, nothing to sync.
 
         uint32 wantSpell  = GetRWSpell(player, hasJourneyman);
         uint32 otherSpell = GetRWSpell(player, !hasJourneyman);
 
         if (player->HasSpell(wantSpell) && !player->HasSpell(otherSpell))
-            return; // already correct
+            return; // Already correct.
 
         if (player->HasSpell(otherSpell))
             player->removeSpell(otherSpell, SPEC_MASK_ALL, false);
