@@ -2,7 +2,7 @@
 
 > 🚧 **Work in Progress / Development Version**
 
-A ready-to-use custom race module for **AzerothCore 3.3.5a**, focused on providing additional playable races with **minimal changes to the AzerothCore server core itself**.
+A ready-to-use custom race module for **AzerothCore 3.3.5a**, focused on providing additional playable races.
 
 The main idea behind this fork is simple:
 
