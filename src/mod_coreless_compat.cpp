@@ -19,10 +19,11 @@ namespace
     constexpr uint8 RACE_DARK_IRON = 16;
     constexpr uint8 RACE_ZANDALARI = 17;
 
+    // Worgen Two Forms is handled ONLY in C++.
     constexpr uint32 SPELL_TWO_FORMS = 68996;
     constexpr uint32 SPELL_DARKFLIGHT = 68992;
     constexpr uint32 HUMAN_MALE_DISPLAY = 19723;
-    constexpr uint32 HUMAN_FEMALE_DISPLAY = 20464;
+    constexpr uint32 HUMAN_FEMALE_DISPLAY = 19724;
 
     enum ParentRace : uint8 { PARENT_NONE, PARENT_HUMAN, PARENT_ORC, PARENT_DWARF, PARENT_TROLL, PARENT_BLOODELF };
 
@@ -155,6 +156,37 @@ namespace
         }
     }
 
+    bool IsWorgenHumanDisplay(uint32 displayId)
+    {
+        return displayId == HUMAN_MALE_DISPLAY || displayId == HUMAN_FEMALE_DISPLAY;
+    }
+
+    void ForceWorgenForm(Player* player)
+    {
+        if (!player || player->getRace() != RACE_WORGEN_CUSTOM)
+            return;
+
+        if (IsWorgenHumanDisplay(player->GetDisplayId()))
+            player->SetDisplayId(player->GetNativeDisplayId());
+    }
+
+    void ToggleWorgenTwoForms(Player* player)
+    {
+        if (!player || player->getRace() != RACE_WORGEN_CUSTOM)
+            return;
+
+        if (player->IsInCombat())
+        {
+            ForceWorgenForm(player);
+            return;
+        }
+
+        if (IsWorgenHumanDisplay(player->GetDisplayId()))
+            player->SetDisplayId(player->GetNativeDisplayId());
+        else
+            player->SetDisplayId(GenderDisplay(player, HUMAN_MALE_DISPLAY, HUMAN_FEMALE_DISPLAY));
+    }
+
     void NormalizeCustomRaceLanguages(Player* player)
     {
         // Language spells: Common 668, Orcish 669, Dwarven 672, Thalassian 813, Troll 7341.
@@ -195,8 +227,18 @@ namespace
 
         switch (player->getRace())
         {
+            case RACE_GOBLIN_CUSTOM:
+                // Restore the complete Worgoblin Goblin racial package.
+                LearnIfMissing(69041); // Rocket Barrage
+                LearnIfMissing(69042); // Time is Money
+                LearnIfMissing(69044); // Best Deals Anywhere
+                LearnIfMissing(69045); // Better Living Through Chemistry
+                LearnIfMissing(69046); // Pack Hobgoblin
+                LearnIfMissing(69070); // Rocket Jump
+                break;
+
             case RACE_WORGEN_CUSTOM:
-                // Two Forms is handled entirely in C++ in FINAL FIX7.
+                // Two Forms belongs to the C++ implementation, not Eluna/Lua.
                 LearnIfMissing(SPELL_TWO_FORMS);
                 break;
 
@@ -242,40 +284,6 @@ namespace
             default:
                 break;
         }
-    }
-
-
-    bool IsHumanWorgenDisplay(Player const* player)
-    {
-        uint32 displayId = player->GetDisplayId();
-        return displayId == HUMAN_MALE_DISPLAY || displayId == HUMAN_FEMALE_DISPLAY;
-    }
-
-    void ForceWorgenForm(Player* player)
-    {
-        if (!player || player->getRace() != RACE_WORGEN_CUSTOM)
-            return;
-
-        if (IsHumanWorgenDisplay(player))
-            player->SetDisplayId(player->GetNativeDisplayId());
-    }
-
-    void ToggleTwoForms(Player* player)
-    {
-        if (!player || player->getRace() != RACE_WORGEN_CUSTOM)
-            return;
-
-        // Worgen cannot remain in human form while in combat.
-        if (player->IsInCombat())
-        {
-            ForceWorgenForm(player);
-            return;
-        }
-
-        if (IsHumanWorgenDisplay(player))
-            player->SetDisplayId(player->GetNativeDisplayId());
-        else
-            player->SetDisplayId(GenderDisplay(player, HUMAN_MALE_DISPLAY, HUMAN_FEMALE_DISPLAY));
     }
 
     void EnsureStartTaxi(Player* player)
@@ -328,19 +336,18 @@ public:
         if (!player || !spell || player->getRace() != RACE_WORGEN_CUSTOM)
             return;
 
-        SpellInfo const* spellInfo = spell->GetSpellInfo();
-        if (!spellInfo)
-            return;
-
-        if (spellInfo->Id == SPELL_TWO_FORMS)
-            ToggleTwoForms(player);
-        else if (spellInfo->Id == SPELL_DARKFLIGHT)
+        uint32 spellId = spell->GetSpellInfo()->Id;
+        if (spellId == SPELL_DARKFLIGHT)
             ForceWorgenForm(player);
+        else if (spellId == SPELL_TWO_FORMS)
+            ToggleWorgenTwoForms(player);
     }
 
-    void OnPlayerEnterCombat(Player* player, Unit* /*enemy*/) override
+    void OnPlayerUpdate(Player* player, uint32 /*diff*/) override
     {
-        ForceWorgenForm(player);
+        // Entering combat always returns a transformed Worgen to native form.
+        if (player && player->getRace() == RACE_WORGEN_CUSTOM && player->IsInCombat())
+            ForceWorgenForm(player);
     }
 };
 

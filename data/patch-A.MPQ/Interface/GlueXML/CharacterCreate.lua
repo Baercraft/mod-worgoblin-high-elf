@@ -23,41 +23,41 @@ FRAMES_TO_BACKDROP_COLOR = {
 	"CharacterCreateNameEdit",
 };
 RACE_ICON_TCOORDS = {
-	["HUMAN_MALE"]		= {0, 0.125, 0, 0.25},
-	["DWARF_MALE"]		= {0.125, 0.25, 0, 0.25},
-	["GNOME_MALE"]		= {0.25, 0.375, 0, 0.25},
-	["NIGHTELF_MALE"]	= {0.375, 0.5, 0, 0.25},
-	["DRAENEI_MALE"]	= {0.5, 0.625, 0, 0.25},
-   	["WORGEN_MALE"]   	= {0.625, 0.750, 0, 0.25},
-    ["HIGHELF_MALE"]    = {0.750, 0.875, 0, 0.25},
-	
-	["TAUREN_MALE"]		= {0, 0.125, 0.25, 0.5},
-	["SCOURGE_MALE"]	= {0.125, 0.25, 0.25, 0.5},
-	["TROLL_MALE"]		= {0.25, 0.375, 0.25, 0.5},
-	["ORC_MALE"]		= {0.375, 0.5, 0.25, 0.5},
-	["BLOODELF_MALE"]	= {0.5, 0.625, 0.25, 0.5},
-	["GOBLIN_MALE"]    	= {0.625, 0.750, 0.25, 0.5},
-	["MAGHAR_MALE"]     = {0.750, 0.875, 0.25, 0.5},
-	["OGRE_MALE"]       = {0.875, 1.0, 0.25, 0.5},
-	["DARKIRONDWARF_MALE"] = {0.125, 0.25, 0, 0.25},
+	["HUMAN_MALE"]       = {0.0000, 0.0625, 0, 0.25},
+	["DWARF_MALE"]       = {0.0625, 0.1250, 0, 0.25},
+	["GNOME_MALE"]       = {0.1250, 0.1875, 0, 0.25},
+	["NIGHTELF_MALE"]    = {0.1875, 0.2500, 0, 0.25},
+	["DRAENEI_MALE"]     = {0.2500, 0.3125, 0, 0.25},
+	["WORGEN_MALE"]      = {0.3125, 0.3750, 0, 0.25},
+	["HIGHELF_MALE"]     = {0.3750, 0.4375, 0, 0.25},
+	["DARKIRONDWARF_MALE"] = {0.4375, 0.5000, 0, 0.25},
 
-	["HUMAN_FEMALE"]	= {0, 0.125, 0.5, 0.75},  
-	["DWARF_FEMALE"]	= {0.125, 0.25, 0.5, 0.75},
-	["GNOME_FEMALE"]	= {0.25, 0.375, 0.5, 0.75},
-	["NIGHTELF_FEMALE"]	= {0.375, 0.5, 0.5, 0.75},
-	["DRAENEI_FEMALE"]	= {0.5, 0.625, 0.5, 0.75},
-   	["WORGEN_FEMALE"]  	= {0.625, 0.750, 0.5, 0.75},
-    ["HIGHELF_FEMALE"]  = {0.750, 0.875, 0.5, 0.75},
-	
-	["TAUREN_FEMALE"]	= {0, 0.125, 0.75, 1.0},   
-	["SCOURGE_FEMALE"]	= {0.125, 0.25, 0.75, 1.0}, 
-	["TROLL_FEMALE"]	= {0.25, 0.375, 0.75, 1.0}, 
-	["ORC_FEMALE"]		= {0.375, 0.5, 0.75, 1.0}, 
-	["BLOODELF_FEMALE"]	= {0.5, 0.625, 0.75, 1.0}, 
-   	["GOBLIN_FEMALE"]  	= {0.625, 0.750, 0.75, 1.0},
-	["DARKIRONDWARF_FEMALE"] = {0.125, 0.25, 0.5, 0.75},
-    ["MAGHAR_FEMALE"]   = {0.750, 0.875, 0.75, 1.0},
-    ["OGRE_FEMALE"]     = {0.875, 1.0, 0.75, 1.0},
+	["TAUREN_MALE"]      = {0.0000, 0.0625, 0.25, 0.5},
+	["SCOURGE_MALE"]     = {0.0625, 0.1250, 0.25, 0.5},
+	["TROLL_MALE"]       = {0.1250, 0.1875, 0.25, 0.5},
+	["ORC_MALE"]         = {0.1875, 0.2500, 0.25, 0.5},
+	["BLOODELF_MALE"]    = {0.2500, 0.3125, 0.25, 0.5},
+	["GOBLIN_MALE"]      = {0.3125, 0.3750, 0.25, 0.5},
+	["MAGHAR_MALE"]      = {0.3750, 0.4375, 0.25, 0.5},
+	["OGRE_MALE"]        = {0.4375, 0.5000, 0.25, 0.5},
+
+	["HUMAN_FEMALE"]     = {0.0000, 0.0625, 0.5, 0.75},
+	["DWARF_FEMALE"]     = {0.0625, 0.1250, 0.5, 0.75},
+	["GNOME_FEMALE"]     = {0.1250, 0.1875, 0.5, 0.75},
+	["NIGHTELF_FEMALE"]  = {0.1875, 0.2500, 0.5, 0.75},
+	["DRAENEI_FEMALE"]   = {0.2500, 0.3125, 0.5, 0.75},
+	["WORGEN_FEMALE"]    = {0.3125, 0.3750, 0.5, 0.75},
+	["HIGHELF_FEMALE"]   = {0.3750, 0.4375, 0.5, 0.75},
+	["DARKIRONDWARF_FEMALE"] = {0.4375, 0.5000, 0.5, 0.75},
+
+	["TAUREN_FEMALE"]    = {0.0000, 0.0625, 0.75, 1.0},
+	["SCOURGE_FEMALE"]   = {0.0625, 0.1250, 0.75, 1.0},
+	["TROLL_FEMALE"]     = {0.1250, 0.1875, 0.75, 1.0},
+	["ORC_FEMALE"]       = {0.1875, 0.2500, 0.75, 1.0},
+	["BLOODELF_FEMALE"]  = {0.2500, 0.3125, 0.75, 1.0},
+	["GOBLIN_FEMALE"]    = {0.3125, 0.3750, 0.75, 1.0},
+	["MAGHAR_FEMALE"]    = {0.3750, 0.4375, 0.75, 1.0},
+	["OGRE_FEMALE"]      = {0.4375, 0.5000, 0.75, 1.0},
 };
 local function GetSafeRaceIconCoords(fileString, gender)
 	local key = strupper((fileString or "HUMAN").."_"..(gender or "MALE"));
@@ -213,17 +213,10 @@ function CharacterCreateEnumerateRaces(...)
 		local coords = GetSafeRaceIconCoords(entry.fileString, gender);
 		local normalTexture = _G["CharacterCreateRaceButton"..visualIndex.."NormalTexture"];
 		local pushedTexture = _G["CharacterCreateRaceButton"..visualIndex.."PushedTexture"];
-		if ( strupper(entry.fileString or "") == "DARKIRONDWARF" ) then
-			normalTexture:SetTexture("Interface\\Icons\\Achievement_Zone_Blackrock_01");
-			pushedTexture:SetTexture("Interface\\Icons\\Achievement_Zone_Blackrock_01");
-			normalTexture:SetTexCoord(0, 1, 0, 1);
-			pushedTexture:SetTexCoord(0, 1, 0, 1);
-		else
-			normalTexture:SetTexture("Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Races");
-			pushedTexture:SetTexture("Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Races");
-			normalTexture:SetTexCoord(coords[1], coords[2], coords[3], coords[4]);
-			pushedTexture:SetTexCoord(coords[1], coords[2], coords[3], coords[4]);
-		end
+		normalTexture:SetTexture("Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Races");
+		pushedTexture:SetTexture("Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Races");
+		normalTexture:SetTexCoord(coords[1], coords[2], coords[3], coords[4]);
+		pushedTexture:SetTexCoord(coords[1], coords[2], coords[3], coords[4]);
 
 		local button = _G["CharacterCreateRaceButton"..visualIndex];
 		button.fileString = entry.fileString;
@@ -315,13 +308,8 @@ function SetCharacterRace(id)
 		gender = "FEMALE";
 	end
 	local coords = RACE_ICON_TCOORDS[fileString.."_"..gender];
-	if ( fileString == "DARKIRONDWARF" ) then
-		CharacterCreateRaceIcon:SetTexture("Interface\\Icons\\Achievement_Zone_Blackrock_01");
-		CharacterCreateRaceIcon:SetTexCoord(0, 1, 0, 1);
-	else
-		CharacterCreateRaceIcon:SetTexture("Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-RacesRound");
-		CharacterCreateRaceIcon:SetTexCoord(coords[1], coords[2], coords[3], coords[4]);
-	end
+	CharacterCreateRaceIcon:SetTexture("Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-RacesRound");
+	CharacterCreateRaceIcon:SetTexCoord(coords[1], coords[2], coords[3], coords[4]);
 	local raceText = _G["RACE_INFO_"..fileString];
 	local abilityIndex = 1;
 	local tempText = _G["ABILITY_INFO_"..fileString..abilityIndex];

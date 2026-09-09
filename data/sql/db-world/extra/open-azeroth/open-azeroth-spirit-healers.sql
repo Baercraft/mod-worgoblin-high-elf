@@ -3,30 +3,25 @@ SET @GUID := 900001; -- Make this something unoccupied!
 DELETE FROM `creature`
 WHERE `guid` BETWEEN @GUID AND @GUID + 21;
 
--- AzerothCore schema compatibility:
--- older/playerbot schemas use `id1`, newer schemas may use `id`.
-SET @ENTRY_COL := (
+-- Compatibility fix: AzerothCore branches differ here.
+-- Older/playerbot DBs can use `id1`; newer/master DBs can use `id`.
+-- Detect the available creature entry column and build the INSERT dynamically.
+SET @ENTRY_COLUMN := (
     SELECT CASE
         WHEN EXISTS (
-            SELECT 1
-            FROM INFORMATION_SCHEMA.COLUMNS
-            WHERE TABLE_SCHEMA = DATABASE()
-              AND TABLE_NAME = 'creature'
-              AND COLUMN_NAME = 'id1'
-        ) THEN '`id1`'
+            SELECT 1 FROM information_schema.COLUMNS
+            WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'creature' AND COLUMN_NAME = 'id1'
+        ) THEN 'id1'
         WHEN EXISTS (
-            SELECT 1
-            FROM INFORMATION_SCHEMA.COLUMNS
-            WHERE TABLE_SCHEMA = DATABASE()
-              AND TABLE_NAME = 'creature'
-              AND COLUMN_NAME = 'id'
-        ) THEN '`id`'
+            SELECT 1 FROM information_schema.COLUMNS
+            WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'creature' AND COLUMN_NAME = 'id'
+        ) THEN 'id'
         ELSE NULL
     END
 );
 
-SET @SQL := CONCAT('INSERT INTO `creature`
-    (`guid`, ', @ENTRY_COL, ', `map`, `zoneId`, `areaId`,
+SET @SPIRIT_HEALER_SQL := 'INSERT INTO `creature`
+    (`guid`, `__ENTRY_COLUMN__`, `map`, `zoneId`, `areaId`,
      `spawnMask`, `phaseMask`, `equipment_id`,
      `position_x`, `position_y`, `position_z`, `orientation`,
      `spawntimesecs`, `wander_distance`, `currentwaypoint`,
@@ -120,7 +115,13 @@ VALUES
 
     (@GUID + 21, 6491, 0, 0, 0, 1, 1, 0,
      -1386, 1371.84, 35.85, 3.15,
-     120, 0, 0, 1, 0, 0, 0, 0, 0, '''', 0, 0, ''Gilneas City - Merchant Square'');');
-PREPARE stmt FROM @SQL;
-EXECUTE stmt;
-DEALLOCATE PREPARE stmt;
+     120, 0, 0, 1, 0, 0, 0, 0, 0, '''', 0, 0, ''Gilneas City - Merchant Square'');
+';
+SET @SPIRIT_HEALER_SQL := REPLACE(@SPIRIT_HEALER_SQL, '__ENTRY_COLUMN__', @ENTRY_COLUMN);
+
+PREPARE stmt_spirit_healers FROM @SPIRIT_HEALER_SQL;
+EXECUTE stmt_spirit_healers;
+DEALLOCATE PREPARE stmt_spirit_healers;
+
+SET @SPIRIT_HEALER_SQL := NULL;
+SET @ENTRY_COLUMN := NULL;
