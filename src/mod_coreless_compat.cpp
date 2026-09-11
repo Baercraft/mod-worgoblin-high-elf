@@ -284,7 +284,13 @@ namespace
                 break;
 
             case RACE_WORGEN_CUSTOM:
-                // Two Forms belongs to the C++ implementation, not Eluna/Lua.
+                // Complete Cataclysm-style Worgen racial package.  SkillLine 789
+                // is enabled for every WotLK class by the ARAC DBC/SQL sync.
+                LearnIfMissing(68975); // Viciousness
+                LearnIfMissing(68976); // Aberration
+                LearnIfMissing(68978); // Flayer
+                LearnIfMissing(SPELL_DARKFLIGHT);
+                // Two Forms is implemented by this module in C++, not Eluna.
                 LearnIfMissing(SPELL_TWO_FORMS);
                 break;
 
@@ -374,15 +380,19 @@ public:
         // changes, which require a relog before normal play continues.
         EnsureStartTaxi(player);
 
-        // Re-apply the database-driven default package for custom races.
-        // This repairs existing characters as well as newly created ones: the
-        // language SkillLines (Common/Orcish/etc.), armor proficiencies and
-        // other class SkillLines are sourced from playercreateinfo_skills,
-        // while playercreateinfo_spell_custom supplies the matching spells.
-        // Both helpers are idempotent and only add missing defaults.
+        // Re-apply database-driven default skills for every playable ARAC race.
+        // This is important for existing non-Blizzard race/class combinations
+        // as well: playercreateinfo_skills now contains the missing starting
+        // weapon proficiencies required by their CharStartOutfit entries.
+        // LearnDefaultSkills() is safe to call repeatedly and only restores
+        // defaults that are valid for the current race/class combination.
+        if (player->getRace() >= 1 && player->getRace() <= RACE_DARK_IRON)
+            player->LearnDefaultSkills();
+
+        // Custom races additionally use playercreateinfo_spell_custom and the
+        // explicit armor/racial compatibility package maintained by this mod.
         if (GetParentRace(player->getRace()) != PARENT_NONE)
         {
-            player->LearnDefaultSkills();
             player->LearnCustomSpells();
             EnsureCustomRaceArmorProficiencies(player);
         }
