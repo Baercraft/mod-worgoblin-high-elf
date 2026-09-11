@@ -1,0 +1,33 @@
+ARAC LANGUAGE / ARMOR FIX - INSTALL
+===================================
+
+1. Recompile the module/server because src/mod_coreless_compat.cpp changed.
+
+2. Let AzerothCore apply the SQL update files from:
+   data/sql/db-world/updates/
+
+3. CLIENT:
+   Build/use the included patch-A.MPQ contents as usual. The corrected files are:
+   - DBFilesClient/SkillLineAbility.dbc
+   - DBFilesClient/SkillRaceClassInfo.dbc
+
+4. SERVER - IMPORTANT:
+   Copy these two files from data/server_dbc_fix/ into your server DataDir/dbc/
+   and replace the old copies:
+   - SkillLineAbility.dbc
+   - SkillRaceClassInfo.dbc
+
+   Client and server must use the SAME corrected versions of these DBCs.
+
+5. Restart worldserver, then log in once with existing Race 13-16 characters.
+   The login repair will restore their language SkillLines/spells and re-sync
+   their owned armor proficiency passives.
+
+Expected languages:
+Race 13 High Elf       = Common + Thalassian
+Race 14 Mag'har Orc    = Orcish
+Race 15 Ogre           = Orcish
+Race 16 Dark Iron      = Common + Dwarven
+
+ARAC client matrix:
+CharBaseInfo.dbc was verified to contain 160 rows = 16 races x 10 WotLK classes.

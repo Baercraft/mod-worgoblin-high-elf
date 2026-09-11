@@ -189,8 +189,23 @@ namespace
 
     void NormalizeCustomRaceLanguages(Player* player)
     {
-        // Language spells: Common 668, Orcish 669, Dwarven 672, Thalassian 813, Troll 7341.
-        std::array<uint32, 5> const languages = { 668, 669, 672, 813, 7341 };
+        struct LanguageDef
+        {
+            uint32 SpellId;
+            uint32 SkillId;
+        };
+
+        // Keep the language spell and the 300/300 language SkillLine in sync.
+        // This deliberately repairs both newly created and already existing
+        // custom-race characters, even if they were saved before the DBC masks
+        // were corrected.
+        std::array<LanguageDef, 5> const languages = {{
+            { 668,  98  }, // Common
+            { 669,  109 }, // Orcish
+            { 672,  111 }, // Dwarven
+            { 813,  137 }, // Thalassian
+            { 7341, 315 }  // Troll
+        }};
         bool wanted[5] = { false, false, false, false, false };
 
         switch (player->getRace())
@@ -207,13 +222,44 @@ namespace
 
         for (size_t i = 0; i < languages.size(); ++i)
         {
+            LanguageDef const& language = languages[i];
             if (wanted[i])
             {
-                if (!player->HasSpell(languages[i]))
-                    player->learnSpell(languages[i]);
+                if (!player->HasSkill(language.SkillId) ||
+                    player->GetPureSkillValue(language.SkillId) != 300 ||
+                    player->GetPureMaxSkillValue(language.SkillId) != 300)
+                {
+                    player->SetSkill(language.SkillId, 0, 300, 300);
+                }
+
+                if (!player->HasSpell(language.SpellId))
+                    player->learnSpell(language.SpellId);
             }
-            else if (player->HasSpell(languages[i]))
-                player->removeSpell(languages[i], SPEC_MASK_ALL, false);
+            else
+            {
+                if (player->HasSpell(language.SpellId))
+                    player->removeSpell(language.SpellId, SPEC_MASK_ALL, false);
+
+                if (player->HasSkill(language.SkillId))
+                    player->SetSkill(language.SkillId, 0, 0, 0);
+            }
+        }
+    }
+
+    void EnsureCustomRaceArmorProficiencies(Player* player)
+    {
+        // Re-sync the passive armor proficiency spells from SkillLineAbility.dbc.
+        // This is especially useful for characters created before the custom-race
+        // SkillRaceClassInfo/playercreateinfo fixes were installed.  Only skills
+        // the character already owns are processed, so class/level restrictions
+        // (for example Mail/Plate progression) are preserved.
+        for (uint32 skillId : std::array<uint32, 5>{ 415, 414, 413, 293, 433 })
+        {
+            if (!player->HasSkill(skillId))
+                continue;
+
+            uint32 skillValue = player->GetPureSkillValue(skillId);
+            player->learnSkillRewardedSpells(skillId, skillValue ? skillValue : 1);
         }
     }
 
@@ -327,6 +373,20 @@ public:
         // safe place for language normalization and also covers race/faction
         // changes, which require a relog before normal play continues.
         EnsureStartTaxi(player);
+
+        // Re-apply the database-driven default package for custom races.
+        // This repairs existing characters as well as newly created ones: the
+        // language SkillLines (Common/Orcish/etc.), armor proficiencies and
+        // other class SkillLines are sourced from playercreateinfo_skills,
+        // while playercreateinfo_spell_custom supplies the matching spells.
+        // Both helpers are idempotent and only add missing defaults.
+        if (GetParentRace(player->getRace()) != PARENT_NONE)
+        {
+            player->LearnDefaultSkills();
+            player->LearnCustomSpells();
+            EnsureCustomRaceArmorProficiencies(player);
+        }
+
         NormalizeCustomRaceLanguages(player);
         EnsureCustomRaceRacials(player);
     }
