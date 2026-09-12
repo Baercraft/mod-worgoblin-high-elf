@@ -123,9 +123,18 @@ RegisterSpellEvent(RIDE_JOURNEYMAN_SPELL, 2, OnCastRidingSpell) -- SPELL_EVENT_O
 -- early-return guard in SyncRunningWild, this is a true no-op for anyone
 -- who's already correct, so it's safe to run unconditionally every time.
 local function OnLogin(event, player)
-    -- Two Forms / combat form switching is handled by mod_coreless_compat.cpp.
+    if player:GetRace() == RACE_WORGEN and not player:HasSpell(TWO_FORMS_SPELL_ID) then
+        player:LearnSpell(TWO_FORMS_SPELL_ID)
+    end
     SyncRunningWild(player)
 end
 
 RegisterPlayerEvent(44, OnLearnSpell) -- PLAYER_EVENT_ON_LEARN_SPELL
 RegisterPlayerEvent(3, OnLogin)       -- PLAYER_EVENT_ON_LOGIN
+
+-- Human form is cosmetic only. Entering combat immediately restores Worgen form.
+local function OnEnterCombat(event, player, enemy)
+    ForceWorgenForm(player)
+end
+
+RegisterPlayerEvent(33, OnEnterCombat) -- PLAYER_EVENT_ON_ENTER_COMBAT
